@@ -45,7 +45,8 @@ char * gamefunctions[NUMGAMEFUNCTIONS] =
    "Inventory",
    "Inventory_Left",
    "Inventory_Right",
-#if defined(EDUKE) || !defined(WW2GI)
+#if defined(EDUKE) || (!defined(WW2GI) && (!defined(PRE_EDUKE)))
+//#if defined(EDUKE) || !defined(WW2GI)
 "Hologram",
 "Jetpack",
 "NightVision",
@@ -67,7 +68,8 @@ char * gamefunctions[NUMGAMEFUNCTIONS] =
    "See_Coop_View",
    "Mouse_Aiming",
    "Toggle_Crosshair",
-#if defined(EDUKE) || !defined(WW2GI)
+#if defined(EDUKE) || (!defined(WW2GI) && (!defined(PRE_EDUKE)))
+//#if defined(EDUKE) || !defined(WW2GI)
 "Steroids",
 #else
 "Special4", //   "Steroids",
@@ -114,7 +116,8 @@ static char * keydefaults[NUMKEYENTRIES*3] =
    "Inventory", "Enter", "KpdEnt", 
    "Inventory_Left", "[", "", 
    "Inventory_Right", "]", "", 
-#if defined(EDUKE) || !defined(WW2GI)
+#if defined(EDUKE) || (!defined(WW2GI) && (!defined(PRE_EDUKE)))
+//#if defined(EDUKE) || !defined(WW2GI)
 "Hologram", "H", "", 
 "Jetpack", "J", "", 
 "NightVision", "N", "",
@@ -136,7 +139,8 @@ static char * keydefaults[NUMKEYENTRIES*3] =
    "See_Coop_View", "K", "", 
    "Mouse_Aiming", "U", "", 
    "Toggle_Crosshair", "I", "", 
-#if defined(EDUKE) || !defined(WW2GI)
+#if defined(EDUKE) || (!defined(WW2GI) && (!defined(PRE_EDUKE)))
+//#if defined(EDUKE) || !defined(WW2GI)
 "Steroids", "R", "",
 #else
 "Special4", "R", "", //   "Steroids", "R", "",

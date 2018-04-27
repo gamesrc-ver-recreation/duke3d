@@ -367,6 +367,7 @@ char *keyw[NUMKEYWORDS] =
 
 #ifdef WW2
 
+#ifndef PRE_EDUKE
 typedef struct _labels
 {
 	char *name;
@@ -4234,6 +4235,7 @@ void DoActor(char bSet, long lVar1, long lLabelID, long lVar2, short sActor, sho
 	}
 	return;
 }
+#endif // PRE_EDUKE
 
 
 void AddLog(char *psz)
@@ -4381,19 +4383,19 @@ void ReadGameVars(long fil)
 	int i;
 	long l;
 
-#ifndef EDUKE20023
+#ifdef EDUKE20021
 AddLog("Reading Game Vars from File");
 #endif
 
 	 kdfread(&l,sizeof(l),1,fil);
 	 kdfread(g_szBuf,l,1,fil);
 	 g_szBuf[l]=0;
-#ifndef EDUKE20023
+#ifdef EDUKE20021
  AddLog(g_szBuf);
 #endif
 
 	 FreeGameVars();	// nuke 'em all...
-#ifndef EDUKE20023
+#ifdef EDUKE20021
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
 #endif
@@ -4405,7 +4407,7 @@ AddLog(g_szBuf);
 		 kdfread(&(aGameVars[i]),sizeof(MATTGAMEVAR),1,fil);
 	 }
 
-#ifndef EDUKE20023
+#ifdef EDUKE20021
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
 #endif
@@ -4427,13 +4429,13 @@ AddLog(g_szBuf);
 		}
 	 }
 	 
-#ifndef EDUKE20023
+#ifdef EDUKE20021
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
 #endif
 	 InitGameVarPointers();
 
-#ifndef EDUKE20023
+#ifdef EDUKE20021
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
 #endif
@@ -4455,7 +4457,7 @@ AddLog(g_szBuf);
 		// else nothing 'extra...'
 	 }
 
-#ifndef EDUKE20023
+#ifdef EDUKE20021
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
 #endif
@@ -4467,16 +4469,18 @@ AddLog(g_szBuf);
 		 apScriptGameEvent[i] = (long *)l;
 	 }
 	 
+#ifndef PRE_EDUKE
 	 kdfread(&g_bEnhanced, sizeof(g_bEnhanced), 1, fil);
+#endif
 	 
-#ifndef EDUKE20023
+#ifdef EDUKE20021
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
 #endif
 	 kdfread(&l,sizeof(l),1,fil);
 	 kdfread(g_szBuf,l,1,fil);
 	 g_szBuf[l]=0;
-#ifndef EDUKE20023
+#ifdef EDUKE20021
  AddLog(g_szBuf);
 #endif
 	 
@@ -4548,7 +4552,9 @@ void SaveGameVars(FILE *fil)
 		 apScriptGameEvent[i] = (long *)l;
 	 }
 
+#ifndef PRE_EDUKE
 	 dfwrite(&g_bEnhanced, sizeof(g_bEnhanced), 1, fil);
+#endif
 	 
 	 sprintf(g_szBuf,"EOF: Matt Saettler");
 	 l=strlen(g_szBuf);
@@ -4775,10 +4781,12 @@ long GetGameVarID(int id, short sActor, short sPlayer)
 		AddLog("GetGameVarID: Invalid Game ID");
 		return -1;
 	}
+#ifndef PRE_EDUKE
 	if( id == g_iThisActorID )
 	{
 		return sActor;
 	}
+#endif
 	if( aGameVars[id].dwFlags & GAMEVAR_FLAG_PERPLAYER )
 	{
 		// for the current player
@@ -5047,6 +5055,7 @@ void makeitfall(short i)
 	}
 }
 
+#ifndef PRE_EDUKE
 long getlabelid(LABELS *pLabel, char *psz)
 {
 	// find the label psz in the table pLabel.
@@ -5065,6 +5074,7 @@ long getlabelid(LABELS *pLabel, char *psz)
 	}
 	return l;
 }
+#endif
 
 
 void getlabel(void)
@@ -5309,12 +5319,14 @@ char parsecommand(void)
 			transnum();
 			return 0;
 			
+#ifndef PRE_EDUKE
 		case CON_IFSOUND:
 			transnum();
 			tempscrptr = scriptptr;
 			scriptptr++; //Leave a spot for the fail location
 			return 0;
 
+#endif
 		case 18:
 			if( parsing_state == 0 )
 			{
@@ -7004,8 +7016,10 @@ char parsecommand(void)
 		case CON_IFVARVARG:
 		case CON_IFVARVARL:
 		case CON_IFVARVARE:
+#ifndef PRE_EDUKE
 		case CON_IFVARVARN:
 		case CON_IFVARVARAND:
+#endif
 
 			// get the ID of the DEF
 			getlabel();	//GetGameVarLabel();
@@ -7067,6 +7081,7 @@ char parsecommand(void)
 
 			checking_ifelse++;
 			return 0;
+#ifndef PRE_EDUKE
 		case CON_SPGETLOTAG:
 		case CON_SPGETHITAG:
 		case CON_SECTGETLOTAG:
@@ -7083,11 +7098,14 @@ char parsecommand(void)
 			error++;
 			printf("  * ERROR!(L%ld) Command  '%s' is not yet implemented.\n",line_number,tempbuf);
 			return 0;
+#endif
 		case CON_IFVARL:
 		case CON_IFVARG:
 		case CON_IFVARE:
+#ifndef PRE_EDUKE
 		case CON_IFVARN:
 		case CON_IFVARAND:
+#endif
 
 			// get the ID of the DEF
 			getlabel();	//GetGameVarLabel();
@@ -7160,6 +7178,7 @@ char parsecommand(void)
 			*scriptptr++=i;	// the ID of the DEF (offset into array...)
 			
 			return 0;
+#ifndef PRE_EDUKE
 		case CON_GETANGLETOTARGET:
 		case CON_GETACTORANGLE:
 		case CON_SETACTORANGLE:
@@ -7192,6 +7211,7 @@ char parsecommand(void)
 			
 			return 0;
 			
+#endif
 		case CON_ADDLOG:
 			// syntax: addlog
 			
@@ -7702,7 +7722,7 @@ void FreeGameVars(void)
 {
 	// call this function as many times as needed.
 	int i;
-#ifndef EDUKE20023
+#ifdef EDUKE20021
 AddLog("FreeGameVars");	
 #endif
 	for(i=0;i<MAXGAMEVARS;i++)
@@ -8635,12 +8655,14 @@ gamevar WEAPON11_SOUND2SOUND 0 GAMEVAR_FLAG_PERPLAYER
 	AddGameVar("ZRANGE", 0, GAMEVAR_FLAG_SYSTEM);
 	AddGameVar("ANGRANGE", 0, GAMEVAR_FLAG_SYSTEM);
 	AddGameVar("AUTOAIMANGLE", 0, GAMEVAR_FLAG_SYSTEM);
+#ifndef PRE_EDUKE
 	AddGameVar("LOTAG", 0, GAMEVAR_FLAG_READONLY | GAMEVAR_FLAG_SYSTEM);
 	AddGameVar("HITAG", 0, GAMEVAR_FLAG_READONLY | GAMEVAR_FLAG_SYSTEM);
 	AddGameVar("TEXTURE", 0, GAMEVAR_FLAG_READONLY | GAMEVAR_FLAG_SYSTEM);
 	AddGameVar("THISACTOR", 0, GAMEVAR_FLAG_READONLY | GAMEVAR_FLAG_SYSTEM);
 	AddGameVar("myconnectindex", (long)&myconnectindex, GAMEVAR_FLAG_READONLY | GAMEVAR_FLAG_PLONG | GAMEVAR_FLAG_SYSTEM);
 	AddGameVar("screenpeek", (long)&screenpeek, GAMEVAR_FLAG_READONLY | GAMEVAR_FLAG_PLONG | GAMEVAR_FLAG_SYSTEM);
+#endif
 }
 
 void ResetSystemDefaults(void)
@@ -9596,10 +9618,12 @@ char parse(void)
 				spritesound((short) *insptr,g_i);
 			insptr++;
 			break;
+#ifndef PRE_EDUKE
 		case CON_IFSOUND:
 			insptr++;
 			parseifelse( Sound[*insptr].num == 0 );
 			break;
+#endif
 		case 89:
 			insptr++;
 			if( Sound[*insptr].num > 0 )
@@ -10827,6 +10851,7 @@ char parse(void)
 			insptr++;
 			break;
 		}
+#ifndef PRE_EDUKE
 		case CON_SPGETLOTAG:
 		{	
 			insptr++;
@@ -10899,6 +10924,7 @@ char parse(void)
 			parseifelse( j );
 			break;
 		}
+#endif // PRE_EDUKE
 		case CON_IFVARVARE:
 		{
 			int i;
@@ -10951,6 +10977,7 @@ char parse(void)
 			parseifelse( j );
 			break;
 		}
+#ifndef PRE_EDUKE
 		case CON_IFVARN:
 		{
 			int i;
@@ -10977,6 +11004,7 @@ char parse(void)
 			parseifelse( j );
 			break;
 		}
+#endif
 		case CON_IFVARG:
 		{
 			int i;
@@ -11144,6 +11172,7 @@ char parse(void)
 	return 0;
 }
 
+#ifndef PRE_EDUKE
 void LoadActor(short i,short p,long x)
 {
 	char done;
@@ -11225,6 +11254,7 @@ void LoadActor(short i,short p,long x)
 	}
 
 }
+#endif // PRE_EDUKE
 
 void execute(short i,short p,long x)
 {

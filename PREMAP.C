@@ -710,7 +710,9 @@ void prelevel(char g)
     {
         nexti = nextspritestat[i];
 
+#ifndef PRE_EDUKE
 		LoadActor(i, -1, -1);
+#endif
 
         if(sprite[i].lotag == -1 && (sprite[i].cstat&16) )
         {
