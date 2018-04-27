@@ -199,8 +199,10 @@ loadplayer(signed char spot)
      char *fnptr, scriptptrs[MAXSCRIPTSIZE];
      long fil, bv, i, j, x;
      int32 nump;
+#ifndef EDUKE20023
 sprintf(g_szBuf,"LoadPlayer for %d", spot);		
 AddLog(g_szBuf);
+#endif
 
      if(spot < 0)
      {
@@ -227,14 +229,18 @@ AddLog(g_szBuf);
         fnptr = fn;
         fn[4] = spot + '0';
      }
+#ifndef EDUKE20023
 sprintf(g_szBuf,"LoadPlayer: File Name = %s", fnptr);		
 AddLog(g_szBuf);
+#endif
 
      if ((fil = kopen4load(fnptr,0)) == -1) return(-1);
 
      ready2send = 0;
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 
      kdfread(&bv,4,1,fil);
      if(bv != BYTEVERSION)
@@ -245,8 +251,10 @@ AddLog(g_szBuf);
         ready2send = 1;
         return 1;
      }
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 
      kdfread(&nump,sizeof(nump),1,fil);
      if(nump != numplayers)
@@ -257,8 +265,10 @@ AddLog(g_szBuf);
         FTA(124,&ps[myconnectindex]);
         return 1;
      }
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 
      if(numplayers > 1)
      {
@@ -269,16 +279,20 @@ AddLog(g_szBuf);
          menutext(160,100,0,0,"LOADING...");
          nextpage();
     }
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 
      waitforeverybody();
 
 	 FX_StopAllSounds();
      clearsoundlocks();
 	 MUSIC_StopSong();
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 
      if(numplayers > 1)
          kdfread(&buf,19,1,fil);
@@ -286,8 +300,10 @@ AddLog(g_szBuf);
          kdfread(&ud.savegame[spot][0],19,1,fil);
 
 //     music_changed = (music_select != (ud.volume_number*11) + ud.level_number);
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 
 	 kdfread(&ud.volume_number,sizeof(ud.volume_number),1,fil);
 	 kdfread(&ud.level_number,sizeof(ud.level_number),1,fil);
@@ -297,8 +313,10 @@ AddLog(g_szBuf);
 	 ud.m_volume_number = ud.volume_number;
 	 ud.m_player_skill = ud.player_skill;
 
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 		 //Fake read because lseek won't work with compression
      walock[MAXTILES-3] = 1;
      if (waloff[MAXTILES-3] == 0) allocache(&waloff[MAXTILES-3],160*100,&walock[MAXTILES-3]);
@@ -338,8 +356,10 @@ AddLog(g_szBuf);
      kdfread(&clouds[0],sizeof(short)<<7,1,fil);
      kdfread(&cloudx[0],sizeof(short)<<7,1,fil);
      kdfread(&cloudy[0],sizeof(short)<<7,1,fil);
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 
      kdfread(&scriptptrs[0],1,MAXSCRIPTSIZE,fil);
      kdfread(&script[0],4,MAXSCRIPTSIZE,fil);
@@ -349,8 +369,10 @@ AddLog(g_szBuf);
          j = (long)script[i]+(long)&script[0];
          script[i] = j;
      }
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 
      kdfread(&actorscrptr[0],4,MAXTILES,fil);
      for(i=0;i<MAXTILES;i++)
@@ -359,8 +381,10 @@ AddLog(g_szBuf);
         j = (long)actorscrptr[i]+(long)&script[0];
         actorscrptr[i] = (long *)j;
      }
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 
      kdfread(&scriptptrs[0],1,MAXSPRITES,fil);
      kdfread(&hittype[0],sizeof(struct weaponhit),MAXSPRITES,fil);
@@ -372,8 +396,10 @@ AddLog(g_szBuf);
         if( scriptptrs[i]&2 ) T5 += j;
         if( scriptptrs[i]&4 ) T6 += j;
      }
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 
 	 kdfread(&lockclock,sizeof(lockclock),1,fil);
      kdfread(&pskybits,sizeof(pskybits),1,fil);
@@ -420,13 +446,17 @@ AddLog(g_szBuf);
      kdfread(&randomseed,sizeof(randomseed),1,fil);
      kdfread(&global_random,sizeof(global_random),1,fil);
      kdfread(&parallaxyscale,sizeof(parallaxyscale),1,fil);
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 #ifdef WW2
      ReadGameVars(fil);
 #endif
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 
      kclose(fil);
 
@@ -481,8 +511,10 @@ AddLog(g_szBuf);
 
      numinterpolations = 0;
      startofdynamicinterpolations = 0;
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 
      k = headspritestat[3];
      while(k >= 0)
@@ -525,8 +557,10 @@ AddLog(g_szBuf);
 
      show_shareware = 0;
      everyothertime = 0;
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 
      clearbufbyte(playerquitflag,MAXPLAYERS,0x01010101);
 
@@ -539,8 +573,10 @@ AddLog(g_szBuf);
      waitforeverybody();
 
      resettimevars();
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 
      return(0);
 }

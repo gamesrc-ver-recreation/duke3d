@@ -1,17 +1,35 @@
+//-------------------------------------------------------------------------
+/*
+Copyright (C) 1996, 2003 - 3D Realms Entertainment
+Copyright (C) 2000, 2003 - Matt Saettler (EDuke Enhancements)
 
+This file is part of Enhanced Duke Nukem 3D version 1.5 - Atomic Edition
 
+Duke Nukem 3D is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-// SOURCE CODE FOR DUKE NUKEM 3D IS COPYRIGHTED BY TODD REPLOGLE AND MAY
-// _NOT_ BE DISTRIBUTED EXCEPT AS AUTHORIZED BY 3DREALMS ENTERTAINMENT.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
 
+See the GNU General Public License for more details.
 
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+Original Source: 1996 - Todd Replogle
+Prepared for public release: 03/21/2003 - Charlie Wiederhold, 3D Realms
 
-// NAM additions made by Matt Saettler.  matts@seanet.com
-//  (DAMN I hate constants....)
-// WW2 additions made by Matt Saettler.
+EDuke enhancements integrated: 04/13/2003 - Matt Saettler
 
+Note: EDuke source was in transition.  Changes are in-progress in the
+source as it is released.
 
+*/
+//-------------------------------------------------------------------------
 
 
 
@@ -30,6 +48,9 @@
 #include "sndcards.h"
 
 #include "duke3d.h"
+#ifdef EDUKE20023
+    #define VERSION "2.00.23 FIRST RELEASE"
+#else
 #ifdef EDUKE
     #define VERSION "2.00.21 FIRST RELEASE"
 #else
@@ -40,6 +61,7 @@
     #define VERSION "1.5"
 #else
     #define VERSION "1.5"
+#endif
 #endif
 #endif
 #endif
@@ -87,6 +109,9 @@ char nam_head2[128];
 
 
 #define TIMERUPDATESIZ 32
+#ifdef EDUKE20023
+char g_bNoReverb=0;
+#endif
 
 long cameradist = 0, cameraclock = 0;
 char eightytwofifty = 0;
@@ -7029,6 +7054,9 @@ void comlinehelp(char **argv)
 #endif
     puts(" /#            Load and run a game (slot 0-9)");
     puts(" /z            Skip memory check");
+#ifdef EDUKE20023	
+    puts(" /z1           Don't use Reverb (use if your sound card crashes)");
+#endif
     puts(" -map FILE     Use a map FILE");
     puts(" -name NAME    Forward NAME");
 #ifdef WW2
@@ -7204,6 +7232,14 @@ void checkcommandline(int argc,char **argv)
                         break;
                     case 'z':
                     case 'Z':
+#ifdef EDUKE20023
+                        c++;
+						if(*c == '1')
+						{
+							g_bNoReverb=1;
+						}
+						else
+#endif
                         memorycheckoveride = 1;
                         break;
                     case 'f':

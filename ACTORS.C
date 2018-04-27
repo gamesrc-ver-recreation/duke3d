@@ -1,19 +1,35 @@
+//-------------------------------------------------------------------------
+/*
+Copyright (C) 1996, 2003 - 3D Realms Entertainment
+Copyright (C) 2000, 2003 - Matt Saettler (EDuke Enhancements)
 
+This file is part of Enhanced Duke Nukem 3D version 1.5 - Atomic Edition
 
+Duke Nukem 3D is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
 
+See the GNU General Public License for more details.
 
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-// SOURCE CODE FOR DUKE NUKEM 3D IS COPYRIGHTED BY TODD REPLOGLE AND MAY
-// _NOT_ BE DISTRIBUTED EXCEPT AS AUTHORIZED BY 3DREALMS ENTERTAINMENT.
+Original Source: 1996 - Todd Replogle
+Prepared for public release: 03/21/2003 - Charlie Wiederhold, 3D Realms
 
+EDuke enhancements integrated: 04/13/2003 - Matt Saettler
 
-// NAM additions made by Matt Saettler.  matts@seanet.com
-//  (DAMN I hate constants....)
+Note: EDuke source was in transition.  Changes are in-progress in the
+source as it is released.
 
-// WW2 additions made by Matt Saettler. matts@seanet.com
-
-
+*/
+//-------------------------------------------------------------------------
 
 
 
@@ -1368,11 +1384,23 @@ void movefx(void)
                     x = ldist(&sprite[ps[screenpeek].i],s);
                     if( x < ht && T1 == 0 )
                     {
+#ifdef EDUKE20023
+						if (g_bNoReverb)
+						{
+							// get rid of the crashing reverb bug...
+							FX_SetReverb( 0 );
+						}
+						else
+						{
+							FX_SetReverb( s->lotag - 1000 );
+						}
+#else
 #ifdef EDUKE
 						// get rid of the crashing reverb bug...
                         FX_SetReverb( 0 );
 #else
                         FX_SetReverb( s->lotag - 1000 );
+#endif
 #endif
                         T1 = 1;
                     }

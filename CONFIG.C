@@ -539,10 +539,14 @@ void readsavenames(void)
     long dummy;
     short i;
 	// also need to change in menues.c loadplayer()2
+#ifdef EDUKE20023
+    char *fn = {"egam_.sav"};
+#else
 #ifdef EDUKE	
     char *fn = {"egame_.sav"};
 #else
     char *fn = {"game_.sav"};
+#endif
 #endif
     FILE *fil;
 

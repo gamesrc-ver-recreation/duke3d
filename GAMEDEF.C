@@ -15,7 +15,11 @@
 
 #ifdef EDUKE
 // build number
+#ifdef EDUKE20023
+#define VERSIONCHECK	23
+#else
 #define VERSIONCHECK	21
+#endif
 #endif
 
 
@@ -4377,16 +4381,22 @@ void ReadGameVars(long fil)
 	int i;
 	long l;
 
+#ifndef EDUKE20023
 AddLog("Reading Game Vars from File");
+#endif
 
 	 kdfread(&l,sizeof(l),1,fil);
 	 kdfread(g_szBuf,l,1,fil);
 	 g_szBuf[l]=0;
+#ifndef EDUKE20023
  AddLog(g_szBuf);
+#endif
 
 	 FreeGameVars();	// nuke 'em all...
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 	 
 	 kdfread(&iGameVarCount,sizeof(iGameVarCount),1,fil);
 	 
@@ -4395,8 +4405,10 @@ AddLog(g_szBuf);
 		 kdfread(&(aGameVars[i]),sizeof(MATTGAMEVAR),1,fil);
 	 }
 
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 	 for(i=0;i<iGameVarCount;i++)
 	 {
 	 
@@ -4415,12 +4427,16 @@ AddLog(g_szBuf);
 		}
 	 }
 	 
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 	 InitGameVarPointers();
 
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 	 for(i=0;i<iGameVarCount;i++)
 	 {
 	 
@@ -4439,8 +4455,10 @@ AddLog(g_szBuf);
 		// else nothing 'extra...'
 	 }
 
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 	 kdfread(apScriptGameEvent,sizeof(apScriptGameEvent),1,fil);
 	 for(i=0;i<MAXGAMEEVENTS;i++)
 		 if(apScriptGameEvent[i])
@@ -4451,12 +4469,16 @@ AddLog(g_szBuf);
 	 
 	 kdfread(&g_bEnhanced, sizeof(g_bEnhanced), 1, fil);
 	 
+#ifndef EDUKE20023
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
+#endif
 	 kdfread(&l,sizeof(l),1,fil);
 	 kdfread(g_szBuf,l,1,fil);
 	 g_szBuf[l]=0;
+#ifndef EDUKE20023
  AddLog(g_szBuf);
+#endif
 	 
 
 #if 0 
@@ -7680,7 +7702,9 @@ void FreeGameVars(void)
 {
 	// call this function as many times as needed.
 	int i;
+#ifndef EDUKE20023
 AddLog("FreeGameVars");	
+#endif
 	for(i=0;i<MAXGAMEVARS;i++)
 	{
 		aGameVars[i].lValue=0;
