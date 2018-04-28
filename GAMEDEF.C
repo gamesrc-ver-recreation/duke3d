@@ -5389,7 +5389,11 @@ char parsecommand(void)
 //AddLog(g_szBuf);
 			
 			AddGameVar(label+(labelcnt<<6),*(scriptptr-2),
+#ifdef PRE_EDUKE
+					   (*(scriptptr-2))
+#else
 					   (*(scriptptr-1))
+#endif
 						// can't define default or secret
 					   & (~( GAMEVAR_FLAG_DEFAULT | GAMEVAR_FLAG_SECRET))
 					  );
@@ -5767,13 +5771,21 @@ char parsecommand(void)
 		case CON_ONEVENT:
 			if( parsing_state )
 			{
+#ifdef PRE_EDUKE
+				printf("  * ERROR!(L%ld) Found 'useritem' within 'state'.\n",line_number);
+#else
 				printf("  * ERROR!(L%ld) Found 'onevent' within 'state'.\n",line_number);
+#endif
 				error++;
 			}
 
 			if( parsing_actor )
 			{
+#ifdef PRE_EDUKE
+				printf("  * ERROR!(L%ld) Found 'useritem' within 'actor'.\n",line_number);
+#else
 				printf("  * ERROR!(L%ld) Found 'onevent' within 'actor'.\n",line_number);
+#endif
 				error++;
 			}
 
@@ -5831,13 +5843,21 @@ char parsecommand(void)
 
 			if( parsing_state )
 			{
+#ifdef PRE_EDUKE
+				printf("  * ERROR!(L%ld) Found 'useritem' within 'state'.\n",line_number);
+#else
 				printf("  * ERROR!(L%ld) Found 'useractor' within 'state'.\n",line_number);
+#endif
 				error++;
 			}
 
 			if( parsing_actor )
 			{
+#ifdef PRE_EDUKE
+				printf("  * ERROR!(L%ld) Found 'useritem' within 'actor'.\n",line_number);
+#else
 				printf("  * ERROR!(L%ld) Found 'useractor' within 'actor'.\n",line_number);
+#endif
 				error++;
 			}
 
@@ -8055,7 +8075,11 @@ gamevar WEAPON11_SOUND2SOUND 0 GAMEVAR_FLAG_PERPLAYER
 		AddGameVar(aszBuf, 14, GAMEVAR_FLAG_PERPLAYER | GAMEVAR_FLAG_SYSTEM);
 
 		sprintf(aszBuf,"WEAPON%d_FLAGS",KNEE_WEAPON);
+#ifdef PRE_EDUKE
+		AddGameVar(aszBuf, WEAPON_FLAG_AUTOMATIC | WEAPON_FLAG_RANDOMRESTART, GAMEVAR_FLAG_PERPLAYER | GAMEVAR_FLAG_SYSTEM);
+#else
 		AddGameVar(aszBuf, WEAPON_FLAG_NOVISIBLE | WEAPON_FLAG_AUTOMATIC | WEAPON_FLAG_RANDOMRESTART, GAMEVAR_FLAG_PERPLAYER | GAMEVAR_FLAG_SYSTEM);
+#endif
 		
 		sprintf(aszBuf,"WEAPON%d_SHOOTS",KNEE_WEAPON);
 		AddGameVar(aszBuf, KNEE, GAMEVAR_FLAG_PERPLAYER | GAMEVAR_FLAG_SYSTEM);
@@ -8867,7 +8891,11 @@ void loadefs(char *filenam,char *mptr)
 		if( groupfile != -1 && loadfromgrouponly == 0 )
 		{
 			printf("\nWarnings found in %s file.  You should backup the original copies before\n",filenam);
+#ifdef PRE_EDUKE
+			puts("before attempting to modify them.  Do you want to use the");
+#else
 			puts("before attempting to modify them.	 Do you want to use the");
+#endif
 			puts("INTERNAL DEFAULTS (y/N)?");
 
 			KB_FlushKeyboardQueue();
@@ -8893,8 +8921,13 @@ void loadefs(char *filenam,char *mptr)
 		{
 			if( groupfile != -1 && loadfromgrouponly == 0 )
 			{
+#ifdef PRE_EDUKE
+				printf("\nErrors found in %s file.  You should backup the original copies\n",filenam);
+				puts("before attempting to modify them.  Do you want to use the");
+#else
 				printf("\nErrors found in %s file.	You should backup the original copies\n",filenam);
 				puts("before attempting to modify them.	 Do you want to use the");
+#endif
 				puts("internal defaults (Y/N)?");
 
 				KB_FlushKeyboardQueue();

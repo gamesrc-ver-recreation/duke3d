@@ -2035,7 +2035,11 @@ void operatefta(void)
           gametext(320>>1,k,fta_quotes[ps[screenpeek].ftq],0,2+8+16);
      else
 #ifdef NAM
+#ifdef PRE_EDUKE
+		 if(ps[screenpeek].ftq == 99) gametext(320>>1,k,"Matt Saettler.  matts@seanet.com",0,2+8+16+1);
+#else
 		 if(ps[screenpeek].ftq == 99) gametext(320>>1,k,"Matt Saettler.  matts@saettler.com",0,2+8+16+1);
+#endif
          else if (j > 2) gametext(320>>1,k,fta_quotes[ps[screenpeek].ftq],0,2+8+16+1);
 #else
          if (j > 2) gametext(320>>1,k,fta_quotes[ps[screenpeek].ftq],0,2+8+16+1);
@@ -7058,9 +7062,16 @@ void comlinehelp(char **argv)
     puts(" /z1           Don't use Reverb (use if your sound card crashes)");
 #endif
     puts(" -map FILE     Use a map FILE");
+#ifdef PRE_EDUKE
+    puts(" -name NAME    Foward NAME");
+#ifdef WW2
+    puts(" -nD           Dump Current Game Definitions to gamevars.con");
+#endif
+#else
     puts(" -name NAME    Forward NAME");
 #ifdef WW2
     puts(" /nD           Dump Current Game Definitions to gamevars.con");
+#endif
 #endif
   printf(" -net          Net mode game");
 }
