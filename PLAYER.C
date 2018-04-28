@@ -3955,7 +3955,8 @@ void processinput(short snum)
         p->posxv += ((sync[snum].fvel*doubvel)<<6);
         p->posyv += ((sync[snum].svel*doubvel)<<6);
 
-#ifndef WW2
+#if (!defined WW2) || (defined PRE_EDUKE)
+//#ifndef WW2
 		// sb_snum&2 = fire
 		if( ( p->curr_weapon == KNEE_WEAPON && *kb > 10 && p->on_ground ) || ( p->on_ground && (sb_snum&2) ) )
 #else

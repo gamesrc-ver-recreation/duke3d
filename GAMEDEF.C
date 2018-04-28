@@ -10931,7 +10931,11 @@ char parse(void)
 			insptr++;
 			i=*(insptr++);	// ID of def
 			j=0;
+#ifdef PRE_EDUKE
+			if(GetGameVarID(i, g_i, g_p) == GetGameVarID(*(insptr++), g_i, g_p) )
+#else
 			if(GetGameVarID(i, g_i, g_p) == GetGameVarID(*(insptr), g_i, g_p) )
+#endif
 			{
 				j=1;
 			}
@@ -10944,7 +10948,11 @@ char parse(void)
 			insptr++;
 			i=*(insptr++);	// ID of def
 			j=0;
+#ifdef PRE_EDUKE
+			if(GetGameVarID(i, g_i, g_p) > GetGameVarID(*(insptr++), g_i, g_p) )
+#else
 			if(GetGameVarID(i, g_i, g_p) > GetGameVarID(*(insptr), g_i, g_p) )
+#endif
 			{
 				j=1;
 			}
@@ -10957,7 +10965,11 @@ char parse(void)
 			insptr++;
 			i=*(insptr++);	// ID of def
 			j=0;
+#ifdef PRE_EDUKE
+			if(GetGameVarID(i, g_i, g_p) < GetGameVarID(*(insptr++), g_i, g_p) )
+#else
 			if(GetGameVarID(i, g_i, g_p) < GetGameVarID(*(insptr), g_i, g_p) )
+#endif
 			{
 				j=1;
 			}
