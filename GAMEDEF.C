@@ -7737,7 +7737,8 @@ void copydefaultcons(void)
 	}
 }
 
-#ifdef NAM
+#if (defined NAM) && (!defined PRE_WW2)
+//#ifdef NAM
 void FreeGameVars(void)
 {
 	// call this function as many times as needed.

@@ -3796,7 +3796,8 @@ void processinput(short snum)
          p->hard_landing ||
          p->access_incs > 0 ||
          p->knee_incs > 0 ||
-#ifdef WW2
+#if (defined WW2) || (defined PRE_WW2)
+//#ifdef WW2
 		 (p->curr_weapon == TRIPBOMB_WEAPON &&
 #else
 		 (aplWeaponWorksLike[p->curr_weapon] == TRIPBOMB_WEAPON &&
@@ -4286,7 +4287,10 @@ void processinput(short snum)
 
     SHOOTINCODE:
 #ifdef NAM
-//#define WEAPON2_CLIP	20					
+// VERSIONS RESTORATION - Uncomment this for NAM Full v1.0
+#ifdef PRE_WW2
+#define WEAPON2_CLIP	20					
+#endif
 	// reload clip
 	if( sb_snum & (1<<19) ) // 'Holster Weapon
 	{
@@ -4319,11 +4323,19 @@ void processinput(short snum)
 		if( p->curr_weapon == PISTOL_WEAPON)
 		{
 //			long lWeaponClip[PISTOL_WEAPON]=GetGameDef("WEAPON2_CLIP",WEAPON2_CLIP);
+#ifdef PRE_WW2
+			if( p->ammo_amount[PISTOL_WEAPON] > WEAPON2_CLIP )
+#else
 			if( p->ammo_amount[PISTOL_WEAPON] > aplWeaponClip[PISTOL_WEAPON][snum] )
+#endif
 			{
 				// throw away the remaining clip
 				p->ammo_amount[PISTOL_WEAPON]-=
+#ifdef PRE_WW2
+						   p->ammo_amount[PISTOL_WEAPON] % WEAPON2_CLIP ;
+#else
 						   p->ammo_amount[PISTOL_WEAPON] % aplWeaponClip[PISTOL_WEAPON][snum] ;
+#endif
 				(*kb) = 3;	// animate, but don't shoot...
 				sb_snum &= ~(1<<2); // not firing...
 			}
@@ -4997,6 +5009,7 @@ void processinput(short snum)
 #ifdef NAM
 
 					{
+#ifndef PRE_WW2
 						long lGrenadeLifetime=GetGameVar("GRENADE_LIFETIME", NAM_GRENADE_LIFETIME, -1, snum);
 						long lGrenadeLifetimeVar=GetGameVar("GRENADE_LIFETIME_VAR", NAM_GRENADE_LIFETIME_VAR, -1, snum);
 //sprintf(g_szBuf,"Lifetime=%ld Var=%ld snum=%d",lGrenadeLifetime, lGrenadeLifetimeVar, snum);
@@ -5005,6 +5018,10 @@ void processinput(short snum)
 					sprite[j].extra=lGrenadeLifetime
 								+ mulscale(krand(),lGrenadeLifetimeVar, 14)
 								- lGrenadeLifetimeVar;
+#else
+					// set timer.  blows up when at zero....
+					sprite[j].extra=mulscale(krand(), 30, 14)+90;
+#endif
 					}
 #endif
 
@@ -5713,13 +5730,21 @@ void processinput(short snum)
 #ifdef NAM
 						// fire now, but don't reload right away...
 						*kb ++;
+#ifdef PRE_WW2
+						if(p->ammo_amount[GROW_WEAPON]<=1)
+#else
 						if(p->ammo_amount[p->curr_weapon]<=1)
+#endif
 							*kb=0;
 #else
                         *kb = 0;
 #endif
                         if( screenpeek == snum ) pus = 1;
+#ifdef PRE_WW2
+                        p->ammo_amount[GROW_WEAPON]--;
+#else
                         p->ammo_amount[p->curr_weapon]--;
+#endif
 #ifdef WW2
 						if(aplWeaponFireSound[p->curr_weapon][snum])
 						{
@@ -5734,7 +5759,9 @@ void processinput(short snum)
 
 //#ifdef NAM
 //#else
+#ifndef PRE_WW2
 						if(! (aplWeaponFlags[p->curr_weapon][snum] & WEAPON_FLAG_NOVISIBLE ))
+#endif
 						{
 							// make them visible if not set...
 							p->visibility = 0;
@@ -5744,11 +5771,17 @@ void processinput(short snum)
 //#endif
                     }
 #ifdef NAM
+#ifndef PRE_WW2
 					if((*kb) > aplWeaponReload[p->curr_weapon][snum])	// 30)
+#else
+					if ( (*kb) > 30)
+#endif
 					{
 						// reload now...
 						*kb=0;
+#ifndef PRE_WW2
 						if(! (aplWeaponFlags[p->curr_weapon][snum] & WEAPON_FLAG_NOVISIBLE ))
+#endif
 						{
 							// make them visible if not set...
 							p->visibility = 0;
@@ -5763,7 +5796,11 @@ void processinput(short snum)
                 else
                 {
 #ifdef NAM
+#ifndef PRE_WW2
 					if( (*kb) == aplWeaponFireDelay[p->curr_weapon][snum])	//10
+#else
+                    if( (*kb) == 10)
+#endif
 #else
                     if( (*kb) > 10)
 #endif						
@@ -5789,6 +5826,7 @@ void processinput(short snum)
                         shoot(pi,SHRINKER);
 #endif
 
+#ifndef PRE_WW2
 #ifdef NAM
 						if(! (aplWeaponFlags[p->curr_weapon][snum] & WEAPON_FLAG_NOVISIBLE ))
 						{
@@ -5801,9 +5839,14 @@ void processinput(short snum)
                         lastvisinc = totalclock+32;
                         checkavailweapon(p);
 #endif						
+#endif // PRE_WW2
                     }
 #ifdef NAM
+#ifndef PRE_WW2
 					else if((*kb) > aplWeaponReload[p->curr_weapon][snum])	// 30
+#else
+					else if((*kb) > 30)
+#endif
 					{
 						*kb=0;
                         p->visibility = 0;
@@ -5820,7 +5863,8 @@ void processinput(short snum)
                 {
                     (*kb)++;
 
-#ifdef WW2
+#if (defined WW2) || (defined PRE_WW2)
+//#ifdef WW2
 					if( (*kb) & 1 )
 #else
 					if( aplWeaponFlags[p->curr_weapon][snum] & WEAPON_FLAG_FIREEVERYOTHER)
@@ -5931,7 +5975,11 @@ void processinput(short snum)
                     if( (*kb) == 3 )
 #endif
                     {
+#ifdef PRE_WW2
+                        p->ammo_amount[FREEZE_WEAPON]--;
+#else
                         p->ammo_amount[p->curr_weapon]--;
+#endif
 						
 #ifdef WW2						
 						if(! (aplWeaponFlags[p->curr_weapon][snum] & WEAPON_FLAG_NOVISIBLE ))

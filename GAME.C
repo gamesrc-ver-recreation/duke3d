@@ -6043,6 +6043,7 @@ void cheats(void)
                         debug_on = 1-debug_on;
                         KB_FlushKeyBoardQueue();
                         ps[myconnectindex].cheat_phase = 0;
+#ifndef PRE_WW2
 {
 int i,j;
 FILE * fp=fopen("xxx.con","w");
@@ -6081,6 +6082,7 @@ fprintf(fp,"\n");
 DumpGameVars(fp);
 fclose(fp);
 }
+#endif // PRE_WW2
 						
                         break;
                     case 20:
@@ -7175,6 +7177,7 @@ void checkcommandline(int argc,char **argv)
                             CommandMusicToggleOff = 1;
                             puts("Music off.");
                         }
+#ifndef PRE_WW2
                         else if( *c == 'D')
                         {
 							FILE * fp=fopen("gamevars.con","w");
@@ -7183,6 +7186,7 @@ void checkcommandline(int argc,char **argv)
 							fclose(fp);
                             puts("Game Variables Saved.");
                         }
+#endif
                         else
                         {
                             comlinehelp(argv);
