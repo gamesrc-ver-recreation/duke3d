@@ -45,15 +45,20 @@ char * gamefunctions[NUMGAMEFUNCTIONS] =
    "Inventory",
    "Inventory_Left",
    "Inventory_Right",
-#if defined(EDUKE) || (!defined(WW2GI) && (!defined(PRE_EDUKE)))
+#if defined(EDUKE) || (!defined(WW2GI) && !defined(PRE_EDUKE))
 //#if defined(EDUKE) || !defined(WW2GI)
 "Hologram",
 "Jetpack",
 "NightVision",
-#else
+#elif (!defined PRE_WW2)
+//#else
 "Special1", //   "Hologram",
 "Special2", //   "Jetpack",
 "Special3", //   "NightVision",
+#else // PRE_WW2
+   "Holo_Duke",
+   "Jetpack",
+   "NightVision",
 #endif
    "MedKit",
    "TurnAround",
@@ -68,13 +73,18 @@ char * gamefunctions[NUMGAMEFUNCTIONS] =
    "See_Coop_View",
    "Mouse_Aiming",
    "Toggle_Crosshair",
-#if defined(EDUKE) || (!defined(WW2GI) && (!defined(PRE_EDUKE)))
+#ifndef PRE_WW2
+#if defined(EDUKE) || (!defined(WW2GI) && !defined(PRE_EDUKE))
 //#if defined(EDUKE) || !defined(WW2GI)
 "Steroids",
 #else
 "Special4", //   "Steroids",
 #endif
    "Quick_Stab",
+#else // PRE_WW2
+   "Steroids",
+   "Quick_Kick",
+#endif
    "Next_Weapon",
    "Previous_Weapon",
    };
@@ -116,15 +126,20 @@ static char * keydefaults[NUMKEYENTRIES*3] =
    "Inventory", "Enter", "KpdEnt", 
    "Inventory_Left", "[", "", 
    "Inventory_Right", "]", "", 
-#if defined(EDUKE) || (!defined(WW2GI) && (!defined(PRE_EDUKE)))
+#if defined(EDUKE) || (!defined(WW2GI) && !defined(PRE_EDUKE))
 //#if defined(EDUKE) || !defined(WW2GI)
 "Hologram", "H", "", 
 "Jetpack", "J", "", 
 "NightVision", "N", "",
-#else
+#elif (!defined PRE_WW2)
+//#else
 "Special1", "H", "", //   "Hologram", "H", "", 
 "Special2", "J", "", //   "Jetpack", "J", "", 
 "Special3", "N", "", //   "NightVision", "N", "",
+#else // PRE_WW2
+   "Holo_Duke", "H", "",
+   "Jetpack", "J", "",
+   "NightVision", "N", "",
 #endif
    "MedKit", "M", "", 
    "TurnAround", "BakSpc", "", 
@@ -139,13 +154,18 @@ static char * keydefaults[NUMKEYENTRIES*3] =
    "See_Coop_View", "K", "", 
    "Mouse_Aiming", "U", "", 
    "Toggle_Crosshair", "I", "", 
-#if defined(EDUKE) || (!defined(WW2GI) && (!defined(PRE_EDUKE)))
+#ifndef PRE_WW2
+#if defined(EDUKE) || (!defined(WW2GI) && !defined(PRE_EDUKE))
 //#if defined(EDUKE) || !defined(WW2GI)
 "Steroids", "R", "",
 #else
 "Special4", "R", "", //   "Steroids", "R", "",
 #endif
    "Quick_Stab", "`", "", 
+#else // PRE_WW2
+   "Steroids", "R", "",
+   "Quick_Kick", "`", "",
+#endif
    "Next_Weapon", "'", "", 
    "Previous_Weapon", ";", ""
    };

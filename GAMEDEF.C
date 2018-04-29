@@ -5693,7 +5693,11 @@ char parsecommand(void)
 					if( strcmp(label+(labelcnt<<6),label+(i<<6)) == 0 )
 					{
 						warning++;
+#ifdef PRE_WW2
+						printf("  * WARNING.(L%ld) Duplicate action '%s' ignored.\n",line_number,label+(labelcnt<<6));
+#else
 						printf("  * WARNING.(L%ld) Duplicate event '%s' ignored.\n",line_number,label+(labelcnt<<6));
+#endif
 						break;
 					}
 

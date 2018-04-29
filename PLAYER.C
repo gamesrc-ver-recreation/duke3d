@@ -2032,6 +2032,20 @@ void displayweapon(short snum)
                     myospal(194-(p->look_ang>>1),looking_arc+235-gun_pos,FIRSTGUN+5,gs,o,pal);
 #endif				
 #else
+#ifndef PRE_NAM
+                else if((*kb) < 38)
+                {
+                    myospal(184-(p->look_ang>>1),looking_arc+235-gun_pos,FIRSTGUN+8,gs,o,pal);
+                    myospal(224-(p->look_ang>>1),looking_arc+210-gun_pos,FIRSTGUN+5,gs,o,pal);
+                }
+                else if((*kb) < 44)
+                {
+                    myospal(164-(p->look_ang>>1),looking_arc+245-gun_pos,FIRSTGUN+8,gs,o,pal);
+                    myospal(224-(p->look_ang>>1),looking_arc+220-gun_pos,FIRSTGUN+5,gs,o,pal);
+                }
+                else if((*kb) < 50)
+                    myospal(194-(p->look_ang>>1),looking_arc+235-gun_pos,FIRSTGUN+5,gs,o,pal);
+#else
                 else if((*kb) < 23)
                 {
                     myospal(184-(p->look_ang>>1),looking_arc+235-gun_pos,FIRSTGUN+8,gs,o,pal);
@@ -2044,6 +2058,7 @@ void displayweapon(short snum)
                 }
                 else if((*kb) < 27)
                     myospal(194-(p->look_ang>>1),looking_arc+235-gun_pos,FIRSTGUN+5,gs,o,pal);
+#endif // PRE_NAM
 #endif					
 //sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 //AddLog(g_szBuf);

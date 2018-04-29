@@ -12,7 +12,11 @@
 extern "C" {
 #endif
 
+#ifdef PRE_WW2
+#define NUMGAMEFUNCTIONS 52
+#else
 #define NUMGAMEFUNCTIONS 55
+#endif
 
 extern char * gamefunctions[];
 

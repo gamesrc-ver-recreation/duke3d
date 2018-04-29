@@ -1745,7 +1745,11 @@ void coolgaugetext(short snum)
 					u |= 1024 + 128;
 			}
 #else
+#ifndef PRE_WW2
 				u |= 65536L+1024 + 128;
+#else
+				u |= 65536L+1024;
+#endif
 #endif
 		}
         if (sbar.gotweapon[i] != p->gotweapon[i])
@@ -7398,7 +7402,8 @@ void checkcommandline(int argc,char **argv)
                         else
                         {
                             puts("Using default weapon orders.");
-#ifdef WW2
+#if (defined WW2) || (!defined PRE_NAM)
+//#ifdef WW2
 #ifdef EDUKE
                             ud.wchoice[0][0] = 2;
                             ud.wchoice[0][1] = 4;
@@ -8030,7 +8035,11 @@ void main(int argc,char **argv)
 	sprintf(namtemp,"Additional engine modifications by Matt Saettler.\n");
 	puts(namtemp);
 #else
+#ifndef PRE_WW2
 	sprintf(namtemp,"Additional engine modifications by Matt Saettler.\n");
+#else
+	sprintf(namtemp,"Additional %s engine modifications by Matt Saettler\n",basename);
+#endif
 	puts(namtemp);
 #endif
 #endif	
@@ -9663,7 +9672,9 @@ void dobonus(char bonusonly)
         if( KB_KeyPressed( sc_F12 ) )
         {
             KB_ClearKeyDown( sc_F12 );
-#ifdef NAM			
+            // VERSIONS RESTORATION - A minor typo
+#if (defined NAM) && (!defined PRE_WW2)
+//#ifdef NAM			
             screencapture("WW20000.pcx",0);
 #else
 #ifdef NAM			
