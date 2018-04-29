@@ -1384,6 +1384,7 @@ void movefx(void)
                     x = ldist(&sprite[ps[screenpeek].i],s);
                     if( x < ht && T1 == 0 )
                     {
+#ifdef EDUKE
 #ifdef EDUKE20023
 						if (g_bNoReverb)
 						{
@@ -1395,12 +1396,11 @@ void movefx(void)
 							FX_SetReverb( s->lotag - 1000 );
 						}
 #else
-#ifdef EDUKE
 						// get rid of the crashing reverb bug...
                         FX_SetReverb( 0 );
+#endif
 #else
                         FX_SetReverb( s->lotag - 1000 );
-#endif
 #endif
                         T1 = 1;
                     }

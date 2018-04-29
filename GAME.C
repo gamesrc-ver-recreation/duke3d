@@ -48,11 +48,12 @@ source as it is released.
 #include "sndcards.h"
 
 #include "duke3d.h"
+#ifdef EDUKE
 #ifdef EDUKE20023
     #define VERSION "2.00.23 FIRST RELEASE"
 #else
-#ifdef EDUKE
     #define VERSION "2.00.21 FIRST RELEASE"
+#endif
 #else
 #ifdef NAM
     #define VERSION "1.0"
@@ -61,7 +62,6 @@ source as it is released.
     #define VERSION "1.5"
 #else
     #define VERSION "1.5"
-#endif
 #endif
 #endif
 #endif
@@ -109,7 +109,7 @@ char nam_head2[128];
 
 
 #define TIMERUPDATESIZ 32
-#ifdef EDUKE20023
+#if (defined EDUKE) && (defined EDUKE20023)
 char g_bNoReverb=0;
 #endif
 
@@ -7064,7 +7064,7 @@ void comlinehelp(char **argv)
 #endif
     puts(" /#            Load and run a game (slot 0-9)");
     puts(" /z            Skip memory check");
-#ifdef EDUKE20023	
+#if (defined EDUKE) && (defined EDUKE20023)
     puts(" /z1           Don't use Reverb (use if your sound card crashes)");
 #endif
     puts(" -map FILE     Use a map FILE");
@@ -7251,7 +7251,7 @@ void checkcommandline(int argc,char **argv)
                         break;
                     case 'z':
                     case 'Z':
-#ifdef EDUKE20023
+#if (defined EDUKE) && (defined EDUKE20023)
                         c++;
 						if(*c == '1')
 						{

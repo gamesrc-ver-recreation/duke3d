@@ -550,7 +550,7 @@ typedef struct
         short last_weapon, weapon_pos, kickback_pic;
 
 } STATUSBARTYPE;
-#ifdef EDUKE20023
+#if (defined EDUKE) && (defined EDUKE20023)
 extern char g_bNoReverb;
 #endif
 
