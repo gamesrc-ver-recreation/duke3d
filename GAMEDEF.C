@@ -32,7 +32,9 @@
 
 #include "duke3d.h"
 
+#ifndef PRE_WW2
 char g_szBuf[1024];
+#endif
 
 #ifdef WW2
 long *aplWeaponClip[MAX_WEAPONS];		// number of items in clip
