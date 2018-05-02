@@ -1,7 +1,8 @@
 *** WARNING: DO NOT TRY TOO HARD TO BUILD ANY OF THE ORIGINAL EXECUTABLES! ***
 
 Please remember that any little difference, not matter how small it is,
-can lead to a vastly different EXE layout. This includes differences in:  
+can lead to a vastly different EXE layout. This includes differences in:
+
 - The development tools (or parts of such); For instance, a compiler, a linker,
 an assembler, or even a support library or header. A version number is not
 a promise for having the exact tool used to reproduce some executable.
@@ -17,7 +18,8 @@ Following the warning, a description of the ways in which the executables were
 reproduced is given.
 
 With the right tools, this patched codebase can be used to reproduce any
-of the executables coming from the following original releases:  
+of the executables coming from the following original releases:
+
 - NAM (NAPALM) Full Version 1.0 (same EXE for NAM and NAPALM).
 - WW2GI Full Version 1.0.
 - Enhanced Duke (EDuke) 2.00.23 (mostly known as EDuke 2.0, not to be
@@ -64,7 +66,8 @@ or a *guessed* date (say, an original modification date of the EXE).
 Any other case is also a possibility.
 
 These are two good reasons for using DN3DREV as described above, referring
-to similar work done for Wolfenstein 3D EXEs (built with Borland C++):  
+to similar work done for Wolfenstein 3D EXEs (built with Borland C++):
+
 - WL1AP12 and WL6AP11 share the same code revision. However, WL1AP11
 is of an earlier revision. Thus, the usage of WOLFREV can be
 less confusing.
@@ -93,7 +96,8 @@ What is this based on
 
 This codebase is based on the EDuke 2.00.21 sources as originally released
 by Matt Saettler on 2003. Apart from actual C sources, this includes the
-MAKEFILE, as well as the following binary (non-source) OBJ/LIB files:  
+MAKEFILE, as well as the following binary (non-source) OBJ/LIB files:
+
 - The Build Engine (A.OBJ, CACHE1D.OBJ, ENGINE.OBJ and MMULTI.OBJ).
 - The Apogee Sound System (AUDIO_WF.LIB).
 - The MACT library (MACT386.LIB).
@@ -131,10 +135,12 @@ same binary library code was used for Duke Nukem 3D: Atomic Edition v1.5.
 Building each EXE
 =================
 
-Required tool:  
+Required tool:
+
 - Watcom C 10.6a (and no other version), for NAM, WW2GI and EDuke.
 
-Notes before trying to build anything:  
+Notes before trying to build anything:
+
 - This may depend on luck. Maybe you'll get a bit different EXE.
 - You may use BUILD.BAT to build each EXE, and CLEAN.BAT to clean
 any previously built object and executable files.
