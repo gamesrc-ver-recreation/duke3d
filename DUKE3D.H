@@ -549,6 +549,10 @@ typedef struct
         short last_weapon, weapon_pos, kickback_pic;
 
 } STATUSBARTYPE;
+// *** VERSIONS RESTORATION ***
+// Taken from the EDuke changelog for Build 22 (06/19/00):
+//
+// "Added /Z1 flag to disable Reverb.  It is enabled by default."
 #if (defined EDUKE) && (APPVER_DN3DREV >= AV_DR_EDK20023)
 extern char g_bNoReverb;
 #endif

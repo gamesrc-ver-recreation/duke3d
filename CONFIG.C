@@ -539,12 +539,16 @@ void readsavenames(void)
     long dummy;
     short i;
 	// also need to change in menues.c loadplayer()2
+// *** VERSIONS RESTORATION ***
+// Taken From the EDuke changelog for Build 23 (06/20/00):
+//
+// "Saved files were not being detected correctly on initialization."
 #if (APPVER_DN3DREV >= AV_DR_EDK20023)
     char *fn = {"egam_.sav"};
 #else
 #ifdef EDUKE	
     char *fn = {"egame_.sav"};
-#else
+#else"
     char *fn = {"game_.sav"};
 #endif
 #endif

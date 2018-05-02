@@ -1385,6 +1385,10 @@ void movefx(void)
                     if( x < ht && T1 == 0 )
                     {
 #ifdef EDUKE
+// *** VERSIONS RESTORATION ***
+// Taken from the EDuke changelog for Build 22 (06/19/00):
+//
+// "Added /Z1 flag to disable Reverb.  It is enabled by default."
 #if (APPVER_DN3DREV >= AV_DR_EDK20023)
 						if (g_bNoReverb)
 						{

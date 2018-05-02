@@ -109,6 +109,10 @@ char nam_head2[128];
 
 
 #define TIMERUPDATESIZ 32
+// *** VERSIONS RESTORATION ***
+// Taken from the EDuke changelog for Build 22 (06/19/00):
+//
+// "Added /Z1 flag to disable Reverb.  It is enabled by default."
 #if (defined EDUKE) && (APPVER_DN3DREV >= AV_DR_EDK20023)
 char g_bNoReverb=0;
 #endif
@@ -7064,6 +7068,8 @@ void comlinehelp(char **argv)
 #endif
     puts(" /#            Load and run a game (slot 0-9)");
     puts(" /z            Skip memory check");
+// *** VERSIONS RESTORATION ***
+// See above comment (changed added in Build 22).
 #if (defined EDUKE) && (APPVER_DN3DREV >= AV_DR_EDK20023)
     puts(" /z1           Don't use Reverb (use if your sound card crashes)");
 #endif
@@ -7251,6 +7257,8 @@ void checkcommandline(int argc,char **argv)
                         break;
                     case 'z':
                     case 'Z':
+// *** VERSIONS RESTORATION ***
+// See above comment (changed added in Build 22).
 #if (defined EDUKE) && (APPVER_DN3DREV >= AV_DR_EDK20023)
                         c++;
 						if(*c == '1')
