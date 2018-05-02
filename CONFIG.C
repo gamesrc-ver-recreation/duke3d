@@ -539,7 +539,7 @@ void readsavenames(void)
     long dummy;
     short i;
 	// also need to change in menues.c loadplayer()2
-#ifdef EDUKE20023
+#if (APPVER_DN3DREV >= AV_DR_EDK20023)
     char *fn = {"egam_.sav"};
 #else
 #ifdef EDUKE	

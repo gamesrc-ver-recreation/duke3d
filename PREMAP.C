@@ -710,7 +710,7 @@ void prelevel(char g)
     {
         nexti = nextspritestat[i];
 
-#ifndef PRE_EDUKE
+#if (APPVER_DN3DREV >= AV_DR_EDK20021)
 		LoadActor(i, -1, -1);
 #endif
 

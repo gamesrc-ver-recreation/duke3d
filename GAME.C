@@ -49,7 +49,7 @@ source as it is released.
 
 #include "duke3d.h"
 #ifdef EDUKE
-#ifdef EDUKE20023
+#if (APPVER_DN3DREV >= AV_DR_EDK20023)
     #define VERSION "2.00.23 FIRST RELEASE"
 #else
     #define VERSION "2.00.21 FIRST RELEASE"
@@ -109,7 +109,7 @@ char nam_head2[128];
 
 
 #define TIMERUPDATESIZ 32
-#if (defined EDUKE) && (defined EDUKE20023)
+#if (defined EDUKE) && (APPVER_DN3DREV >= AV_DR_EDK20023)
 char g_bNoReverb=0;
 #endif
 
@@ -1745,7 +1745,7 @@ void coolgaugetext(short snum)
 					u |= 1024 + 128;
 			}
 #else
-#ifndef PRE_WW2
+#if (APPVER_DN3DREV >= AV_DR_WW2GI10)
 				u |= 65536L+1024 + 128;
 #else
 				u |= 65536L+1024;
@@ -2039,7 +2039,7 @@ void operatefta(void)
           gametext(320>>1,k,fta_quotes[ps[screenpeek].ftq],0,2+8+16);
      else
 #ifdef NAM
-#ifdef PRE_EDUKE
+#if (APPVER_DN3DREV < AV_DR_EDK20021)
 		 if(ps[screenpeek].ftq == 99) gametext(320>>1,k,"Matt Saettler.  matts@seanet.com",0,2+8+16+1);
 #else
 		 if(ps[screenpeek].ftq == 99) gametext(320>>1,k,"Matt Saettler.  matts@saettler.com",0,2+8+16+1);
@@ -6047,7 +6047,7 @@ void cheats(void)
                         debug_on = 1-debug_on;
                         KB_FlushKeyBoardQueue();
                         ps[myconnectindex].cheat_phase = 0;
-#ifndef PRE_WW2
+#if (APPVER_DN3DREV >= AV_DR_WW2GI10)
 {
 int i,j;
 FILE * fp=fopen("xxx.con","w");
@@ -6086,7 +6086,7 @@ fprintf(fp,"\n");
 DumpGameVars(fp);
 fclose(fp);
 }
-#endif // PRE_WW2
+#endif // APPVER_DN3DREV >= AV_DR_WW2GI10
 						
                         break;
                     case 20:
@@ -7064,11 +7064,11 @@ void comlinehelp(char **argv)
 #endif
     puts(" /#            Load and run a game (slot 0-9)");
     puts(" /z            Skip memory check");
-#if (defined EDUKE) && (defined EDUKE20023)
+#if (defined EDUKE) && (APPVER_DN3DREV >= AV_DR_EDK20023)
     puts(" /z1           Don't use Reverb (use if your sound card crashes)");
 #endif
     puts(" -map FILE     Use a map FILE");
-#ifdef PRE_EDUKE
+#if (APPVER_DN3DREV < AV_DR_EDK20021)
     puts(" -name NAME    Foward NAME");
 #ifdef WW2
     puts(" -nD           Dump Current Game Definitions to gamevars.con");
@@ -7181,7 +7181,7 @@ void checkcommandline(int argc,char **argv)
                             CommandMusicToggleOff = 1;
                             puts("Music off.");
                         }
-#ifndef PRE_WW2
+#if (APPVER_DN3DREV >= AV_DR_WW2GI10)
                         else if( *c == 'D')
                         {
 							FILE * fp=fopen("gamevars.con","w");
@@ -7251,7 +7251,7 @@ void checkcommandline(int argc,char **argv)
                         break;
                     case 'z':
                     case 'Z':
-#if (defined EDUKE) && (defined EDUKE20023)
+#if (defined EDUKE) && (APPVER_DN3DREV >= AV_DR_EDK20023)
                         c++;
 						if(*c == '1')
 						{
@@ -7402,7 +7402,7 @@ void checkcommandline(int argc,char **argv)
                         else
                         {
                             puts("Using default weapon orders.");
-#if (defined WW2) || (!defined PRE_NAM)
+#if (defined WW2) || (APPVER_DN3DREV >= AV_DR_NAM10)
 //#ifdef WW2
 #ifdef EDUKE
                             ud.wchoice[0][0] = 2;
@@ -8035,7 +8035,7 @@ void main(int argc,char **argv)
 	sprintf(namtemp,"Additional engine modifications by Matt Saettler.\n");
 	puts(namtemp);
 #else
-#ifndef PRE_WW2
+#if (APPVER_DN3DREV >= AV_DR_WW2GI10)
 	sprintf(namtemp,"Additional engine modifications by Matt Saettler.\n");
 #else
 	sprintf(namtemp,"Additional %s engine modifications by Matt Saettler\n",basename);
@@ -9673,7 +9673,7 @@ void dobonus(char bonusonly)
         {
             KB_ClearKeyDown( sc_F12 );
             // VERSIONS RESTORATION - A minor typo
-#if (defined NAM) && (!defined PRE_WW2)
+#if (defined NAM) && (APPVER_DN3DREV >= AV_DR_WW2GI10)
 //#ifdef NAM			
             screencapture("WW20000.pcx",0);
 #else

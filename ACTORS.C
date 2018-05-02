@@ -1385,7 +1385,7 @@ void movefx(void)
                     if( x < ht && T1 == 0 )
                     {
 #ifdef EDUKE
-#ifdef EDUKE20023
+#if (APPVER_DN3DREV >= AV_DR_EDK20023)
 						if (g_bNoReverb)
 						{
 							// get rid of the crashing reverb bug...

@@ -199,7 +199,7 @@ loadplayer(signed char spot)
      char *fnptr, scriptptrs[MAXSCRIPTSIZE];
      long fil, bv, i, j, x;
      int32 nump;
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 
 sprintf(g_szBuf,"LoadPlayer for %d", spot);		
 AddLog(g_szBuf);
@@ -231,7 +231,7 @@ AddLog(g_szBuf);
         fnptr = fn;
         fn[4] = spot + '0';
      }
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 
 sprintf(g_szBuf,"LoadPlayer: File Name = %s", fnptr);		
 AddLog(g_szBuf);
@@ -241,7 +241,7 @@ AddLog(g_szBuf);
      if ((fil = kopen4load(fnptr,0)) == -1) return(-1);
 
      ready2send = 0;
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
@@ -257,7 +257,7 @@ AddLog(g_szBuf);
         ready2send = 1;
         return 1;
      }
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
@@ -273,7 +273,7 @@ AddLog(g_szBuf);
         FTA(124,&ps[myconnectindex]);
         return 1;
      }
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
@@ -289,7 +289,7 @@ AddLog(g_szBuf);
          menutext(160,100,0,0,"LOADING...");
          nextpage();
     }
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
@@ -301,7 +301,7 @@ AddLog(g_szBuf);
 	 FX_StopAllSounds();
      clearsoundlocks();
 	 MUSIC_StopSong();
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
@@ -314,7 +314,7 @@ AddLog(g_szBuf);
          kdfread(&ud.savegame[spot][0],19,1,fil);
 
 //     music_changed = (music_select != (ud.volume_number*11) + ud.level_number);
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
@@ -329,7 +329,7 @@ AddLog(g_szBuf);
 	 ud.m_volume_number = ud.volume_number;
 	 ud.m_player_skill = ud.player_skill;
 
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
@@ -374,7 +374,7 @@ AddLog(g_szBuf);
      kdfread(&clouds[0],sizeof(short)<<7,1,fil);
      kdfread(&cloudx[0],sizeof(short)<<7,1,fil);
      kdfread(&cloudy[0],sizeof(short)<<7,1,fil);
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
@@ -389,7 +389,7 @@ AddLog(g_szBuf);
          j = (long)script[i]+(long)&script[0];
          script[i] = j;
      }
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
@@ -403,7 +403,7 @@ AddLog(g_szBuf);
         j = (long)actorscrptr[i]+(long)&script[0];
         actorscrptr[i] = (long *)j;
      }
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
@@ -420,7 +420,7 @@ AddLog(g_szBuf);
         if( scriptptrs[i]&2 ) T5 += j;
         if( scriptptrs[i]&4 ) T6 += j;
      }
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
@@ -472,7 +472,7 @@ AddLog(g_szBuf);
      kdfread(&randomseed,sizeof(randomseed),1,fil);
      kdfread(&global_random,sizeof(global_random),1,fil);
      kdfread(&parallaxyscale,sizeof(parallaxyscale),1,fil);
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
@@ -481,7 +481,7 @@ AddLog(g_szBuf);
 #ifdef WW2
      ReadGameVars(fil);
 #endif
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
@@ -541,7 +541,7 @@ AddLog(g_szBuf);
 
      numinterpolations = 0;
      startofdynamicinterpolations = 0;
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
@@ -589,7 +589,7 @@ AddLog(g_szBuf);
 
      show_shareware = 0;
      everyothertime = 0;
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
@@ -607,7 +607,7 @@ AddLog(g_szBuf);
      waitforeverybody();
 
      resettimevars();
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);

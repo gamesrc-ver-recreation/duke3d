@@ -15,7 +15,7 @@
 
 #ifdef EDUKE
 // build number
-#ifdef EDUKE20023
+#if (APPVER_DN3DREV >= AV_DR_EDK20023)
 #define VERSIONCHECK	23
 #else
 #define VERSIONCHECK	21
@@ -32,7 +32,7 @@
 
 #include "duke3d.h"
 
-#ifndef PRE_WW2
+#if (APPVER_DN3DREV >= AV_DR_WW2GI10)
 char g_szBuf[1024];
 #endif
 
@@ -369,7 +369,7 @@ char *keyw[NUMKEYWORDS] =
 
 #ifdef WW2
 
-#ifndef PRE_EDUKE
+#if (APPVER_DN3DREV >= AV_DR_EDK20021)
 typedef struct _labels
 {
 	char *name;
@@ -4237,7 +4237,7 @@ void DoActor(char bSet, long lVar1, long lLabelID, long lVar2, short sActor, sho
 	}
 	return;
 }
-#endif // PRE_EDUKE
+#endif // APPVER_DN3DREV >= AV_DR_EDK20021
 
 
 void AddLog(char *psz)
@@ -4385,19 +4385,19 @@ void ReadGameVars(long fil)
 	int i;
 	long l;
 
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 AddLog("Reading Game Vars from File");
 #endif
 
 	 kdfread(&l,sizeof(l),1,fil);
 	 kdfread(g_szBuf,l,1,fil);
 	 g_szBuf[l]=0;
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
  AddLog(g_szBuf);
 #endif
 
 	 FreeGameVars();	// nuke 'em all...
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
 #endif
@@ -4409,7 +4409,7 @@ AddLog(g_szBuf);
 		 kdfread(&(aGameVars[i]),sizeof(MATTGAMEVAR),1,fil);
 	 }
 
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
 #endif
@@ -4431,13 +4431,13 @@ AddLog(g_szBuf);
 		}
 	 }
 	 
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
 #endif
 	 InitGameVarPointers();
 
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
 #endif
@@ -4459,7 +4459,7 @@ AddLog(g_szBuf);
 		// else nothing 'extra...'
 	 }
 
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
 #endif
@@ -4471,18 +4471,18 @@ AddLog(g_szBuf);
 		 apScriptGameEvent[i] = (long *)l;
 	 }
 	 
-#ifndef PRE_EDUKE
+#if (APPVER_DN3DREV >= AV_DR_EDK20021)
 	 kdfread(&g_bEnhanced, sizeof(g_bEnhanced), 1, fil);
 #endif
 	 
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
 AddLog(g_szBuf);
 #endif
 	 kdfread(&l,sizeof(l),1,fil);
 	 kdfread(g_szBuf,l,1,fil);
 	 g_szBuf[l]=0;
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
  AddLog(g_szBuf);
 #endif
 	 
@@ -4554,7 +4554,7 @@ void SaveGameVars(FILE *fil)
 		 apScriptGameEvent[i] = (long *)l;
 	 }
 
-#ifndef PRE_EDUKE
+#if (APPVER_DN3DREV >= AV_DR_EDK20021)
 	 dfwrite(&g_bEnhanced, sizeof(g_bEnhanced), 1, fil);
 #endif
 	 
@@ -4783,7 +4783,7 @@ long GetGameVarID(int id, short sActor, short sPlayer)
 		AddLog("GetGameVarID: Invalid Game ID");
 		return -1;
 	}
-#ifndef PRE_EDUKE
+#if (APPVER_DN3DREV >= AV_DR_EDK20021)
 	if( id == g_iThisActorID )
 	{
 		return sActor;
@@ -5057,7 +5057,7 @@ void makeitfall(short i)
 	}
 }
 
-#ifndef PRE_EDUKE
+#if (APPVER_DN3DREV >= AV_DR_EDK20021)
 long getlabelid(LABELS *pLabel, char *psz)
 {
 	// find the label psz in the table pLabel.
@@ -5321,7 +5321,7 @@ char parsecommand(void)
 			transnum();
 			return 0;
 			
-#ifndef PRE_EDUKE
+#if (APPVER_DN3DREV >= AV_DR_EDK20021)
 		case CON_IFSOUND:
 			transnum();
 			tempscrptr = scriptptr;
@@ -5391,7 +5391,7 @@ char parsecommand(void)
 //AddLog(g_szBuf);
 			
 			AddGameVar(label+(labelcnt<<6),*(scriptptr-2),
-#ifdef PRE_EDUKE
+#if (APPVER_DN3DREV < AV_DR_EDK20021)
 					   (*(scriptptr-2))
 #else
 					   (*(scriptptr-1))
@@ -5695,7 +5695,7 @@ char parsecommand(void)
 					if( strcmp(label+(labelcnt<<6),label+(i<<6)) == 0 )
 					{
 						warning++;
-#ifdef PRE_WW2
+#if (APPVER_DN3DREV < AV_DR_WW2GI10)
 						printf("  * WARNING.(L%ld) Duplicate action '%s' ignored.\n",line_number,label+(labelcnt<<6));
 #else
 						printf("  * WARNING.(L%ld) Duplicate event '%s' ignored.\n",line_number,label+(labelcnt<<6));
@@ -5777,7 +5777,7 @@ char parsecommand(void)
 		case CON_ONEVENT:
 			if( parsing_state )
 			{
-#ifdef PRE_EDUKE
+#if (APPVER_DN3DREV < AV_DR_EDK20021)
 				printf("  * ERROR!(L%ld) Found 'useritem' within 'state'.\n",line_number);
 #else
 				printf("  * ERROR!(L%ld) Found 'onevent' within 'state'.\n",line_number);
@@ -5787,7 +5787,7 @@ char parsecommand(void)
 
 			if( parsing_actor )
 			{
-#ifdef PRE_EDUKE
+#if (APPVER_DN3DREV < AV_DR_EDK20021)
 				printf("  * ERROR!(L%ld) Found 'useritem' within 'actor'.\n",line_number);
 #else
 				printf("  * ERROR!(L%ld) Found 'onevent' within 'actor'.\n",line_number);
@@ -5849,7 +5849,7 @@ char parsecommand(void)
 
 			if( parsing_state )
 			{
-#ifdef PRE_EDUKE
+#if (APPVER_DN3DREV < AV_DR_EDK20021)
 				printf("  * ERROR!(L%ld) Found 'useritem' within 'state'.\n",line_number);
 #else
 				printf("  * ERROR!(L%ld) Found 'useractor' within 'state'.\n",line_number);
@@ -5859,7 +5859,7 @@ char parsecommand(void)
 
 			if( parsing_actor )
 			{
-#ifdef PRE_EDUKE
+#if (APPVER_DN3DREV < AV_DR_EDK20021)
 				printf("  * ERROR!(L%ld) Found 'useritem' within 'actor'.\n",line_number);
 #else
 				printf("  * ERROR!(L%ld) Found 'useractor' within 'actor'.\n",line_number);
@@ -7042,7 +7042,7 @@ char parsecommand(void)
 		case CON_IFVARVARG:
 		case CON_IFVARVARL:
 		case CON_IFVARVARE:
-#ifndef PRE_EDUKE
+#if (APPVER_DN3DREV >= AV_DR_EDK20021)
 		case CON_IFVARVARN:
 		case CON_IFVARVARAND:
 #endif
@@ -7107,7 +7107,7 @@ char parsecommand(void)
 
 			checking_ifelse++;
 			return 0;
-#ifndef PRE_EDUKE
+#if (APPVER_DN3DREV >= AV_DR_EDK20021)
 		case CON_SPGETLOTAG:
 		case CON_SPGETHITAG:
 		case CON_SECTGETLOTAG:
@@ -7128,7 +7128,7 @@ char parsecommand(void)
 		case CON_IFVARL:
 		case CON_IFVARG:
 		case CON_IFVARE:
-#ifndef PRE_EDUKE
+#if (APPVER_DN3DREV >= AV_DR_EDK20021)
 		case CON_IFVARN:
 		case CON_IFVARAND:
 #endif
@@ -7204,7 +7204,7 @@ char parsecommand(void)
 			*scriptptr++=i;	// the ID of the DEF (offset into array...)
 			
 			return 0;
-#ifndef PRE_EDUKE
+#if (APPVER_DN3DREV >= AV_DR_EDK20021)
 		case CON_GETANGLETOTARGET:
 		case CON_GETACTORANGLE:
 		case CON_SETACTORANGLE:
@@ -7743,13 +7743,13 @@ void copydefaultcons(void)
 	}
 }
 
-#if (defined NAM) && (!defined PRE_WW2)
+#if (defined NAM) && (APPVER_DN3DREV >= AV_DR_WW2GI10)
 //#ifdef NAM
 void FreeGameVars(void)
 {
 	// call this function as many times as needed.
 	int i;
-#ifdef EDUKE20021
+#if (APPVER_DN3DREV == AV_DR_EDK20021)
 AddLog("FreeGameVars");	
 #endif
 	for(i=0;i<MAXGAMEVARS;i++)
@@ -8082,7 +8082,7 @@ gamevar WEAPON11_SOUND2SOUND 0 GAMEVAR_FLAG_PERPLAYER
 		AddGameVar(aszBuf, 14, GAMEVAR_FLAG_PERPLAYER | GAMEVAR_FLAG_SYSTEM);
 
 		sprintf(aszBuf,"WEAPON%d_FLAGS",KNEE_WEAPON);
-#ifdef PRE_EDUKE
+#if (APPVER_DN3DREV < AV_DR_EDK20021)
 		AddGameVar(aszBuf, WEAPON_FLAG_AUTOMATIC | WEAPON_FLAG_RANDOMRESTART, GAMEVAR_FLAG_PERPLAYER | GAMEVAR_FLAG_SYSTEM);
 #else
 		AddGameVar(aszBuf, WEAPON_FLAG_NOVISIBLE | WEAPON_FLAG_AUTOMATIC | WEAPON_FLAG_RANDOMRESTART, GAMEVAR_FLAG_PERPLAYER | GAMEVAR_FLAG_SYSTEM);
@@ -8686,7 +8686,7 @@ gamevar WEAPON11_SOUND2SOUND 0 GAMEVAR_FLAG_PERPLAYER
 	AddGameVar("ZRANGE", 0, GAMEVAR_FLAG_SYSTEM);
 	AddGameVar("ANGRANGE", 0, GAMEVAR_FLAG_SYSTEM);
 	AddGameVar("AUTOAIMANGLE", 0, GAMEVAR_FLAG_SYSTEM);
-#ifndef PRE_EDUKE
+#if (APPVER_DN3DREV >= AV_DR_EDK20021)
 	AddGameVar("LOTAG", 0, GAMEVAR_FLAG_READONLY | GAMEVAR_FLAG_SYSTEM);
 	AddGameVar("HITAG", 0, GAMEVAR_FLAG_READONLY | GAMEVAR_FLAG_SYSTEM);
 	AddGameVar("TEXTURE", 0, GAMEVAR_FLAG_READONLY | GAMEVAR_FLAG_SYSTEM);
@@ -8898,7 +8898,7 @@ void loadefs(char *filenam,char *mptr)
 		if( groupfile != -1 && loadfromgrouponly == 0 )
 		{
 			printf("\nWarnings found in %s file.  You should backup the original copies before\n",filenam);
-#ifdef PRE_EDUKE
+#if (APPVER_DN3DREV < AV_DR_EDK20021)
 			puts("before attempting to modify them.  Do you want to use the");
 #else
 			puts("before attempting to modify them.	 Do you want to use the");
@@ -8928,7 +8928,7 @@ void loadefs(char *filenam,char *mptr)
 		{
 			if( groupfile != -1 && loadfromgrouponly == 0 )
 			{
-#ifdef PRE_EDUKE
+#if (APPVER_DN3DREV < AV_DR_EDK20021)
 				printf("\nErrors found in %s file.  You should backup the original copies\n",filenam);
 				puts("before attempting to modify them.  Do you want to use the");
 #else
@@ -9658,7 +9658,7 @@ char parse(void)
 				spritesound((short) *insptr,g_i);
 			insptr++;
 			break;
-#ifndef PRE_EDUKE
+#if (APPVER_DN3DREV >= AV_DR_EDK20021)
 		case CON_IFSOUND:
 			insptr++;
 			parseifelse( Sound[*insptr].num == 0 );
@@ -10891,7 +10891,7 @@ char parse(void)
 			insptr++;
 			break;
 		}
-#ifndef PRE_EDUKE
+#if (APPVER_DN3DREV >= AV_DR_EDK20021)
 		case CON_SPGETLOTAG:
 		{	
 			insptr++;
@@ -10964,14 +10964,14 @@ char parse(void)
 			parseifelse( j );
 			break;
 		}
-#endif // PRE_EDUKE
+#endif // APPVER_DN3DREV >= AV_DR_EDK20021
 		case CON_IFVARVARE:
 		{
 			int i;
 			insptr++;
 			i=*(insptr++);	// ID of def
 			j=0;
-#ifdef PRE_EDUKE
+#if (APPVER_DN3DREV < AV_DR_EDK20021)
 			if(GetGameVarID(i, g_i, g_p) == GetGameVarID(*(insptr++), g_i, g_p) )
 #else
 			if(GetGameVarID(i, g_i, g_p) == GetGameVarID(*(insptr), g_i, g_p) )
@@ -10988,7 +10988,7 @@ char parse(void)
 			insptr++;
 			i=*(insptr++);	// ID of def
 			j=0;
-#ifdef PRE_EDUKE
+#if (APPVER_DN3DREV < AV_DR_EDK20021)
 			if(GetGameVarID(i, g_i, g_p) > GetGameVarID(*(insptr++), g_i, g_p) )
 #else
 			if(GetGameVarID(i, g_i, g_p) > GetGameVarID(*(insptr), g_i, g_p) )
@@ -11005,7 +11005,7 @@ char parse(void)
 			insptr++;
 			i=*(insptr++);	// ID of def
 			j=0;
-#ifdef PRE_EDUKE
+#if (APPVER_DN3DREV < AV_DR_EDK20021)
 			if(GetGameVarID(i, g_i, g_p) < GetGameVarID(*(insptr++), g_i, g_p) )
 #else
 			if(GetGameVarID(i, g_i, g_p) < GetGameVarID(*(insptr), g_i, g_p) )
@@ -11029,7 +11029,7 @@ char parse(void)
 			parseifelse( j );
 			break;
 		}
-#ifndef PRE_EDUKE
+#if (APPVER_DN3DREV >= AV_DR_EDK20021)
 		case CON_IFVARN:
 		{
 			int i;
@@ -11224,7 +11224,7 @@ char parse(void)
 	return 0;
 }
 
-#ifndef PRE_EDUKE
+#if (APPVER_DN3DREV >= AV_DR_EDK20021)
 void LoadActor(short i,short p,long x)
 {
 	char done;
@@ -11306,7 +11306,7 @@ void LoadActor(short i,short p,long x)
 	}
 
 }
-#endif // PRE_EDUKE
+#endif // APPVER_DN3DREV >= AV_DR_EDK20021
 
 void execute(short i,short p,long x)
 {

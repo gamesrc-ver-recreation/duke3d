@@ -1,4 +1,4 @@
-### VERSIONS RESTORATION ###^M
+### VERSIONS RESTORATION ###
 #
 #Makefile modified as desired, based on the one from the EDuke 2.00.21
 #sources, and also includes dynamic generation of an alternative
@@ -11,7 +11,7 @@
 !error appver_exedef not set!
 !endif
 
-LIBVER_ARGS = -DAPPVER_EXEDEF=$(appver_exedef) -DAPPVER_EXEDEF_$(appver_exedef)
+appver_args = -DAPPVER_EXEDEF=$(appver_exedef)
 
 #debug = /d2 /w1
 #all = debug all
@@ -26,21 +26,20 @@ $(appver_exedef)\game.exe: $(game_objs)
            cd $(appver_exedef)
            wlink $(all) @..\makefile.lnk
            cd ..
-           #wlink $(all) @makefile.lnk
 
 # use for NAM
 #compileoptions = $(prod) $(debug) -imact -DNAM
 # use for WW2.  Note that NAM must also be defined...
 #compileoptions = $(prod) $(debug) -imact -DNAM -DWW2
 # use for Enhanced Duke v2.00.21.  Note that NAM and WW2 must also be defined...
-#compileoptions = $(prod) $(debug) -imact -DEDUKE20021 -DEDUKE -DNAM -DWW2
+#compileoptions = $(prod) $(debug) -imact -DEDUKE -DNAM -DWW2 $(appver_args)
 
 !ifeq appver_exedef NAM10 # NAM Full Version 1.0
-compileoptions = $(prod) $(debug) -imact -DPRE_WW2 -DPRE_EDUKE -DNAM
+compileoptions = $(prod) $(debug) -imact -DNAM $(appver_args)
 !else ifeq appver_exedef WW2GI10 # WW2GI Full Version 1.0
-compileoptions = $(prod) $(debug) -imact -DPRE_EDUKE -DNAM -DWW2
+compileoptions = $(prod) $(debug) -imact -DNAM -DWW2 $(appver_args)
 !else ifeq appver_exedef EDK20023 # Enhanced Duke v2.00.23
-compileoptions = $(prod) $(debug) -imact -DEDUKE20023 -DEDUKE -DNAM -DWW2
+compileoptions = $(prod) $(debug) -imact -DEDUKE -DNAM -DWW2 $(appver_args)
 !endif
 
 globaldependencies = makefile. duke3d.h global.c
@@ -51,30 +50,30 @@ globaldependencies = makefile. duke3d.h global.c
 .obj : $(appver_exedef)
 
 game.obj : game.c $(globaldependencies)
-#	wcc386 game $(compileoptions)
+
 actors.obj : actors.c $(globaldependencies)
-#	wcc386 actors $(compileoptions)
+
 gamedef.obj : gamedef.c $(globaldependencies)
-#	wcc386 gamedef $(compileoptions)
+
 global.obj : global.c $(globaldependencies)
-#	wcc386 global $(compileoptions)
+
 menues.obj : menues.c $(globaldependencies)
-#	wcc386 menues $(compileoptions)
+
 player.obj : player.c $(globaldependencies)
-#	wcc386 player $(compileoptions)
+
 premap.obj : premap.c $(globaldependencies)
-#	wcc386 premap $(compileoptions)
+
 sector.obj : sector.c $(globaldependencies)
-#	wcc386 sector $(compileoptions)
+
 sounds.obj : sounds.c $(globaldependencies)
 	wcc386 sounds /fo=$(appver_exedef)\sounds /zu $(compileoptions)
-	#wcc386 sounds /zu $(compileoptions)
+
 rts.obj : rts.c $(globaldependencies)
-#	wcc386 rts $(compileoptions)
+
 config.obj : config.c $(globaldependencies)
-#	wcc386 config $(compileoptions)
+
 animlib.obj : animlib.c $(globaldependencies)
-#        wcc386 animlib $(compileoptions)
+
 
 .c.obj :
 	wcc386 $[* /fo=$(appver_exedef)\$^& $(compileoptions)

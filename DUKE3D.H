@@ -51,7 +51,6 @@ Prepared for public release: 03/21/2003 - Charlie Wiederhold, 3D Realms
 // #define AUSTRALIA
 // #define UK
 
-
 #define MAXSLEEPDIST  16384
 #define SLEEPTIME 24*64
 
@@ -550,7 +549,7 @@ typedef struct
         short last_weapon, weapon_pos, kickback_pic;
 
 } STATUSBARTYPE;
-#if (defined EDUKE) && (defined EDUKE20023)
+#if (defined EDUKE) && (APPVER_DN3DREV >= AV_DR_EDK20023)
 extern char g_bNoReverb;
 #endif
 

@@ -45,17 +45,17 @@ char * gamefunctions[NUMGAMEFUNCTIONS] =
    "Inventory",
    "Inventory_Left",
    "Inventory_Right",
-#if defined(EDUKE) || (!defined(WW2GI) && !defined(PRE_EDUKE))
+#if defined(EDUKE) || (!defined(WW2GI) && (APPVER_DN3DREV >= AV_DR_EDK20021))
 //#if defined(EDUKE) || !defined(WW2GI)
 "Hologram",
 "Jetpack",
 "NightVision",
-#elif (!defined PRE_WW2)
+#elif (APPVER_DN3DREV >= AV_DR_WW2GI10)
 //#else
 "Special1", //   "Hologram",
 "Special2", //   "Jetpack",
 "Special3", //   "NightVision",
-#else // PRE_WW2
+#else // APPVER_DN3DREV < AV_DR_WW2GI10
    "Holo_Duke",
    "Jetpack",
    "NightVision",
@@ -73,15 +73,15 @@ char * gamefunctions[NUMGAMEFUNCTIONS] =
    "See_Coop_View",
    "Mouse_Aiming",
    "Toggle_Crosshair",
-#ifndef PRE_WW2
-#if defined(EDUKE) || (!defined(WW2GI) && !defined(PRE_EDUKE))
+#if (APPVER_DN3DREV >= AV_DR_WW2GI10)
+#if defined(EDUKE) || (!defined(WW2GI) && (APPVER_DN3DREV >= AV_DR_EDK20021))
 //#if defined(EDUKE) || !defined(WW2GI)
 "Steroids",
 #else
 "Special4", //   "Steroids",
 #endif
    "Quick_Stab",
-#else // PRE_WW2
+#else // APPVER_DN3DREV < AV_DR_WW2GI10
    "Steroids",
    "Quick_Kick",
 #endif
@@ -126,17 +126,17 @@ static char * keydefaults[NUMKEYENTRIES*3] =
    "Inventory", "Enter", "KpdEnt", 
    "Inventory_Left", "[", "", 
    "Inventory_Right", "]", "", 
-#if defined(EDUKE) || (!defined(WW2GI) && !defined(PRE_EDUKE))
+#if defined(EDUKE) || (!defined(WW2GI) && (APPVER_DN3DREV >= AV_DR_EDK20021))
 //#if defined(EDUKE) || !defined(WW2GI)
 "Hologram", "H", "", 
 "Jetpack", "J", "", 
 "NightVision", "N", "",
-#elif (!defined PRE_WW2)
+#elif (APPVER_DN3DREV >= AV_DR_WW2GI10)
 //#else
 "Special1", "H", "", //   "Hologram", "H", "", 
 "Special2", "J", "", //   "Jetpack", "J", "", 
 "Special3", "N", "", //   "NightVision", "N", "",
-#else // PRE_WW2
+#else // APPVER_DN3DREV < AV_DR_WW2GI10
    "Holo_Duke", "H", "",
    "Jetpack", "J", "",
    "NightVision", "N", "",
@@ -154,15 +154,15 @@ static char * keydefaults[NUMKEYENTRIES*3] =
    "See_Coop_View", "K", "", 
    "Mouse_Aiming", "U", "", 
    "Toggle_Crosshair", "I", "", 
-#ifndef PRE_WW2
-#if defined(EDUKE) || (!defined(WW2GI) && !defined(PRE_EDUKE))
+#if (APPVER_DN3DREV >= AV_DR_WW2GI10)
+#if defined(EDUKE) || (!defined(WW2GI) && (APPVER_DN3DREV >= AV_DR_EDK20021))
 //#if defined(EDUKE) || !defined(WW2GI)
 "Steroids", "R", "",
 #else
 "Special4", "R", "", //   "Steroids", "R", "",
 #endif
    "Quick_Stab", "`", "", 
-#else // PRE_WW2
+#else // APPVER_DN3DREV < AV_DR_WW2GI10
    "Steroids", "R", "",
    "Quick_Kick", "`", "",
 #endif

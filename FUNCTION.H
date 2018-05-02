@@ -11,8 +11,16 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+// VERSIONS RESTORATION
+//
+// For now adding this here is sufficient, as long as macros originally
+// not added by us (like WW2) are still defined using Watcom's -D arguments.
+//
+// Any source file for which one of our new macros is used, *will* include
+// this header beforehand (as of writing this).
+#include "gamever.h"
 
-#ifdef PRE_WW2
+#if (APPVER_DN3DREV < AV_DR_WW2GI10)
 #define NUMGAMEFUNCTIONS 52
 #else
 #define NUMGAMEFUNCTIONS 55
