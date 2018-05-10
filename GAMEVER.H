@@ -9,6 +9,7 @@
 // this header first (as of writing this).
 
 // APPVER_DN3DREV definitions
+#define AV_DR_DN3D15 199612110L
 #define AV_DR_NAM10 199805150L // Also for NAPALM
 #define AV_DR_WW2GI10 199902280L
 #define AV_DR_EDK20021 200006191L // There were two builds during the same day!

@@ -7410,7 +7410,10 @@ void checkcommandline(int argc,char **argv)
                         else
                         {
                             puts("Using default weapon orders.");
-#if (defined WW2) || (APPVER_DN3DREV >= AV_DR_NAM10)
+// *** VERSIONS RESTORATION ***
+// This covers all of Duke3D v1.5, NAM, WW2GI, EDuke 2.00.23
+// (based on definition of the EDUKE macro)
+#if 1
 //#ifdef WW2
 #ifdef EDUKE
                             ud.wchoice[0][0] = 2;

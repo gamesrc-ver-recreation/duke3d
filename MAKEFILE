@@ -34,7 +34,9 @@ $(appver_exedef)\game.exe: $(game_objs)
 # use for Enhanced Duke v2.00.21.  Note that NAM and WW2 must also be defined...
 #compileoptions = $(prod) $(debug) -imact -DEDUKE -DNAM -DWW2 $(appver_args)
 
-!ifeq appver_exedef NAM10 # NAM Full Version 1.0
+!ifeq appver_exedef DN3D15 # Duke Nukem 3D: Atomic Edition v1.5
+compileoptions = $(prod) $(debug) -imact $(appver_args)
+!else ifeq appver_exedef NAM10 # NAM Full Version 1.0
 compileoptions = $(prod) $(debug) -imact -DNAM $(appver_args)
 !else ifeq appver_exedef WW2GI10 # WW2GI Full Version 1.0
 compileoptions = $(prod) $(debug) -imact -DNAM -DWW2 $(appver_args)

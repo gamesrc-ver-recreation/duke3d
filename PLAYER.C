@@ -5841,20 +5841,20 @@ void processinput(short snum)
                         shoot(pi,SHRINKER);
 #endif
 
-#if (APPVER_DN3DREV >= AV_DR_WW2GI10)
-#ifdef NAM
+#if (defined NAM) && (APPVER_DN3DREV >= AV_DR_WW2GI10)
+//#ifdef NAM
 						if(! (aplWeaponFlags[p->curr_weapon][snum] & WEAPON_FLAG_NOVISIBLE ))
 						{
 							// make them visible if not set...
 							p->visibility = 0;
 							lastvisinc = totalclock+32;
 						}
-#else
+#elif (APPVER_DN3DREV < AV_DR_NAM10)
+//#else
                         p->visibility = 0;
                         lastvisinc = totalclock+32;
                         checkavailweapon(p);
 #endif						
-#endif // APPVER_DN3DREV >= AV_DR_WW2GI10 
                     }
 #ifdef NAM
 #if (APPVER_DN3DREV >= AV_DR_WW2GI10)
