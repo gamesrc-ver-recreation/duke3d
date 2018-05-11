@@ -18,8 +18,10 @@ Following the warning, a description of the ways in which the executables were
 reproduced is given.
 
 With the right tools, this patched codebase can be used to reproduce any
-of the executables coming from the following original releases:
+of the executables coming from the following original releases, with some
+caveats for the Duke Nukem 3D: Atomic Edition v1.5 EXE:
 
+- Duke Nukem 3D: Atomic Edition v1.5.
 - NAM (NAPALM) Full Version 1.0 (same EXE for NAM and NAPALM).
 - WW2GI Full Version 1.0.
 - Enhanced Duke (EDuke) 2.00.23 (mostly known as EDuke 2.0, not to be
@@ -32,6 +34,7 @@ your own anymore. Instead, use BUILD.BAT.
 List of releases by directory names
 -----------------------------------
 
+- DN3D15: Duke Nukem 3D: Atomic Edition v1.5.
 - NAM10: NAM (NAPALM) Full Version 1.0.
 - WW2GI10: WW2GI Full Version 1.0.
 - EDK20023: Enhanced Duke 2.00.23.
@@ -95,17 +98,20 @@ What is this based on
 ---------------------
 
 This codebase is based on the EDuke 2.00.21 sources as originally released
-by Matt Saettler on 2003. Apart from actual C sources, this includes the
-MAKEFILE, as well as the following binary (non-source) OBJ/LIB files:
+by Matt Saettler on 2003. As for the Duke Nukem 3D sources as released by
+3D Realms beforehand, they were mostly used for reference, say while
+attempting to recreate the behaviors of Duke3D v1.5.
+Apart from actual C sources, the usage of the EDuke 2.00.21 source tree
+includes the MAKEFILE, as well as the following binary (non-source)
+OBJ/LIB files (also turning out to be present in 3DR's sources):
 
 - The Build Engine (A.OBJ, CACHE1D.OBJ, ENGINE.OBJ and MMULTI.OBJ).
 - The Apogee Sound System (AUDIO_WF.LIB).
 - The MACT library (MACT386.LIB).
 - The Total Entertainment Network (TEN) library (BUTWCD4.LIB).
 
-A few missing headers from the MACT library were copied from
-the Duke Nukem 3D sources as released by 3D Realms earlier
-on 2003. Their MAKEFILE.LNK file was also used as a base.
+A few missing headers from the MACT library were copied from 3DR's sources.
+Their MAKEFILE.LNK file was also used as a base.
 
 As a side-note on MAKEFILE.LNK, using the "file" directive even for the
 libraries, and further issuing the "segment" directives, were all essential
@@ -127,26 +133,54 @@ There are no sources for the MACT library (MACT386.LIB), as well
 as the Total Entertainment Network i.e., TEN library (BUTWCD4.LIB).
 
 In addition, while the Build Engine and the Apogee Sound System were
-open sourced, currently the binary files from the EDuke 2.00.21 sources are
-used. Based on the original modification date of Dec 9 1996 that all binary
-files share, it is currently *guessed* (but *not* proven) that the exact
-same binary library code was used for Duke Nukem 3D: Atomic Edition v1.5.
+open sourced, currently the binary files from the EDuke 2.00.21 sources
+(or equivalently 3DR's released sources) are used. As hinted by the original
+modification date of Dec 9 1996 that all binary files share, the exact same
+binary library code was used for Duke Nukem 3D: Atomic Edition v1.5.
 
-Building each EXE
-=================
+Building any of the EXEs
+========================
 
-Required tool:
+Required tools:
 
-- Watcom C 10.6a (and no other version), for NAM, WW2GI and EDuke.
+- For Duke3D v1.5 i.e., Duke Nukem 3D Atomic Edition v1.5:
+Watcom C 10.0 (and no other version, not even 10.0a or 10.0b).
+- For any other EXE: Watcom C 10.6a (and no other version).
+- (Optional) For Duke3D v1.5: DOS/4GW Professional Bind Utility version 1.3,
+along with DOS/4GW Professional Protected Mode Run Time version 1.96.
 
 Notes before trying to build anything:
 
-- This may depend on luck. Maybe you'll get a bit different EXE.
+- This may depend on luck. In the case of Duke Nukem 3D: Atomic Edition v1.5,
+you *will* get a different EXE, especially if you don't
+use DOS/4GW Professional (but also if you do).
+Even with other EXEs, luck may have its part.
+- Further note that any customized patch, like copy protection removal,
+shall *not* be applied here. This may lead to an additional
+minor difference of one byte, if not much more.
 - You may use BUILD.BAT to build each EXE, and CLEAN.BAT to clean
 any previously built object and executable files.
 
-Building any of the EXEs
-------------------------
+Building the Duke Nukem 3D: Atomic Edition v1.5 EXE
+===================================================
+
+1. Use BUILD.BAT, passing the output directory name of DN3D15
+as an argument
+2. Hopefully you should get an EXE essentially behaving like the original.
+
+Expected differences from the original:
+
+- A few unused gaps, mostly between C string literals, seem to be filled with
+values depending on the environment while running the Watcom C compiler
+(e.g., the exact contents of each compilation unit). This seems to be
+related to Watcom C v10.0(a/b), and less to 10.6a.
+2. The created GAME.EXE file will require an external DOS4GW EXE
+(or compatible). You may optionally use DOS/4GW Professional to
+bind its loader to the EXE, but chances are there'll still be an
+*additional* difference of, say, 6 bytes from the original EXE.
+
+Building the NAM, WW2GI or EDUKE EXE
+====================================
 
 1. Use BUILD.BAT, passing the corresponding output directory name
 as an argument (e.g., NAM10 for NAM Full Version 1.0).
