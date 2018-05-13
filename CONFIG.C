@@ -548,7 +548,7 @@ void readsavenames(void)
 #else
 #ifdef EDUKE	
     char *fn = {"egame_.sav"};
-#else"
+#else
     char *fn = {"game_.sav"};
 #endif
 #endif
