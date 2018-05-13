@@ -113,14 +113,16 @@ OBJ/LIB files (also turning out to be present in 3DR's sources):
 A few missing headers from the MACT library were copied from 3DR's sources.
 Their MAKEFILE.LNK file was also used as a base.
 
+As a side-note on MAKEFILE.LNK, using the "file" directive even for the
+libraries, and further issuing the "segment" directives, were all essential
+for reproducing exactly the original EXEs as built by Matt.
+
 The idea to look into the EDuke 2.00.21 sources
 (rather than just 3DR's sources) came from Evan Ramos.
 Further thanks shall be sent to Barry Duncan, Jarmo Kylmäaho
 and Richard Gobeille for any assistance and/or other way of showing support.
-
-As a side-note on MAKEFILE.LNK, using the "file" directive even for the
-libraries, and further issuing the "segment" directives, were all essential
-for reproducing exactly the original EXEs as built by Matt.
+It's probably also a good chance to send my thanks to various other members
+of the Duke4.net community for their great support during all of these years!
 
 How was the makefile (and a bit more) modified from the original
 ----------------------------------------------------------------
