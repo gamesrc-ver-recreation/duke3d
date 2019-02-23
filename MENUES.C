@@ -114,6 +114,15 @@ void cmenu(short cm)
 
 void savetemp(char *fn,long daptr,long dasiz)
 {
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+    int fp;
+
+    fp = open(fn,O_WRONLY|O_CREAT|O_TRUNC|O_BINARY,S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP);
+
+    write(fp,(char *)daptr,dasiz);
+
+    close(fp);
+#else
     FILE *fp;
 
     if ((fp = fopen(fn,"wb")) == (FILE *)NULL)
@@ -122,6 +131,7 @@ void savetemp(char *fn,long daptr,long dasiz)
     fwrite((char *)daptr,dasiz,1,fp);
 
     fclose(fp);
+#endif
 }
 
 void getangplayers(short snum)
@@ -187,7 +197,11 @@ loadpheader(char spot,int32 *vn,int32 *ln,int32 *psk,int32 *nump)
 
 loadplayer(signed char spot)
 {
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+     short k,music_changed;
+#else
      short k;
+#endif
 #ifdef EDUKE
 	 // also need to change in config.c readsavenames()
      char *fn = "egam0.sav";
@@ -313,7 +327,9 @@ AddLog(g_szBuf);
      else
          kdfread(&ud.savegame[spot][0],19,1,fil);
 
-//     music_changed = (music_select != (ud.volume_number*11) + ud.level_number);
+#if (APPVER_DN3DREV < AV_DR_DN3D15) // VERSIONS RESTORATION - Uncomment for <1.5
+     music_changed = (music_select != (ud.volume_number*11) + ud.level_number);
+#endif
 #if (APPVER_DN3DREV == AV_DR_EDK20021)
 
 sprintf(g_szBuf,"CP:%s %d",__FILE__,__LINE__);
@@ -502,8 +518,12 @@ AddLog(g_szBuf);
      clearbufbyte(gotpic,sizeof(gotpic),0L);
      clearsoundlocks();
 	 cacheit();
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+     docacheit();
 
-     music_select = (ud.volume_number*11) + ud.level_number;
+     if(music_changed == 0)
+#endif
+        music_select = (ud.volume_number*11) + ud.level_number;
      playmusic(&music_fn[0][music_select][0]);
 
      ps[myconnectindex].gm = MODE_GAME;
@@ -1805,7 +1825,8 @@ void menus(void)
         case 0:
             c = (320>>1);
             rotatesprite(c<<16,28<<16,65536L,0,INGAMEDUKETHREEDEE,0,0,10,0,0,xdim-1,ydim-1);
-#ifndef UK
+#if (APPVER_DN3DREV < AV_DR_DN3D15) || (!defined UK)
+//#ifndef UK
             rotatesprite((c+100)<<16,36<<16,65536L,0,PLUTOPAKSPRITE+2,(sintable[(totalclock<<4)&2047]>>11),0,2+8,0,0,xdim-1,ydim-1);
 #endif
             x = probe(c,67,16,7);
@@ -1922,7 +1943,8 @@ void menus(void)
         case 50:
             c = (320>>1);
             rotatesprite(c<<16,32<<16,65536L,0,INGAMEDUKETHREEDEE,0,0,10,0,0,xdim-1,ydim-1);
-#ifndef UK
+#if (APPVER_DN3DREV < AV_DR_DN3D15) || (!defined UK)
+//#ifndef UK
             rotatesprite((c+100)<<16,36<<16,65536L,0,PLUTOPAKSPRITE+2,(sintable[(totalclock<<4)&2047]>>11),0,2+8,0,0,xdim-1,ydim-1);
 #endif
             x = probe(c,67,16,7);

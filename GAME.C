@@ -53,8 +53,9 @@ source as it is released.
     #define VERSION "2.00.23 FIRST RELEASE"
 #else
     #define VERSION "2.00.21 FIRST RELEASE"
-#endif
+#endif // APPVER_DN3DREV
 #else
+#if (APPVER_DN3DREV >= AV_DR_DN3D15)
 #ifdef NAM
     #define VERSION "1.0"
 #else
@@ -63,6 +64,13 @@ source as it is released.
 #else
     #define VERSION "1.5"
 #endif
+#else // APPVER_DN3DREV
+#ifdef VOLUMEONE
+    #define VERSION "1.4"
+#else
+    #define VERSION "1.4"
+#endif
+#endif // APPVER_DN3DREV
 #endif
 #endif
 
@@ -72,7 +80,8 @@ char nam_head2[128];
 
 #else
 
-#ifdef UK
+#if (APPVER_DN3DREV >= AV_DR_DN3D15) && (defined UK)
+//#ifdef UK
 #define HEAD2  "Duke Nukem 3D (U.K. Plutonium Edition) v"VERSION
 #else
 #define HEAD   "Duke Nukem 3D Unregistered Shareware v"VERSION" "
@@ -82,7 +91,9 @@ char nam_head2[128];
 #define HEAD2  "Duke Nukem 3D Full Version v"VERSION
 #endif
 #define HEADA  "Duke Nukem 3D AUSSIE Unregistered Shareware v"VERSION
+#if (APPVER_DN3DREV >= AV_DR_DN3D15)
 #define HEAD2A "Duke Nukem 3D (Parental Lock) Full Version v"VERSION
+#endif // APPVER_DN3DREV
 #endif
 
 #endif
@@ -432,6 +443,12 @@ void getpackets(void)
     {
         switch(packbuf[0])
         {
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+            case 125:
+                cp = 0;
+                break;
+
+#endif
             case 126:
                 multiflag = 2;
                 multiwhat = 0;
@@ -2144,7 +2161,11 @@ void gameexit(char *t)
     if(playerswhenstarted > 1 && ud.coop != 1 && *t == ' ')
     {
         dobonus(1);
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+        setgamemode();
+#else
         setgamemode(ScreenMode,ScreenWidth,ScreenHeight);
+#endif
     }
 #ifdef ONELEVELDEMO
     doorders();
@@ -2291,6 +2312,9 @@ void typemode(void)
                 j = 50;
                 gametext(320>>1,j,"SEND MESSAGE TO...",0,2+8+16); j += 8;
                 for(i=connecthead;i>=0;i=connectpoint2[i])
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+//                for(i=0;i<ud.multimode;i++)
+#endif
                 {
                      if (i == myconnectindex)
                      {
@@ -2307,6 +2331,13 @@ void typemode(void)
                 minitextshade((320>>1)-40-4+1,j+1,"    ESC - Abort",26,0,2+8+16);
                 minitext((320>>1)-40-4,j,"    ESC - Abort",0,2+8+16); j += 7;
 
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+                //sprintf(buf,"PRESS 1-%ld FOR INDIVIDUAL PLAYER.",ud.multimode);
+                //gametext(320>>1,j,buf,0,2+8+16); j += 8;
+                //gametext(320>>1,j,"'A' OR 'ENTER' FOR ALL PLAYERS",0,2+8+16); j += 8;
+                //gametext(320>>1,j,"ESC ABORTS",0,2+8+16); j += 8;
+
+#endif
                 if (ud.screen_size > 0) j = 200-45; else j = 200-8;
                 gametext(320>>1,j,typebuf,0,2+8+16);
 
@@ -2388,10 +2419,12 @@ void displayrest(long smoothratio)
     walltype *wal;
     long cposx,cposy,cang;
 
+#if (APPVER_DN3DREV >= AV_DR_DN3D15)
     // printf("%ld\n",cacnum);
 
     // Print Gotpic picnum array if bit on, walloc of picnum
 
+#endif
     pp = &ps[screenpeek];
 
     if( pp->pals_time > 0 && pp->loogcnt == 0)
@@ -2917,6 +2950,11 @@ void displayrooms(short snum,long smoothratio)
 
     p = &ps[snum];
 
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+//    if(screencapt == 0 && (p->gm&MODE_MENU) && ( (current_menu/100) == 3 ) || (current_menu >= 1000 && current_menu < 2999 ) )
+  //      return;
+
+#endif
     if(pub > 0)
     {
         if(ud.screen_size > 8) drawbackground();
@@ -2967,7 +3005,11 @@ void displayrooms(short snum,long smoothratio)
 
         if(screencapt)
         {
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+            walock[MAXTILES-1] = 254;
+#else
             walock[MAXTILES-1] = 199;
+#endif
             if (waloff[MAXTILES-1] == 0)
                 allocache((long *)&waloff[MAXTILES-1],100*160,&walock[MAXTILES-1]);
             setviewtotile(MAXTILES-1,100L,160L);
@@ -3100,8 +3142,13 @@ void displayrooms(short snum,long smoothratio)
         if(screencapt == 1)
         {
             setviewback();
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+            walock[MAXTILES-1] = 1;
+#endif
             screencapt = 0;
+#if (APPVER_DN3DREV >= AV_DR_DN3D15)
 //            walock[MAXTILES-1] = 1;
+#endif
         }
         else if( ( ud.screen_tilting && p->rotscrnang) || ud.detail==0 )
         {
@@ -7343,6 +7390,21 @@ void checkcommandline(int argc,char **argv)
                     case 'j':
                     case 'J':
 
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+#ifdef VOLUMEALL
+    #ifdef AUSTRALIA
+        printf("Duke Nukem 3D (AUSSIE FULL VERSION) v%s\n",VERSION);
+    #else
+        printf("Duke Nukem 3D (FULL VERSION) v%s\n",VERSION);
+    #endif
+#else
+    #ifdef AUSTRALIA
+        printf("Duke Nukem 3D (AUSSIE SHAREWARE) v%s\n",VERSION);
+    #else
+        printf("Duke Nukem 3D (SHAREWARE) v%s\n",VERSION);
+    #endif
+#endif
+#else // APPVER_DN3DREV
                         #ifdef VOLUMEALL
                             #ifdef AUSTRALIA
                                 printf(HEAD2A);
@@ -7356,6 +7418,7 @@ void checkcommandline(int argc,char **argv)
                                  printf(HEAD);
                              #endif
                         #endif
+#endif // APPVER_DN3DREV
 
                          exit(0);
 
@@ -7575,7 +7638,8 @@ void Logo(void)
         else if( totalclock >= (220+30) )
             rotatesprite(160<<16,(129)<<16,30<<11,0,THREEDEE,0,0,2+8,0,0,xdim-1,ydim-1);
 
-#ifndef UK
+#if (APPVER_DN3DREV < AV_DR_DN3D15) || (!defined UK)
+//#ifndef UK
 
         if( totalclock >= 280 && totalclock < 395 )
         {
@@ -7608,7 +7672,8 @@ void Logo(void)
         rotatesprite(160<<16,(104)<<16,60<<10,0,DUKENUKEM,0,0,2+8,0,0,xdim-1,ydim-1);
         rotatesprite(160<<16,(129)<<16,30<<11,0,THREEDEE,0,0,2+8,0,0,xdim-1,ydim-1);
 
-#ifndef UK
+#if (APPVER_DN3DREV < AV_DR_DN3D15) || (!defined UK)
+//#ifndef UK
         rotatesprite(160<<16,(151)<<16,30<<11,0,PLUTOPAKSPRITE+1,0,0,2+8,0,0,xdim-1,ydim-1);
 #endif
 
@@ -7723,16 +7788,22 @@ void Startup(void)
 
    CONTROL_Startup( ControllerType, &GetTime, TICRATE );
 
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+   initengine(ScreenMode,ScreenWidth,ScreenHeight);
+#else
    initengine();
+#endif
    inittimer();
 
    puts("* Hold Esc to Abort. *");
    puts("Loading art header.");
    loadpics("tiles000.art");
 
+#if (APPVER_DN3DREV >= AV_DR_DN3D15)
    puts("Loading palette/lookups.");
    genspriteremaps();
 
+#endif
    readsavenames();
 
    tilesizx[MIRROR] = tilesizy[MIRROR] = 0;
@@ -7754,9 +7825,11 @@ void Startup(void)
    puts("Checking sound inits.");
    SoundStartup();
    loadtmb();
+#if (APPVER_DN3DREV >= AV_DR_DN3D15)
 
    getnames();
 
+#endif
 }
 
 
@@ -7789,6 +7862,10 @@ void getnames(void)
             if( i != myconnectindex )
                 sendpacket(i,&buf[0],l);
 
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+  //      getpackets();
+
+#endif
         l = 1;
         buf[0] = 9;
 
@@ -7799,12 +7876,18 @@ void getnames(void)
             l++;
         }
 
+#if (APPVER_DN3DREV >= AV_DR_DN3D15)
         waitforeverybody();
 
+#endif
         for(i=connecthead;i>=0;i=connectpoint2[i])
             if(i != myconnectindex)
                 sendpacket(i,&buf[0],11);
 
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+//        getpackets();
+
+#endif
         buf[0] = 10;
         buf[1] = ps[0].aim_mode;
         ps[myconnectindex].aim_mode = ps[0].aim_mode;
@@ -7813,12 +7896,32 @@ void getnames(void)
             if(i != myconnectindex)
                 sendpacket(i,buf,2);
 
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+//        getpackets();
+
+        if(cp == 0)
+        {
+            buf[0] = 125;
+
+            for(i=connecthead;i>=0;i=connectpoint2[i])
+                if(i != myconnectindex)
+                    sendpacket(i,buf,1);
+        }
+
+#endif
         getpackets();
 
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+        waitforeverybody();
+#endif
     }
 
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+    if(cp == 1)
+#else
 // MATTS: TEMPORARY	
     if(cp == 1 && numplayers < 2)
+#endif
 #ifdef NAM
 	{
 		sprintf(namtemp,"Please put %s CD in drive.",basename);
@@ -7925,6 +8028,11 @@ char testcd( char *fn )
   fil = open(fn,O_RDONLY,S_IREAD);
 
   if ( fil < 0 ) return 1;
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+
+  // ( DO A SEE/Byte check here.) (Not coded in this version)
+
+#endif
 
   dalen = filelength(fil);
 
@@ -7976,8 +8084,10 @@ void main(int argc,char **argv)
     int32 tempautorun;
 
 	
+#if (APPVER_DN3DREV >= AV_DR_DN3D15)
 
     ud.lockout = 1;
+#endif
 
 #ifndef NOCOPYPROTECT
 	copyprotect();
@@ -8013,6 +8123,11 @@ void main(int argc,char **argv)
     #endif
 #endif
 
+#if (APPVER_DN3DREV < AV_DR_DN3D15) && (defined BETA)
+//#ifdef BETA
+    printstr(0,1,"BETA VERSION BETA VERSION BETA VERSION BETA VERSION BETA VERSION BETA VERSION ",79);
+#endif
+
 #ifdef ONELEVELDEMO
     printstr(33,1,"ONE LEVEL DEMO",79);
 #endif
@@ -8027,6 +8142,11 @@ void main(int argc,char **argv)
 #else
     printstr(0,1,"                   Copyright (c) 1996 3D Realms Entertainment                   ",79);
 #endif	
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+
+//    printstr(0,2,"  ***     DUKE NUKEM v1.4 BETA VERSION.  USED FOR INTERNAL USE ONLY!!!     ***  ",79);
+
+#endif
     printf("\n\n");
 	
 #ifdef NAM
@@ -8056,7 +8176,8 @@ void main(int argc,char **argv)
 #endif	
 #endif	
 
-#ifdef AUSTRALIA
+#if ((APPVER_DN3DREV >= AV_DR_DN3D15) && (defined AUSTRALIA)
+//#ifdef AUSTRALIA
     puts("NOTICE: This version of Duke Nukem 3D has been modified from it's original");
     puts("version.  It has been modified to remove adult or violent content.");
     puts("\nPress any key to continue.");
@@ -8163,6 +8284,10 @@ void main(int argc,char **argv)
         ud.warp_on = 1;
     }
 
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+    getnames();
+
+#endif
     if(ud.multimode > 1)
     {
         playerswhenstarted = ud.multimode;
@@ -8189,6 +8314,18 @@ void main(int argc,char **argv)
           CenterRudder
           );
 
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+        puts("Loading palette/lookups.");
+
+    if( setgamemode() < 0 )
+    {
+        printf("\nVESA driver for ( %i * %i ) not found/supported!\n",xdim,ydim);
+        vidoption = 2;
+        setgamemode();
+    }
+
+    genspriteremaps();
+#else
     if( setgamemode(ScreenMode,ScreenWidth,ScreenHeight) < 0 )
     {
         printf("\nVESA driver for ( %ld * %ld ) not found/supported!\n",xdim,ydim);
@@ -8196,6 +8333,7 @@ void main(int argc,char **argv)
         setgamemode(ScreenMode,ScreenWidth,ScreenHeight);
     }
 
+#endif
 
 #ifdef VOLUMEONE
         if(numplayers > 4 || ud.multimode > 4)
@@ -8404,7 +8542,11 @@ void opendemowrite(void)
 
     ver = BYTEVERSION;
 
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+    if ((frecfilep = fopen(d,"wb")) == -1) return;
+#else
     if ((frecfilep = fopen(d,"wb")) == (FILE *)NULL) return;
+#endif
     fwrite(&dummylong,4,1,frecfilep);
     fwrite(&ver,sizeof(char),1,frecfilep);
     fwrite((char *)&ud.volume_number,sizeof(char),1,frecfilep);
@@ -9604,7 +9746,8 @@ void dobonus(char bonusonly)
         rotatesprite(0,0,65536L,0,MENUSCREEN,16,0,2+8+16+64,0,0,xdim-1,ydim-1);
         rotatesprite(160<<16,34<<16,65536L,0,INGAMEDUKETHREEDEE,0,0,10,0,0,xdim-1,ydim-1);
 
-#ifndef UK
+#if (APPVER_DN3DREV < AV_DR_DN3D15) || (!defined UK)
+//#ifndef UK
         rotatesprite((260)<<16,36<<16,65536L,0,PLUTOPAKSPRITE+2,0,0,2+8,0,0,xdim-1,ydim-1);
 #endif
 
@@ -10425,8 +10568,10 @@ Layout:
         Fire/Use
         Use Menu
 
+#if (APPVER_DN3DREV >= AV_DR_DN3D15) // Silly one, in a comment
 Duke V
 
+#endif
     After a brief resbit, Duke decides to get back to work.
 
 Cmdr:   "Duke, we've got a lot of scared people down there.
@@ -10437,12 +10582,21 @@ Cmdr:   "Croud control, my ass!  Remember that incident
          during the war?  You created nuthin' but death and
          destruction."
 Duke:   "Not destruction, justice."
+#if (APPVER_DN3DREV < AV_DR_DN3D15) // More silly ones
+Cmdr:   "I'll take no responsibility for your actions.  Your on
+         your own!  Behave your self, damnit!  You got that,
+         soldger?"
+Duke:   "I've always been on my own...   Face it, it's ass kickin' time,
+         SIR!"
+Cmdr:   "Get outta here...!"
+#else
 Cmdr:   "I'll take no responsibility for your actions.  You're on
          your own!  Behave your self, damnit!  You got that,
          soldger?!!"
 Duke:   "I've always been on my own...   Face it, it's ass kickin' time,
          SIR!"
 Cmdr:   "Get outta herrrre...!"
+#endif
         (Duke gives the Cmdr a hard stair, then cocks his weapon and
          walks out of the room)
 Cmdr:   In a wisper: "Good luck, my friend."
@@ -10450,10 +10604,12 @@ Cmdr:   In a wisper: "Good luck, my friend."
         (Cut to a scene where aliens are injecting genetic material
          into an unconcious subject)
 
+#if (APPVER_DN3DREV >= AV_DR_DN3D15) // OK, that's enough for now
 
 
 
 
+#endif
 Programming:   ( the functions I need )
      Images: Polys
      Actors:

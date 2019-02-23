@@ -49,16 +49,26 @@ Prepared for public release: 03/21/2003 - Charlie Wiederhold, 3D Realms
 // #define BETA
 
 // #define AUSTRALIA
+#if (APPVER_DN3DREV >= AV_DR_DN3D15)
 // #define UK
+#endif
 
 #define MAXSLEEPDIST  16384
 #define SLEEPTIME 24*64
 
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+#ifdef VOLUMEONE
+    #define BYTEVERSION 27
+#else
+    #define BYTEVERSION 116
+#endif
+#else // APPVER_DN3DREV
 #ifdef VOLUMEONE
     #define BYTEVERSION 28
 #else
     #define BYTEVERSION 117
 #endif
+#endif // APPVER_DN3DREV
 
 #define NUMPAGES 1
 

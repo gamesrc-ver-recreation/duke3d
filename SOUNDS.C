@@ -22,6 +22,7 @@ long backflag,numenvsnds;
 ===================
 */
 
+#if (APPVER_DN3DREV >= AV_DR_DN3D15)
 void soundexit(char *s)
 {
     SoundShutdown();
@@ -36,6 +37,7 @@ void soundexit(char *s)
     exit(-1);
 }
 
+#endif
 void SoundStartup( void )
    {
    int32 status;
@@ -78,16 +80,34 @@ void SoundStartup( void )
 
          FX_SetVolume( FXVolume );
          if (ReverseStereo == 1)
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+            {
+#endif
             FX_SetReverseStereo(!FX_GetReverseStereo());
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+            }
+#endif
          }
       }
    if ( status != FX_Ok )
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+      {
+      Error( FX_ErrorString( FX_Error ));
+      }
+#else
         soundexit("Error initializing sound.");
+#endif
 
    status = FX_SetCallBack( TestCallBack );
 
    if ( status != FX_Ok )
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+      {
+      Error( FX_ErrorString( FX_Error ));
+      }
+#else
         soundexit("Error initializing sound.");
+#endif
    }
 
 /*
@@ -109,8 +129,12 @@ void SoundShutdown( void )
    status = FX_Shutdown();
    if ( status != FX_Ok )
       {
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+      Error( FX_ErrorString( FX_Error ));
+#else
         puts("Error initializing sound.");
         gameexit("");
+#endif
       }
    }
 
@@ -155,7 +179,23 @@ void MusicStartup( void )
       MUSIC_SetVolume( MusicVolume );
       }
    else
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+   {
+      puts("Couldn't find selected sound card, or, error w/ sound card itself.");
+
+      SoundShutdown();
+      uninittimer();
+      uninitengine();
+      CONTROL_Shutdown();
+      CONFIG_WriteSetup();
+      KB_Shutdown();
+      uninitgroupfile();
+      unlink("duke3d.tmp");
+      exit(-1);
+   }
+#else
       soundexit("Couldn't find selected sound card.");
+#endif
 }
 
 /*

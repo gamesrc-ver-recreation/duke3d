@@ -130,7 +130,11 @@ void cachespritenum(short i)
             {
                 maxc = 5;
                 for(j = 1420;j < 1420+106; j++)
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+                    if(waloff[j] == -1)
+#else
                     if(waloff[j] == 0)
+#endif
                         tloadtile(j);
             }
             break;
@@ -246,7 +250,11 @@ char getsound(unsigned short num)
     if( (ud.level_number == 0 && ud.volume_number == 0 && (num == 189 || num == 232 || num == 99 || num == 233 || num == 17 ) ) ||
         ( l < 12288 ) )
     {
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+        Sound[num].lock = 2;
+#else
         Sound[num].lock = 199;
+#endif
         allocache((long *)&Sound[num].ptr,l,&Sound[num].lock);
         if(Sound[num].ptr != NULL)
             kread( fp, Sound[num].ptr , l);
@@ -313,6 +321,14 @@ void cacheit(void)
             j = nextspritesect[j];
         }
     }
+#if (APPVER_DN3DREV < AV_DR_DN3D15) // VERSIONS RESTORATION - Function were fused in 1.5
+
+}
+
+void docacheit(void)
+{
+    long i,j;
+#endif
 
     j = 0;
 
@@ -1000,7 +1016,8 @@ void newgame(char vn,char ln,char sk)
         nextpage();
 
         playanm("vol42a.anm",7);
-#ifdef WW2
+#if (APPVER_DN3DREV >= AV_DR_DN3D15) && (defined WW2) // VERSIONS RESTORATION - Commented out before 1.5, removed in 1.5, brought back in WW2
+//#ifdef WW2
 // maybe I deleted this by accident...		
         clearview(0L);
         nextpage();
@@ -1470,6 +1487,9 @@ void enterlevel(char g)
     if(ud.recstat != 2) MUSIC_StopSong();
 
     cacheit();
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+    docacheit();
+#endif
 
     if(ud.recstat != 2)
     {
@@ -1536,7 +1556,9 @@ void enterlevel(char g)
      vscrn();
      clearview(0L);
      drawbackground();
+#if (APPVER_DN3DREV >= AV_DR_DN3D15)
      displayrooms(myconnectindex,65536);
+#endif
 
      clearbufbyte(playerquitflag,MAXPLAYERS,0x01010101);
      ps[myconnectindex].over_shoulder_on = 0;
