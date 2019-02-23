@@ -3605,7 +3605,9 @@ void endanimvol43(long fr)
 }
 
 
+#if (APPVER_DN3DREV >= AV_DR_DN3DGPLSRC)
 long lastanimhack=0;
+#endif
 void playanm(char *fn,char t)
 {
 	char *animbuf, *palptr;
@@ -3629,13 +3631,17 @@ void playanm(char *fn,char t)
 
     walock[MAXTILES-3-t] = 219+t;
 
+#if (APPVER_DN3DREV >= AV_DR_DN3DGPLSRC)
     if(anim == 0 || lastanimhack != (MAXTILES-3-t))
+#endif
         allocache((long *)&anim,length+sizeof(anim_t),&walock[MAXTILES-3-t]);
 
     animbuf = (char *)(FP_OFF(anim)+sizeof(anim_t));
 
+#if (APPVER_DN3DREV >= AV_DR_DN3DGPLSRC)
     lastanimhack = (MAXTILES-3-t);
 
+#endif
     tilesizx[MAXTILES-3-t] = 200;
     tilesizy[MAXTILES-3-t] = 320;
 

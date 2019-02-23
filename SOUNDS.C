@@ -181,6 +181,9 @@ void MusicStartup( void )
    else
 #if (APPVER_DN3DREV < AV_DR_DN3D15)
    {
+#if (APPVER_DN3DREV < AV_DR_DN3DGPLSRC)
+      Error( MUSIC_ErrorString( MUSIC_ErrorCode ));
+#else
       puts("Couldn't find selected sound card, or, error w/ sound card itself.");
 
       SoundShutdown();
@@ -192,6 +195,7 @@ void MusicStartup( void )
       uninitgroupfile();
       unlink("duke3d.tmp");
       exit(-1);
+#endif
    }
 #else
       soundexit("Couldn't find selected sound card.");

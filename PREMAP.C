@@ -265,19 +265,29 @@ char getsound(unsigned short num)
 
 void precachenecessarysounds(void)
 {
+#if (APPVER_DN3DREV < AV_DR_DN3DGPLSRC)
+    short i;
+#else
     short i, j;
+#endif
 
     if (FXDevice == NumSoundCards) return;
+#if (APPVER_DN3DREV >= AV_DR_DN3DGPLSRC)
     j = 0;
+#endif
 
     for(i=0;i<NUM_SOUNDS;i++)
         if(Sound[i].ptr == 0)
+#if (APPVER_DN3DREV >= AV_DR_DN3DGPLSRC)
         {
             j++;
             if( (j&7) == 0 )
                 getpackets();
+#endif
             getsound(i);
+#if (APPVER_DN3DREV >= AV_DR_DN3DGPLSRC)
         }
+#endif
 }
 
 
