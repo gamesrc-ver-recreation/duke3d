@@ -157,7 +157,11 @@ char debug_on = 0,actor_tog = 0,*rtsptr,memorycheckoveride=0;
 extern char syncstate;
 extern int32 numlumps;
 
+#if (APPVER_DN3DREV < AV_DR_DN3DGPLSRC)
+FILE *frecfilep = -1;
+#else
 FILE *frecfilep = (FILE *)NULL;
+#endif
 void pitch_test( void );
 
 char restorepalette,screencapt,nomorelogohack;
@@ -2311,9 +2315,10 @@ void typemode(void)
           {
                 j = 50;
                 gametext(320>>1,j,"SEND MESSAGE TO...",0,2+8+16); j += 8;
+#if (APPVER_DN3DREV >= AV_DR_DN3DGPLSRC) // VERSIONS RESTORATION - Uncomment bottom line for 1.4, and keep the top one for >1.4
                 for(i=connecthead;i>=0;i=connectpoint2[i])
-#if (APPVER_DN3DREV < AV_DR_DN3D15)
-//                for(i=0;i<ud.multimode;i++)
+#else
+                for(i=0;i<ud.multimode;i++)
 #endif
                 {
                      if (i == myconnectindex)
@@ -2778,6 +2783,7 @@ void drawbackground(void)
 }
 
 
+#if (APPVER_DN3DREV >= AV_DR_DN3DGPLSRC) // VERSIONS RESTORATION - No FOF in 1.4
 // Floor Over Floor
 
 // If standing in sector with SE42
@@ -2937,6 +2943,7 @@ void se40code(long x,long y,long z,long a,long h, long smoothratio)
         i = nextspritestat[i];
     }
 }
+#endif // APPVER_DN3DREV
 
 static long oyrepeat=-1;
 
@@ -2988,7 +2995,9 @@ void displayrooms(short snum,long smoothratio)
 
         cang = hittype[ud.camerasprite].tempang+mulscale16((long)(((s->ang+1024-hittype[ud.camerasprite].tempang)&2047)-1024),smoothratio);
 
+#if (APPVER_DN3DREV >= AV_DR_DN3DGPLSRC)
         se40code(s->x,s->y,s->z,cang,s->yvel,smoothratio);
+#endif
 
         drawrooms(s->x,s->y,s->z-(4<<8),cang,s->yvel,s->sectnum);
         animatesprites(s->x,s->y,cang,smoothratio);
@@ -3103,7 +3112,9 @@ void displayrooms(short snum,long smoothratio)
         if(choriz > 299) choriz = 299;
         else if(choriz < -99) choriz = -99;
 
+#if (APPVER_DN3DREV >= AV_DR_DN3DGPLSRC)
         se40code(cposx,cposy,cposz,cang,choriz,smoothratio);
+#endif
 
         if ((gotpic[MIRROR>>3]&(1<<(MIRROR&7))) > 0)
         {
@@ -3142,7 +3153,9 @@ void displayrooms(short snum,long smoothratio)
         if(screencapt == 1)
         {
             setviewback();
-#if (APPVER_DN3DREV < AV_DR_DN3D15)
+#if (APPVER_DN3DREV < AV_DR_DN3DGPLSRC)
+            walock[MAXTILES-1] = 190;
+#elif (APPVER_DN3DREV < AV_DR_DN3D15)
             walock[MAXTILES-1] = 1;
 #endif
             screencapt = 0;
@@ -3463,10 +3476,12 @@ short spawn( short j, short pn )
                         sp->ang = sprite[j].ang;
                 }
                 break;
+#if (APPVER_DN3DREV >= AV_DR_DN3DGPLSRC)
             case FOF:
                 sp->xrepeat = sp->yrepeat = 0;
                 changespritestat(i,5);
                 break;
+#endif
             case WATERSPLASH2:
                 if(j >= 0)
                 {
@@ -5010,6 +5025,9 @@ short spawn( short j, short pn )
                         break;
                 }
 
+#if (APPVER_DN3DREV < AV_DR_DN3DGPLSRC) // VERSIONS RESTORATION - No FOF in 1.4
+                changespritestat(i,3);
+#else
                 switch(sprite[i].lotag)
                 {
                     case 40:
@@ -5023,6 +5041,7 @@ short spawn( short j, short pn )
                         changespritestat(i,3);
                         break;
                 }
+#endif
 
                 break;
 
@@ -5611,7 +5630,11 @@ void animatesprites(long x,long y,short a,long smoothratio)
                 break;
         }
 
+#if (APPVER_DN3DREV < AV_DR_DN3DGPLSRC)
+        if( actorscrptr[s->picnum] && ((t->cstat & 48) != 48) )
+#else
         if( actorscrptr[s->picnum] )
+#endif
         {
             if(t4)
             {
@@ -5676,7 +5699,11 @@ void animatesprites(long x,long y,short a,long smoothratio)
         }
 
         if( s->statnum == 13 || badguy(s) || (s->picnum == APLAYER && s->owner >= 0) )
+#if (APPVER_DN3DREV < AV_DR_DN3DGPLSRC)
+            if((s->cstat & 48) t->statnum != 99 && s->picnum != EXPLOSION2 && s->picnum != HANGLIGHT && s->picnum != DOMELITE)
+#else
             if(t->statnum != 99 && s->picnum != EXPLOSION2 && s->picnum != HANGLIGHT && s->picnum != DOMELITE)
+#endif
                 if(s->picnum != HOTMEAT)
         {
             if( hittype[i].dispicnum < 0 )
@@ -6837,7 +6864,9 @@ void nonsharedkeys(void)
                 FX_StopAllSounds();
                 clearsoundlocks();
 
-//                setview(0,0,xdim-1,ydim-1);
+#if (APPVER_DN3DREV < AV_DR_DN3DGPLSRC) // VERSIONS RESTORATION - Uncomment for 1.4
+                setview(0,0,xdim-1,ydim-1);
+#endif
                 ps[myconnectindex].gm |= MODE_MENU;
 
                 if(ud.multimode < 2)
@@ -8319,7 +8348,11 @@ void main(int argc,char **argv)
 
     if( setgamemode() < 0 )
     {
+#if (APPVER_DN3DREV < AV_DR_DN3DGPLSRC)
+        printf("\nVESA driver for ( %ld * %ld ) not found/supported!\n",xdim,ydim);
+#else
         printf("\nVESA driver for ( %i * %i ) not found/supported!\n",xdim,ydim);
+#endif
         vidoption = 2;
         setgamemode();
     }

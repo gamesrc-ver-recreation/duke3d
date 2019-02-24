@@ -117,7 +117,11 @@ void savetemp(char *fn,long daptr,long dasiz)
 #if (APPVER_DN3DREV < AV_DR_DN3D15)
     int fp;
 
+#if (APPVER_DN3DREV < AV_DR_DN3DGPLSRC)
+    fp = open(fn,O_WRONLY|O_CREAT|O_TRUNC|O_TEXT|O_BINARY,S_IWUSR|S_IRGRP|S_IWGRP);
+#else
     fp = open(fn,O_WRONLY|O_CREAT|O_TRUNC|O_BINARY,S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP);
+#endif
 
     write(fp,(char *)daptr,dasiz);
 

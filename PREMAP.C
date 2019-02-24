@@ -1444,9 +1444,11 @@ void enterlevel(char g)
     if( (g&MODE_DEMO) == 0 && ud.recstat == 2)
         ud.recstat = 0;
 
+#if (APPVER_DN3DREV >= AV_DR_DN3DGPLSRC) // VERSIONS RESTORATION - Relocated from 1.4
     FX_StopAllSounds();
     clearsoundlocks();
     FX_SetReverb(0);
+#endif
 
     i = ud.screen_size;
     ud.screen_size = 0;
@@ -1506,6 +1508,10 @@ void enterlevel(char g)
         music_select = (ud.volume_number*11) + ud.level_number;
         playmusic(&music_fn[0][music_select][0]);
     }
+#if (APPVER_DN3DREV < AV_DR_DN3DGPLSRC) // VERSIONS RESTORATION - Relocated after 1.4
+    clearsoundlocks();
+    FX_SetReverb(0);
+#endif
 
     if( (g&MODE_GAME) || (g&MODE_EOL) )
         ps[myconnectindex].gm = MODE_GAME;
@@ -1559,6 +1565,9 @@ void enterlevel(char g)
 
      restorepalette = 1;
 
+#if (APPVER_DN3DREV < AV_DR_DN3DGPLSRC) // VERSIONS RESTORATION - Relocated after 1.4
+     FX_StopAllSounds();
+#endif
      flushpackets();
      waitforeverybody();
 
