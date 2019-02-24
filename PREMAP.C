@@ -248,7 +248,11 @@ char getsound(unsigned short num)
     soundsiz[num] = l;
 
     if( (ud.level_number == 0 && ud.volume_number == 0 && (num == 189 || num == 232 || num == 99 || num == 233 || num == 17 ) ) ||
+#if (APPVER_DN3DREV < AV_DR_DN3DGPLSRC)
+        ( l < 12800 ) )
+#else
         ( l < 12288 ) )
+#endif
     {
 #if (APPVER_DN3DREV < AV_DR_DN3D15)
         Sound[num].lock = 2;

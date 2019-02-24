@@ -3014,6 +3014,8 @@ void displayrooms(short snum,long smoothratio)
 
         if(screencapt)
         {
+#if (APPVER_DN3DREV < AV_DR_DN3DGPLSRC)
+            walock[MAXTILES-1] = 255;
 #if (APPVER_DN3DREV < AV_DR_DN3D15)
             walock[MAXTILES-1] = 254;
 #else
@@ -5700,7 +5702,7 @@ void animatesprites(long x,long y,short a,long smoothratio)
 
         if( s->statnum == 13 || badguy(s) || (s->picnum == APLAYER && s->owner >= 0) )
 #if (APPVER_DN3DREV < AV_DR_DN3DGPLSRC)
-            if((s->cstat & 48) t->statnum != 99 && s->picnum != EXPLOSION2 && s->picnum != HANGLIGHT && s->picnum != DOMELITE)
+            if(!(s->cstat & 48) t->statnum != 99 && s->picnum != EXPLOSION2 && s->picnum != HANGLIGHT && s->picnum != DOMELITE)
 #else
             if(t->statnum != 99 && s->picnum != EXPLOSION2 && s->picnum != HANGLIGHT && s->picnum != DOMELITE)
 #endif
