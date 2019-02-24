@@ -1,3 +1,8 @@
+// "Build Engine & Tools" Copyright (c) 1993-1997 Ken Silverman
+// Ken Silverman's official web site: "http://www.advsys.net/ken"
+// See the included license file "BUILDLIC.TXT" for license info.
+// This file has been modified from Ken Silverman's original release
+
 #define MAXSECTORS 1024
 #define MAXWALLS 8192
 #define MAXSPRITES 4096
@@ -30,12 +35,16 @@
 //   bit 4: 1 = x-flip                                               "F"
 //   bit 5: 1 = y-flip                                               "F"
 //   bit 6: 1 = Align texture to first wall of sector                "R"
+#if (APPVER_DN3DREV < AV_DR_DN3D15)
+//   bits 7-15: reserved
+#else
 //   bits 7-8:                                                       "T"
 //          00 = normal floors
 //          01 = masked floors
 //          10 = transluscent masked floors
 //          11 = reverse transluscent masked floors
 //   bits 9-15: reserved
+#endif
 
 	//40 bytes
 typedef struct
@@ -117,10 +126,12 @@ EXTERN char vidoption;
 EXTERN long xdim, ydim, ylookup[MAXYDIM+1], numpages;
 EXTERN long yxaspect, viewingrange;
 
+#if (APPVER_DN3DREV >= AV_DR_DN3D15)
 EXTERN long validmodecnt;
 EXTERN short validmode[256];
 EXTERN long validmodexdim[256], validmodeydim[256];
 
+#endif
 EXTERN short numsectors, numwalls;
 EXTERN volatile long totalclock;
 EXTERN long numframes, randomseed;
