@@ -64,6 +64,7 @@ source as it is released.
 #else
     #define VERSION "1.5"
 #endif
+#endif
 #else // APPVER_DN3DREV
 #ifdef VOLUMEONE
     #define VERSION "1.4"
@@ -71,7 +72,6 @@ source as it is released.
     #define VERSION "1.4"
 #endif
 #endif // APPVER_DN3DREV
-#endif
 #endif
 
 #ifdef NAM
@@ -3016,7 +3016,7 @@ void displayrooms(short snum,long smoothratio)
         {
 #if (APPVER_DN3DREV < AV_DR_DN3DGPLSRC)
             walock[MAXTILES-1] = 255;
-#if (APPVER_DN3DREV < AV_DR_DN3D15)
+#elif (APPVER_DN3DREV < AV_DR_DN3D15)
             walock[MAXTILES-1] = 254;
 #else
             walock[MAXTILES-1] = 199;
@@ -5702,7 +5702,7 @@ void animatesprites(long x,long y,short a,long smoothratio)
 
         if( s->statnum == 13 || badguy(s) || (s->picnum == APLAYER && s->owner >= 0) )
 #if (APPVER_DN3DREV < AV_DR_DN3DGPLSRC)
-            if(!(s->cstat & 48) t->statnum != 99 && s->picnum != EXPLOSION2 && s->picnum != HANGLIGHT && s->picnum != DOMELITE)
+            if(!(s->cstat & 48) && t->statnum != 99 && s->picnum != EXPLOSION2 && s->picnum != HANGLIGHT && s->picnum != DOMELITE)
 #else
             if(t->statnum != 99 && s->picnum != EXPLOSION2 && s->picnum != HANGLIGHT && s->picnum != DOMELITE)
 #endif
@@ -8207,7 +8207,7 @@ void main(int argc,char **argv)
 #endif	
 #endif	
 
-#if ((APPVER_DN3DREV >= AV_DR_DN3D15) && (defined AUSTRALIA)
+#if (APPVER_DN3DREV >= AV_DR_DN3D15) && (defined AUSTRALIA)
 //#ifdef AUSTRALIA
     puts("NOTICE: This version of Duke Nukem 3D has been modified from it's original");
     puts("version.  It has been modified to remove adult or violent content.");
