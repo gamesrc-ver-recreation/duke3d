@@ -24,7 +24,11 @@ game_objs = $(game_objs_minus_animlib) animlib.obj
 
 $(appver_exedef)\game.exe: $(game_objs)
            cd $(appver_exedef)
+!ifeq appver_exedef DN3D14
+           wlink $(all) @..\makef_14.lnk
+!else
            wlink $(all) @..\makefile.lnk
+!endif
            cd ..
 
 # use for NAM
@@ -34,14 +38,14 @@ $(appver_exedef)\game.exe: $(game_objs)
 # use for Enhanced Duke v2.00.21.  Note that NAM and WW2 must also be defined...
 #compileoptions = $(prod) $(debug) -imact -DEDUKE -DNAM -DWW2 $(appver_args)
 
-!ifeq appver_exedef DN3D15 # Duke Nukem 3D: Atomic Edition v1.5
-compileoptions = $(prod) $(debug) -imact $(appver_args)
-!else ifeq appver_exedef NAM10 # NAM Full Version 1.0
-compileoptions = $(prod) $(debug) -imact -DNAM $(appver_args)
+!ifeq appver_exedef EDK20023 # Enhanced Duke v2.00.23
+compileoptions = $(prod) $(debug) -imact -DEDUKE -DNAM -DWW2 $(appver_args)
 !else ifeq appver_exedef WW2GI10 # WW2GI Full Version 1.0
 compileoptions = $(prod) $(debug) -imact -DNAM -DWW2 $(appver_args)
-!else ifeq appver_exedef EDK20023 # Enhanced Duke v2.00.23
-compileoptions = $(prod) $(debug) -imact -DEDUKE -DNAM -DWW2 $(appver_args)
+!else ifeq appver_exedef NAM10 # NAM Full Version 1.0
+compileoptions = $(prod) $(debug) -imact -DNAM $(appver_args)
+!else # Duke Nukem 3D: Atomic Edition v1.5 or earlier
+compileoptions = $(prod) $(debug) -imact $(appver_args)
 !endif
 
 globaldependencies = makefile. duke3d.h global.c
