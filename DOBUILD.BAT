@@ -3,7 +3,7 @@ cls
 type BATCHLST.TXT
 choice /C:123450 /N Please select what to build:
 echo.
-if ERRORLEVEL 6 goto quit
+if ERRORLEVEL 6 goto end
 if ERRORLEVEL 1 set TARGET=DN3D14
 if ERRORLEVEL 2 set TARGET=DN3D15
 if ERRORLEVEL 3 set TARGET=NAM10
@@ -17,8 +17,8 @@ goto task
 :dn3d14error
 echo Can't recreate Duke3D 1.4, you need compatible Build engine
 echo object files ready under ..\build.
-goto quit
+goto end
 :task
 mkdir %TARGET%
 wmake.exe "appver_exedef = %TARGET%"
-:quit
+:end
