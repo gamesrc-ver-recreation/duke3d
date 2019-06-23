@@ -5,7 +5,7 @@
 game.exe : game.obj engine.obj cache1d.obj multi.obj a.obj kdmeng.obj k.obj
 	wlink f game f engine f cache1d f multi f a f kdmeng f k
 build.exe :astub.obj
-	wlink option map f ..\build\19960820\build f astub f ..\build\19960820\engine f ..\build\19960820\cache1d f a
+	wlink option map name build f ..\build\19960820\build f astub f ..\build\19960820\engine f ..\build\19960820\cache1d f a
 #build.exe : build.obj engine.obj cache1d.obj a.obj bstub.obj
 #	wlink f build f engine f cache1d f a f bstub
 
