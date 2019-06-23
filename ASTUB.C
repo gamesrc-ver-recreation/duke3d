@@ -1880,18 +1880,11 @@ void ExtInit(void)
                 // if (option[3] != 0) moustat =
                 initmouse();
 
-// CTW - MODIFICATION
-// I just updated this quickly to force it to work.
-// You'll want to update it properly to support other video modes.
-        initengine();
-        setgamemode(2,320L,200L);
-/*      switch(option[0]+1)
+        switch(option[0]+1)
         {
                 case 1: initengine(1,vesares[option[6]&15][0],vesares[option[6]&15][1]); break;
                 default: initengine(option[0]+1,320L,200L); break;
-        }*/
-
-// CTW END - MODIFICATION
+        }
 
         kensplayerheight = 40; //32
          zmode = 1;
