@@ -67,6 +67,7 @@ Duke Lookup Table
 #include <sys\types.h>
 #include <sys\stat.h>
 
+#include "gamever.h" // VERSIONS RESTORATION
 //#include "dos.h"
 
 #include "build.h"
@@ -676,6 +677,9 @@ void TotalMem()
                 incache[DRONE]=0;
                 break;
         case COMMANDER :
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+        case COMMANDERSTAYPUT :
+#endif
         totactors+=ActorMem(COMMANDER);
         incache[COMMANDER]=0;
                 break;
@@ -743,6 +747,9 @@ void ExtShowSectorData(short sectnum)   //F5
     int secrets=0;
     int totalactors1=0,totalactors2=0,totalactors3=0,totalactors4=0;
     int totalrespawn=0;
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+    if(qsetmode!=200) return;
+#endif
     for(i=0;i<numsectors;i++)
     { if(sector[i].lotag==32767) secrets++;
     }
@@ -898,6 +905,9 @@ void ExtShowWallData(short wallnum)       //F6
  int i,nextfreetag=0,total=0;
  char x,y;
 
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+ if(qsetmode!=200) return;
+#endif
  for(i=0;i<MAXSPRITES;i++)
  {
   if(sprite[i].statnum==0)
@@ -1847,7 +1857,12 @@ void ExtInit(void)
     long fil;
     
     printf("------------------------------------------------------------------------------\n");
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
     printf("BUILD.EXE Copyright (c) 1993 - 1996 Ken Silverman, 3D Realms Entertainment.\n");
+#else
+    printf("BUILD.EXE for Duke Nukem 3D - Atomic Edition v1.4\n");
+    printf("Copyright (c) 1993 - 1996 Ken Silverman, 3D Realms Entertainment.\n");
+#endif
     printf("This version of BUILD was created for Duke Nukem 3D and parts were modified\n");
     printf("by Allen H. Blum III.\n");
     printf("\n");
@@ -1861,12 +1876,22 @@ void ExtInit(void)
     printf("Please refer to LICENSE.DOC for further information on levels created with\n");
     printf("BUILD.EXE.\n");
     printf("\n");
+    // VERSIONS RESTORATION - FIXME not changing spacing for now
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+    printf("Press <Y> if you have read and accepted the terms of LICENSE.DOC,\n");
+    printf("or any other key to abort the program. \n");
+    switch(getch())
+{
+case 'y':
+case 'Y':
+#else
     printf("Please help us protect against software piracy (which drives up software\n");
     printf("prices) by following these simple rules.\n");
     printf("\n");
     printf("Thank You!\n");
     printf("------------------------------------------------------------------------------\n");
     getch();
+#endif
 
     initgroupfile("duke3d.grp");
 
@@ -1893,6 +1918,13 @@ void ExtInit(void)
 
         ReadPaletteTable();
 //  InitWater();
+    // VERSIONS RESTORATION - FIXME: Recall what we aren't doing with spacing for the switch atm.
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
+    break;
+}
+    printf("------------------------------------------------------------------------------\n");
+    exit(0);
+#endif
 }
 
 void ExtUnInit(void)
@@ -2192,7 +2224,11 @@ faketimerhandler()
 
 void Ver()
 {
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
  sprintf(tempbuf,"DUKE NUKEM BUILD: V032696");
+#else
+ sprintf(tempbuf,"DUKE NUKEM BUILD ATOMIC EDITION : V1.4 100296");
+#endif
  if (qsetmode == 200)    //In 3D mode
  { printext256(60*8,24*8,11,-1,tempbuf,1);
    rotatesprite((320-8)<<16,(200-8)<<16,64<<9,0,SPINNINGNUKEICON+(((4-totalclock>>3))&7),0,0,0,0,0,xdim-1,ydim-1);
