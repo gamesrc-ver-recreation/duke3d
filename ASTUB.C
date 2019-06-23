@@ -1919,7 +1919,7 @@ case 'Y':
         ReadPaletteTable();
 //  InitWater();
     // VERSIONS RESTORATION - FIXME: Recall what we aren't doing with spacing for the switch atm.
-#if (APPVER_DN3DREV < AV_DR_DN3D14)
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
     break;
 }
     printf("------------------------------------------------------------------------------\n");
