@@ -691,13 +691,20 @@ void TotalMem()
 #endif
         totactors+=ActorMem(COMMANDER);
         incache[COMMANDER]=0;
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+        incache[COMMANDERSTAYPUT]=0;
+#endif
                 break;
             case RECON :
                 totactors+=ActorMem(RECON);
                 incache[RECON]=0;
                 break;
             case PIGCOP :
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
         totactors+=ActorMem(COMMANDER);
+#else
+        totactors+=ActorMem(PIGCOP);
+#endif
                 incache[PIGCOP]=0;
                 break;
             case LIZMAN :
