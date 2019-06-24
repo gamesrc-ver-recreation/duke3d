@@ -243,6 +243,10 @@ long ppointhighlight;
 static counter=0;
 char nosprites=0,purpleon=0,skill=4;
 char framerateon=1,tabgraphic=0;
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+static char autosize=1;
+static int autosizespritenum=-1;
+#endif
 
 
 static char sidemode=0;
@@ -284,11 +288,15 @@ void ExtLoadMap(char *mapname)
         if(tilesizx[sprite[j].picnum]==0 || tilesizy[sprite[j].picnum]==0)
         sprite[j].picnum=0;
 
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
         if(sprite[j].picnum>=20 && sprite[j].picnum<=59)
         {
             if(sprite[j].picnum==26) {sprite[j].xrepeat = 8; sprite[j].yrepeat = 8;}
             else {sprite[j].xrepeat = 32; sprite[j].yrepeat = 32;}
         }
+#else
+        autosizesprite(j);
+#endif
 
     }
 
@@ -331,6 +339,7 @@ void ExtLoadMap(char *mapname)
 
     pskybits=3;
     parallaxtype=0;
+    autosizespritenum=-1;
 
 }
 
@@ -1571,7 +1580,11 @@ void Keys3d(void)
 
  if(keystatus[0x0f]>0) // TAB : USED
  {
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
   usedcount=!usedcount;
+#else
+  usedcount=1;
+#endif
 
   count=0;
   for(i=0;i<numwalls;i++)
@@ -2072,6 +2085,7 @@ void ExtCheckKeys(void)
  short statnum=0;
         if (qsetmode == 200)    //In 3D mode
         {
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
                 if (sidemode != 0)
                 {
                         setviewback();
@@ -2084,8 +2098,13 @@ void ExtCheckKeys(void)
             rotatesprite(160<<16,170<<16,65536,(100-horiz+1024)<<3,1153,0,0,2);
 
         }
+#endif
 
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
     if(intro<100)
+#else
+    if(intro<600)
+#endif
         {
         intro++;
 //        rotatesprite((160-8)<<16,(100-8)<<16,(200-intro)<<9,0,SPINNINGNUKEICON+(((4-totalclock>>3))&7),0,0,0,0,0,xdim-1,ydim-1);
@@ -2093,11 +2112,17 @@ void ExtCheckKeys(void)
         }
 
                   Keys3d();
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
                 if (sidemode != 1) editinput();
+#else
+                editinput();
+#endif
                 if(usedcount)
         {
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
           if(tabgraphic)
            rotatesprite((320-32)<<16,(64)<<16,64<<9,0,temppicnum,0,0,0,0,0,xdim-1,ydim-1);
+#endif
           if(searchstat!=3)
           {
            count=0;
@@ -2384,5 +2409,166 @@ SearchSectorsBackward()
  printmessage16("< Sector Search : none");
 }
 
+#if (APPVER_DN3DREV >= AV_DR_DN3D14) // VERSIONS RESTORATION - *Large* switch
+void autosizesprite (short spritenum)
+{
+ if(autosize==0)
+     return;
+ if(sprite[spritenum].picnum<11)
+     return;
+ if(sprite[spritenum].picnum>20 && sprite[spritenum].picnum<62) {sprite[spritenum].xrepeat = 32; sprite[spritenum].yrepeat = 32;}
 
+ switch(sprite[spritenum].picnum)
+ {
+     case FEM5:
+     case FEM6:
+     case FEM8:
+     case HOLODUKE:
 
+         sprite[spritenum].xrepeat = 26; sprite[spritenum].yrepeat = 26;
+         break;
+
+     case FEM9:
+
+         sprite[spritenum].xrepeat = 30; sprite[spritenum].yrepeat = 30;
+         break;
+
+     case ATOMICHEALTH:
+
+     case NAKED1:
+
+     case 606: // Broken space suit
+
+     case LIGHTSWITCH2:
+     case LIGHTSWITCH2+1:
+
+     case PODFEM1:
+
+     case FEM1:
+     case FEM2:
+     case FEM3:
+     case FEM4:
+     case FEM7:
+
+     case PIRATE1A:
+     case PIRATE4A:
+     case PIRATE2A:
+     case PIRATE5A:
+     case PIRATE3A:
+     case PIRATE6A:
+
+     case FEM10:
+     case TOUGHGAL:
+     case MAN:
+
+         sprite[spritenum].xrepeat = 32; sprite[spritenum].yrepeat = 32;
+         break;
+
+     case CHAIR1:
+     case CHAIR2:
+
+     case TOILET:
+
+     case STALL:
+     case STALLBROKE:
+
+     case TOILETBROKE:
+
+     case EGG:
+
+     case CHAIR3:
+
+     case FIREEXT:
+     case HYDRENT:
+     case RUBBERCAN:
+
+     case APLAYER:
+
+     case LIZTROOP:
+     case LIZTROOPRUNNING:
+     case LIZTROOPSTAYPUT:
+     case LIZTROOPSHOOT:
+     case LIZTROOPJETPACK:
+     case LIZTROOPONTOILET:
+     case LIZTROOPJUSTSIT:
+     case LIZTROOPDUCKING:
+
+     case OCTABRAIN:
+     case OCTABRAINSTAYPUT:
+
+     case DRONE:
+
+     case COMMANDER:
+     case COMMANDERSTAYPUT:
+
+     case RECON:
+
+     case PIGCOP:
+     case PIGCOPSTAYPUT:
+     case PIGCOPDIVE:
+     case PIGCOPDEADSPRITE:
+
+     case LIZMAN:
+     case LIZMANSTAYPUT:
+     case LIZMANSPITTING:
+     case LIZMANFEEDING:
+     case LIZMANJUMP:
+
+     case ROTATEGUN:
+
+     case GREENSLIME:
+
+     case DUKECUTOUT:
+
+     case ROBOTPIRATE:
+     case ROBOTMOUSE:
+
+     case PIRATEHALF:
+
+     case CANWITHSOMETHING2:
+     case CANWITHSOMETHING3:
+     case CANWITHSOMETHING4:
+
+     case NEWBEAST:
+     case NEWBEASTSTAYPUT:
+     case NEWBEASTJUMP:
+     case NEWBEASTHANG:
+     case NEWBEASTHANGDEAD:
+
+     case JURYGUY:
+
+         sprite[spritenum].xrepeat = 40; sprite[spritenum].yrepeat = 40;
+         break;
+
+     case STATUE:
+     case STATUEFLASH:
+         sprite[spritenum].xrepeat = 48; sprite[spritenum].yrepeat = 40;
+         break;
+
+     case BOSS1:
+     case BOSS1STAYPUT:
+     case BOSS1SHOOT:
+     case BOSS1LOB:
+
+     case BOSS2:
+
+     case BOSS3:
+
+         sprite[spritenum].xrepeat = 64; sprite[spritenum].yrepeat = 64;
+         break;
+
+     case HEAVYHBOMB:
+     case AMMO:
+         sprite[spritenum].xrepeat = 16; sprite[spritenum].yrepeat = 16;
+         break;
+
+     case TRIPBOMB:
+         sprite[spritenum].xrepeat = 8; sprite[spritenum].yrepeat = 8;
+         break;
+
+     case TANK:
+         sprite[spritenum].xrepeat = 60; sprite[spritenum].yrepeat = 60;
+         break;
+ }
+}
+#endif // APPVER_DN3DREV >= AV_DR_DN3D14
