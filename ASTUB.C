@@ -764,7 +764,8 @@ void ExtShowSectorData(short sectnum)   //F5
     int totalactors1=0,totalactors2=0,totalactors3=0,totalactors4=0;
     int totalrespawn=0;
 #if (APPVER_DN3DREV >= AV_DR_DN3D14)
-    if(qsetmode!=200) return;
+    int nextfreetag=0;
+    if(qsetmode==200) return;
 #endif
     for(i=0;i<numsectors;i++)
     { if(sector[i].lotag==32767) secrets++;
@@ -803,10 +804,22 @@ void ExtShowSectorData(short sectnum)   //F5
             case LIZMANJUMP:
             case ORGANTIC:
             case BOSS1:
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+            case BOSS1STAYPUT:
+#endif
             case BOSS2:
             case BOSS3:
             case GREENSLIME:
             case ROTATEGUN:
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+            case TANK:
+            case NEWBEAST:
+            case NEWBEASTSTAYPUT:
+            case NEWBEASTJUMP:
+            case NEWBEASTHANG:
+            case NEWBEASTHANGDEAD:
+            case BOSS4:
+#endif
             if(sprite[i].lotag<=1) totalactors1++;
             if(sprite[i].lotag<=2) totalactors2++;
             if(sprite[i].lotag<=3) totalactors3++;
@@ -832,7 +845,11 @@ void ExtShowSectorData(short sectnum)   //F5
          }
 
         clearmidstatbar16();             //Clear middle of status bar
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
          sprintf(tempbuf,"Level %s",levelname);
+#else
+         sprintf(tempbuf,"Level %s : Next Tag %d",levelname,GetNextTag(nextfreetag));
+#endif
          printmessage16(tempbuf);
 
      x=1; x2=14; y=4;
@@ -897,12 +914,23 @@ void ExtShowSectorData(short sectnum)   //F5
       PrintStatus("",multisprite[RPGAMMO],x2,y+5,1);
      PrintStatus("Pipe Bomb=",numsprite[HBOMBAMMO],x,y+6,11);
       PrintStatus("",multisprite[HBOMBAMMO],x2,y+6,1);
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
           PrintStatus("Disruptor=",numsprite[DEVISTATORAMMO],x,y+7,11);
                 PrintStatus("",multisprite[DEVISTATORAMMO],x2,y+7,1);
      PrintStatus("Shrinker =",numsprite[CRYSTALAMMO],x,y+8,11);
       PrintStatus("",multisprite[CRYSTALAMMO],x2,y+8,1);
      PrintStatus("Freezeray=",numsprite[FREEZEAMMO],x,y+9,11);
       PrintStatus("",multisprite[FREEZEAMMO],x2,y+9,1);
+#else
+     PrintStatus("Shrinker =",numsprite[CRYSTALAMMO],x,y+7,11);
+      PrintStatus("",multisprite[CRYSTALAMMO],x2,y+7,1);
+          PrintStatus("Disruptor=",numsprite[DEVISTATORAMMO],x,y+8,11);
+                PrintStatus("",multisprite[DEVISTATORAMMO],x2,y+8,1);
+     PrintStatus("Enlarger=",numsprite[GROWAMMO],x,y+9,11);
+      PrintStatus("",multisprite[GROWAMMO],x2,y+9,1);
+     PrintStatus("Freezeray=",numsprite[FREEZEAMMO],x,y+10,11);
+      PrintStatus("",multisprite[FREEZEAMMO],x2,y+10,1);
+#endif
 
      printext16(65*8,4*8,11,-1,"MISC",0);
      PrintStatus("Secrets =",secrets,65,6,11);
@@ -922,8 +950,8 @@ void ExtShowWallData(short wallnum)       //F6
  char x,y;
 
 #if (APPVER_DN3DREV >= AV_DR_DN3D14)
- if(qsetmode!=200) return;
-#endif
+ if(qsetmode==200) return;
+#else // Tag code moved to separate function for most
  for(i=0;i<MAXSPRITES;i++)
  {
   if(sprite[i].statnum==0)
@@ -973,6 +1001,7 @@ void ExtShowWallData(short wallnum)       //F6
   }
 
  } // end sprite loop
+#endif // APPVER_DN3DREV
 
  //Count Normal Actors
     for(i=0;i<MAXSPRITES;i++) numsprite[i]=0;
@@ -991,6 +1020,16 @@ void ExtShowWallData(short wallnum)       //F6
                     case LIZTROOPONTOILET :
                     case LIZTROOPDUCKING :
                         numsprite[LIZTROOP]++; break;
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+                    case TANK:
+                        numsprite[TANK]++; break;
+                    case NEWBEAST:
+                    case NEWBEASTSTAYPUT:
+                    case NEWBEASTJUMP:
+                    case NEWBEASTHANG:
+                    case NEWBEASTHANGDEAD:
+                        numsprite[NEWBEAST]++; break;
+#endif
                     case BOSS1:
                     case BOSS1STAYPUT:
                     case BOSS1SHOOT:
@@ -1001,6 +1040,10 @@ void ExtShowWallData(short wallnum)       //F6
                         multisprite[BOSS2]++; break;
                     case BOSS3:
                         multisprite[BOSS3]++; break;
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+                    case BOSS4:
+                        multisprite[BOSS4]++; break;
+#endif
 
                     default:
                         break;
@@ -1039,6 +1082,9 @@ void ExtShowWallData(short wallnum)       //F6
                     case OCTABRAINSTAYPUT:
                         numsprite[OCTABRAIN]++; break;
                     case RECON:
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+                    case TANK:
+#endif
                     case DRONE:
                     case ROTATEGUN:
                     case EGG:
@@ -1047,6 +1093,17 @@ void ExtShowWallData(short wallnum)       //F6
                     case BOSS2:
                     case BOSS3:
                         numsprite[sprite[i].picnum]++;
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+                        break;
+                    case NEWBEAST:
+                    case NEWBEASTSTAYPUT:
+                    case NEWBEASTJUMP:
+                    case NEWBEASTHANG:
+                    case NEWBEASTHANGDEAD:
+                        numsprite[NEWBEAST]++; break;
+                    case BOSS4:
+                        numsprite[sprite[i].picnum]++; break;
+#endif
                     default:
                         break;
 
@@ -1059,15 +1116,23 @@ void ExtShowWallData(short wallnum)       //F6
 
  clearmidstatbar16();
 
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
  sprintf(tempbuf,"Level %s",levelname);
+#else
+ sprintf(tempbuf,"Level %s : Next Tag %d",levelname, GetNextTag(nextfreetag));
+#endif
  printmessage16(tempbuf);
 
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
  sprintf(tempbuf,"Level %s Status",levelname);
  printext16(1*8,4*8,11,-1,tempbuf,0);
 
  PrintStatus("Next Available Tag =",nextfreetag,35,4,11);
 
  x=2;y=6;
+#else
+ x=2;y=4;
+#endif
  PrintStatus("Normal Actors =",total,x,y,11);
  PrintStatus(" Liztroop  =",numsprite[LIZTROOP],x,y+1,11);
  PrintStatus(" Lizman    =",numsprite[LIZMAN],x,y+2,11);
@@ -1076,6 +1141,7 @@ void ExtShowWallData(short wallnum)       //F6
  PrintStatus(" PigCop    =",numsprite[PIGCOP],x,y+5,11);
  PrintStatus(" Recon Car =",numsprite[RECON],x,y+6,11);
  PrintStatus(" Drone     =",numsprite[DRONE],x,y+7,11);
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
  x+=17;
  PrintStatus("Turret    =",numsprite[ROTATEGUN],x,y+1,11);
  PrintStatus("Egg       =",numsprite[EGG],x,y+2,11);
@@ -1084,6 +1150,19 @@ void ExtShowWallData(short wallnum)       //F6
  PrintStatus("MiniBoss1 =",multisprite[BOSS1],x,y+5,11);
  PrintStatus("Boss2     =",numsprite[BOSS2],x,y+6,11);
  PrintStatus("Boss3     =",numsprite[BOSS3],x,y+7,11);
+#else
+ PrintStatus(" Turret    =",numsprite[ROTATEGUN],x,y+8,11);
+ PrintStatus(" Egg       =",numsprite[EGG],x,y+9,11);
+ x+=17;
+ PrintStatus("Slimer    =",numsprite[GREENSLIME],x,y+1,11);
+ PrintStatus("Boss1     =",numsprite[BOSS1],x,y+2,11);
+ PrintStatus("MiniBoss1 =",multisprite[BOSS1],x,y+3,11);
+ PrintStatus("Boss2     =",numsprite[BOSS2],x,y+4,11);
+ PrintStatus("Boss3     =",numsprite[BOSS3],x,y+5,11);
+ PrintStatus("Riot Tank =",numsprite[TANK],x,y+6,11);
+ PrintStatus("New Beast =",numsprite[NEWBEAST],x,y+6,11);
+ PrintStatus("Boss4     =",numsprite[BOSS4],x,y+6,11);
+#endif
 
  //Count Respawn Actors
     for(i=0;i<MAXSPRITES;i++) numsprite[i]=0;
@@ -1100,6 +1179,10 @@ void ExtShowWallData(short wallnum)       //F6
                     case LIZTROOPONTOILET :
                     case LIZTROOPDUCKING :
                         numsprite[LIZTROOP]++; break;
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+                    case TANK:
+                        numsprite[TANK]++; break;
+#endif
                     case PIGCOP:
                     case PIGCOPSTAYPUT:
                     case PIGCOPDIVE:
@@ -1132,6 +1215,17 @@ void ExtShowWallData(short wallnum)       //F6
                     case BOSS2:
                     case BOSS3:
                         numsprite[sprite[i].hitag]++;
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+                        break;
+                    case NEWBEAST:
+                    case NEWBEASTSTAYPUT:
+                    case NEWBEASTJUMP:
+                    case NEWBEASTHANG:
+                    case NEWBEASTHANGDEAD:
+                        numsprite[NEWBEAST]++; break;
+                    case BOSS4:
+                        numsprite[sprite[i].hitag]++; break;
+#endif
                     default:
                         break;
                 }//end switch
@@ -1142,8 +1236,13 @@ void ExtShowWallData(short wallnum)       //F6
     for(i=0;i<MAXSPRITES;i++) if(multisprite[i]!=0) total+=multisprite[i];
 
 
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
  x=36;y=6;
  PrintStatus("Respawn",total,x,y,11);
+#else
+ x=36;y=4;
+ PrintStatus("Respawn =",total,x,y,11);
+#endif
  PrintStatus(" Liztroop  =",numsprite[LIZTROOP],x,y+1,11);
  PrintStatus(" Lizman    =",numsprite[LIZMAN],x,y+2,11);
  PrintStatus(" Commander =",numsprite[COMMANDER],x,y+3,11);
@@ -1151,6 +1250,7 @@ void ExtShowWallData(short wallnum)       //F6
  PrintStatus(" PigCop    =",numsprite[PIGCOP],x,y+5,11);
  PrintStatus(" Recon Car =",numsprite[RECON],x,y+6,11);
  PrintStatus(" Drone     =",numsprite[DRONE],x,y+7,11);
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
  x+=17;
  PrintStatus("Turret    =",numsprite[ROTATEGUN],x,y+1,11);
  PrintStatus("Egg       =",numsprite[EGG],x,y+2,11);
@@ -1159,6 +1259,19 @@ void ExtShowWallData(short wallnum)       //F6
  PrintStatus("MiniBoss1 =",multisprite[BOSS1],x,y+5,11);
  PrintStatus("Boss2     =",numsprite[BOSS2],x,y+6,11);
  PrintStatus("Boss3     =",numsprite[BOSS3],x,y+7,11);
+#else
+ PrintStatus("Turret    =",numsprite[ROTATEGUN],x,y+8,11);
+ PrintStatus("Egg       =",numsprite[EGG],x,y+9,11);
+ x+=17;
+ PrintStatus("Slimer    =",numsprite[GREENSLIME],x,y+1,11);
+ PrintStatus("Boss1     =",numsprite[BOSS1],x,y+2,11);
+ PrintStatus("MiniBoss1 =",multisprite[BOSS1],x,y+3,11);
+ PrintStatus("Boss2     =",numsprite[BOSS2],x,y+4,11);
+ PrintStatus("Boss3     =",numsprite[BOSS3],x,y+5,11);
+ PrintStatus("Tank      =",numsprite[TANK],x,y+6,11);
+ PrintStatus("New Beast =",numsprite[NEWBEAST],x,y+7,11);
+ PrintStatus("Boss4     =",numsprite[BOSS4],x,y+8,11);
+#endif
 
 }// end ExtShowWallData
 
@@ -1261,11 +1374,19 @@ void ShowHelpText(char *name)
 
 void ExtShowSpriteData(short spritenum)   //F6
 {
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+ if(qsetmode==200) return;
+ sprintf(tempbuf,"Level %s : Next Tag %d",levelname, GetNextTag(0));
+ printmessage16(tempbuf);
+#endif
  Show2dText("sehelp.hlp");
 }// end ExtShowSpriteData
 
 void ExtEditSectorData(short sectnum)    //F7
 {
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+ if(qsetmode==200) return;
+#endif
  Show2dText("sthelp.hlp");
 }// end ExtEditSectorData
 
@@ -2416,7 +2537,7 @@ SearchSectorsBackward()
  printmessage16("< Sector Search : none");
 }
 
-#if (APPVER_DN3DREV >= AV_DR_DN3D14) // VERSIONS RESTORATION - *Large* switch
+#if (APPVER_DN3DREV >= AV_DR_DN3D14) // VERSIONS RESTORATION - New functions
 void autosizesprite (short spritenum)
 {
  if(autosize==0)
@@ -2577,5 +2698,60 @@ void autosizesprite (short spritenum)
          sprite[spritenum].xrepeat = 60; sprite[spritenum].yrepeat = 60;
          break;
  }
+}
+
+int GetNextTag(short nextfreetag)
+{
+ int i;
+ for(i=0;i<MAXSPRITES;i++)
+ {
+  if(sprite[i].statnum==0)
+  switch(sprite[i].picnum)
+  {
+    //LOTAG
+    case ACTIVATOR:
+    case ACTIVATORLOCKED:
+    case TOUCHPLATE:
+    case MASTERSWITCH:
+    case RESPAWN:
+    case ACCESSSWITCH:
+    case SLOTDOOR:
+    case LIGHTSWITCH:
+    case SPACEDOORSWITCH:
+    case SPACELIGHTSWITCH:
+    case FRANKENSTINESWITCH:
+    case MULTISWITCH:
+    case DIPSWITCH:
+    case DIPSWITCH2:
+    case TECHSWITCH:
+    case DIPSWITCH3:
+    case ACCESSSWITCH2:
+    case POWERSWITCH1:
+    case LOCKSWITCH1:
+    case POWERSWITCH2:
+    case PULLSWITCH:
+    case ALIENSWITCH:
+        if(sprite[i].lotag>nextfreetag) nextfreetag=1+sprite[i].lotag;
+        break;
+
+    //HITAG
+    case SEENINE:
+    case OOZFILTER:
+        case SECTOREFFECTOR:
+        if(sprite[i].lotag==10 ||
+            sprite[i].lotag==27 ||
+            sprite[i].lotag==28 ||
+            sprite[i].lotag==29
+            ) break;
+        else
+            if(sprite[i].hitag>nextfreetag) nextfreetag=1+sprite[i].hitag;
+        break;
+        default:
+        break;
+
+  }
+
+ } // end sprite loop
+ return nextfreetag;
 }
 #endif // APPVER_DN3DREV >= AV_DR_DN3D14
