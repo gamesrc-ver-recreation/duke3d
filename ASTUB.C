@@ -111,6 +111,9 @@ static long clockval[16], clockcnt = 0;
 #define NUMOPTIONS 8
 #define NUMKEYS 19
 
+#if (APPVER_DN3DREV >= AV_DR_DN3D14) // FIXME - How to describe this? Unchained, maybe?
+static long altres[15] = {256,320,360,400,200,240,256,270,300,350,360,400,480,512,540};
+#endif
 static long vesares[13][2] = {320,200,360,200,320,240,360,240,320,400,
                                                                         360,400,640,350,640,400,640,480,800,600,
                                                                         1024,768,1280,1024,1600,1200};
@@ -244,8 +247,9 @@ static counter=0;
 char nosprites=0,purpleon=0,skill=4;
 char framerateon=1,tabgraphic=0;
 #if (APPVER_DN3DREV >= AV_DR_DN3D14)
+static char gamma=0;
 static char autosize=1;
-static int autosizespritenum=-1;
+static short autosizespritenum=-1;
 #endif
 
 
@@ -1392,6 +1396,9 @@ void ExtEditSectorData(short sectnum)    //F7
 
 void ExtEditWallData(short wallnum)       //F8
 {
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+    if(qsetmode==200) return;
+#endif
     if(qsetmode!=480) return;
     wallsprite=1;
     curwall = wallnum;
@@ -1408,6 +1415,9 @@ void ExtEditWallData(short wallnum)       //F8
 
 void ExtEditSpriteData(short spritenum)   //F8
 {
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+    if(qsetmode==200) return;
+#endif
     if(qsetmode!=480) return;
     wallsprite=2;
     cursprite = spritenum;
@@ -1426,7 +1436,11 @@ void ExtEditSpriteData(short spritenum)   //F8
 void PrintStatus(char *string,int num,char x,char y,char color)
 {
      sprintf(tempbuf,"%s %d",string,num);
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
      printext16(x*8,y*8,color,-1,tempbuf,0);
+#else
+     printext16(x*8,y*8-2,color,-1,tempbuf,0);
+#endif
 }
 
 void SpriteName(short spritenum, char *lo2)
@@ -2021,6 +2035,7 @@ void ExtInit(void)
 #if (APPVER_DN3DREV >= AV_DR_DN3D14)
     printf("Press <Y> if you have read and accepted the terms of LICENSE.DOC,\n");
     printf("or any other key to abort the program. \n");
+    printf("\n");
     switch(getch())
 {
 case 'y':
@@ -2046,11 +2061,20 @@ case 'Y':
                 // if (option[3] != 0) moustat =
                 initmouse();
 
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
         switch(option[0]+1)
         {
                 case 1: initengine(1,vesares[option[6]&15][0],vesares[option[6]&15][1]); break;
                 default: initengine(option[0]+1,320L,200L); break;
         }
+#else
+        if (option[0]<=0)
+            initengine(0,altres[option[6]&15],altres[(option[6]>>4)+4]);
+        else if (option[0]==1)
+            initengine(1,vesares[option[6]&15][0],vesares[option[6]&15][1]);
+        else
+            initengine(option[0],320L,200L);
+#endif
 
         kensplayerheight = 40; //32
          zmode = 1;
@@ -2062,9 +2086,11 @@ case 'Y':
     // VERSIONS RESTORATION - FIXME: Recall what we aren't doing with spacing for the switch atm.
 #if (APPVER_DN3DREV >= AV_DR_DN3D14)
     break;
-}
+
+  default:
     printf("------------------------------------------------------------------------------\n");
     exit(0);
+}
 #endif
 }
 
@@ -2107,6 +2133,9 @@ void ExtAnalyzeSprites(void)
         if(nosprites==1||nosprites==3)
          switch(tspr->picnum)
          {
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+             case OOZFILTER :
+#endif
              case SEENINE :
                  tspr->xrepeat=0;
          }
@@ -2138,6 +2167,11 @@ void ExtAnalyzeSprites(void)
             case BOSS1 :
         case BOSS2 :
             case BOSS3 :
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+        case BOSS1STAYPUT :
+        case NEWBEAST :
+        case BOSS4 :
+#endif
                 if(frames==0) frames=4;
 
         case LIZTROOPJETPACK :
@@ -2145,8 +2179,16 @@ void ExtAnalyzeSprites(void)
          case DRONE :
         case COMMANDER :
         case RECON :
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+        case OCTABRAINSTAYPUT :
+        case COMMANDERSTAYPUT :
+#endif
         if(frames==0) frames=10;
 
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+        case TANK :
+        if(frames==0) frames=1;
+#endif
         case GREENSLIME :
         case EGG :
         case PIGCOPSTAYPUT :
@@ -2155,6 +2197,12 @@ void ExtAnalyzeSprites(void)
             case LIZMANSPITTING :
             case LIZMANFEEDING :
             case LIZMANJUMP :
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+        case NEWBEASTSTAYPUT :
+        case NEWBEASTJUMP :
+        case NEWBEASTHANG :
+        case NEWBEASTHANGDEAD :
+#endif
                 if(skill!=4)
                 {
                     if(tspr->lotag>skill)
@@ -2383,8 +2431,14 @@ void Ver()
  sprintf(tempbuf,"DUKE NUKEM BUILD ATOMIC EDITION : V1.4 100296");
 #endif
  if (qsetmode == 200)    //In 3D mode
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
  { printext256(60*8,24*8,11,-1,tempbuf,1);
    rotatesprite((320-8)<<16,(200-8)<<16,64<<9,0,SPINNINGNUKEICON+(((4-totalclock>>3))&7),0,0,0,0,0,xdim-1,ydim-1);
+#else
+ { printext256(48*8,24*8-1,0,-1,tempbuf,1);
+   printext256(48*8,24*8,31,-1,tempbuf,1);
+   rotatesprite((320-8)<<16,(200-8)<<16,64<<9,0,SPINNINGNUKEICON+(((4-totalclock>>3))&7),0,0,0,0,0,xdim-1,ydim-1);
+#endif
  }else
  { printext16(0,0,15,-1,tempbuf,0);
  }
@@ -2408,12 +2462,18 @@ ActorMem(int i)
                 for(j=LIZTROOP;j<(LIZTROOP+100);j++) total +=tilesizx[j]*tilesizy[j];
                 break;
         case OCTABRAIN :
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+        case OCTABRAINSTAYPUT :
+#endif
         for(j=OCTABRAIN;j<(OCTABRAIN+40);j++) total +=tilesizx[j]*tilesizy[j];
                 break;
                  case DRONE :
                 for(j=DRONE;j<(DRONE+10);j++) total +=tilesizx[j]*tilesizy[j];
                 break;
         case COMMANDER :
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+        case COMMANDERSTAYPUT :
+#endif
         for(j=COMMANDER;j<(COMMANDER+40);j++) total +=tilesizx[j]*tilesizy[j];
                 break;
             case RECON :
@@ -2489,6 +2549,9 @@ kensetpalette(char *vgapal)
                 vesapal[i*4+3] = 0;
         }
         VBE_setPalette(0L,256L,vesapal);
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+        setbrightness(gamma,vgapal);
+#endif
 }
 
 SearchSectorsForward()
