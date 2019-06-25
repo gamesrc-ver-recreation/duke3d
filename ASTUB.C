@@ -2011,10 +2011,13 @@ void ExtInit(void)
 {
     long fil;
     
-    printf("------------------------------------------------------------------------------\n");
 #if (APPVER_DN3DREV < AV_DR_DN3D14)
+    printf("------------------------------------------------------------------------------\n");
     printf("BUILD.EXE Copyright (c) 1993 - 1996 Ken Silverman, 3D Realms Entertainment.\n");
 #else
+    int key;
+
+    printf("\n------------------------------------------------------------------------------\n");
     printf("BUILD.EXE for Duke Nukem 3D - Atomic Edition v1.4\n");
     printf("Copyright (c) 1993 - 1996 Ken Silverman, 3D Realms Entertainment.\n");
 #endif
@@ -2036,10 +2039,9 @@ void ExtInit(void)
     printf("Press <Y> if you have read and accepted the terms of LICENSE.DOC,\n");
     printf("or any other key to abort the program. \n");
     printf("\n");
-    switch(getch())
+    key = getch();
+if ((key == 'y') || (key == 'Y'))
 {
-case 'y':
-case 'Y':
 #else
     printf("Please help us protect against software piracy (which drives up software\n");
     printf("prices) by following these simple rules.\n");
@@ -2068,12 +2070,12 @@ case 'Y':
                 default: initengine(option[0]+1,320L,200L); break;
         }
 #else
-        if (option[0]<=0)
-            initengine(0,altres[option[6]&15],altres[(option[6]>>4)+4]);
-        else if (option[0]==1)
-            initengine(1,vesares[option[6]&15][0],vesares[option[6]&15][1]);
-        else
-            initengine(option[0],320L,200L);
+        switch(option[0])
+        {
+                case 0: initengine(0,altres[option[6]&15],altres[(option[6]>>4)+4]); break;
+                case 1: initengine(1,vesares[option[6]&15][0],vesares[option[6]&15][1]); break;
+                default: initengine(option[0],320L,200L); break;
+        }
 #endif
 
         kensplayerheight = 40; //32
@@ -2083,11 +2085,11 @@ case 'Y':
 
         ReadPaletteTable();
 //  InitWater();
-    // VERSIONS RESTORATION - FIXME: Recall what we aren't doing with spacing for the switch atm.
+    // VERSIONS RESTORATION - FIXME: Recall what we aren't doing with spacing
 #if (APPVER_DN3DREV >= AV_DR_DN3D14)
-    break;
-
-  default:
+}
+else
+{
     printf("------------------------------------------------------------------------------\n");
     exit(0);
 }
