@@ -343,7 +343,9 @@ void ExtLoadMap(char *mapname)
 
     pskybits=3;
     parallaxtype=0;
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
     autosizespritenum=-1;
+#endif
 
 }
 
