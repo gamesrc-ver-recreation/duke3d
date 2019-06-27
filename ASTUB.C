@@ -250,6 +250,17 @@ char framerateon=1,tabgraphic=0;
 static char gamma=0;
 static char autosize=1;
 static short autosizespritenum=-1;
+static unsigned char textoffset = 31;
+static unsigned char texttimeleft = 0;
+static unsigned char debuginfotimeleft=0;
+static char textbuf[1024];
+static char autorun=0;
+static char quickspeed=0;
+static char runrate=1;
+static long count;
+// VERSIONS RESTORATION - This *replaces* the function from BUILD.C
+extern short asksave;
+static int getnumber256(char namestart[80], short num, long maxnumber);
 #endif
 
 
@@ -1445,6 +1456,35 @@ void PrintStatus(char *string,int num,char x,char y,char color)
 #endif
 }
 
+#if (APPVER_DN3DREV < AV_DR_DN3D14) // VERSIONS RESTORATION - Convenience macros
+
+#define SHOW_TEXT_COMMON(string) printext256(1*4,1*8,11,-1,string,0)
+#define SHOW_TEXT_NEAR SHOW_TEXT_COMMON
+#define SHOW_TEXT_MED SHOW_TEXT_COMMON
+#define SHOW_TEXT_FAR SHOW_TEXT_COMMON
+
+#else
+
+#define SHOW_TEXT_NEAR(string) ShowText(string,31)
+#define SHOW_TEXT_MED(string) ShowText(string,95)
+#define SHOW_TEXT_FAR(string) ShowText(string,143)
+
+void ShowText(char *string, char offset)
+{
+    sprintf(textbuf,string,0); // VERSIONS RESTORATION - THIS IS *NOT* SECURE!!
+    textoffset = offset;
+    texttimeleft = 128;
+}
+
+void UpdateShownText(void)
+{
+    if (texttimeleft<1) return;
+    texttimeleft--;
+    printext256(0,8,textoffset,0,textbuf,0);
+}
+
+#endif // APPVER_DN3DREV
+
 void SpriteName(short spritenum, char *lo2)
 {
     sprintf(lo2,names[sprite[spritenum].picnum]);
@@ -1490,8 +1530,16 @@ void ReadPaletteTable()
 
 void Keys3d(void)
 {
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
     long i,count,rate,nexti;
     short statnum=0;
+#else
+    long i,rate,nexti;
+    short statnum=0;
+    int nextfreetag=0;
+    UpdateShownText();
+    ShowDebugInfo();
+#endif
 
 
 
@@ -1519,7 +1567,11 @@ void Keys3d(void)
  if(helpon==1)
  {
   for(i=0;i<MAXHELP3D;i++)
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
   {printext256(0*8,8+(i*8),15,-1,Help3d[i],1);
+#else
+  {printext256(0*8,i*8,15,-1,Help3d[i],1);
+#endif
    switch(i)
    {
         case 3: sprintf(tempbuf,"%d",framerateon); break;
@@ -1529,12 +1581,20 @@ void Keys3d(void)
         case 7: sprintf(tempbuf,"%d",purpleon); break;
         default : sprintf(tempbuf," "); break;
    }
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
    printext256(20*8,8+(i*8),15,-1,tempbuf,1);
+#else
+   printext256(20*8,i*8,15,-1,tempbuf,1);
+#endif
   }
   Ver();
  }
 
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
  if(purpleon) printext256(1*4,1*8,11,-1,"Purple ON",0);
+#else
+ if(purpleon) printext256(0,1*8,11,-1,"Purple ON",0);
+#endif
 
  if(sector[cursectnum].lotag==2)
  { if(sector[cursectnum].floorpal==8) SetBOSS1Palette();
@@ -1548,33 +1608,167 @@ void Keys3d(void)
 
 
 
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+ if(keystatus[0x28] && keystatus[0x3a]) // ' CAPS
+    {
+        keystatus[0x3a] = 0;
+        autorun=!autorun;
+        if(autorun) SHOW_TEXT_MED("Autorun On");
+        else SHOW_TEXT_FAR("Autorun Off");
+    }
+ if(keystatus[0x28] && keystatus[0x35]) // ' .
+   if (searchstat==3)
+    {
+        keystatus[0x35] = 0;
+        if(autosize)
+        {
+            SHOW_TEXT_NEAR("Autosize");
+            autosizesprite(searchwall);
+        }
+    }
+ if(keystatus[0x28] && keystatus[0x1e]) // ' a
+    {
+        keystatus[0x1e] = 0;
+        autosize=!autosize;
+        if(autosize) SHOW_TEXT_MED("Autosize On");
+        else SHOW_TEXT_FAR("Autosize Off");
+    }
+ if (autosize && autosizespritenum!=-1)
+    {
+        if(autosize) SHOW_TEXT_NEAR("Autosize");
+        else autosizesprite(autosizespritenum);
+    }
+ autosizespritenum = -1;
+ if (searchstat==3 && keystatus[0x52]==1) // INS
+    {
+        if(keystatus[0x4b]==1) // Left
+        {
+            keystatus[0x4b] = 0;
+            sprite[searchwall].x -= 128;
+        }
+        if(keystatus[0x4d]==1) // Right
+        {
+            keystatus[0x4d] = 0;
+            sprite[searchwall].x += 128;
+        }
+        if(keystatus[0x48]==1) // Up
+        {
+            keystatus[0x48] = 0;
+            sprite[searchwall].y -= 128;
+        }
+        if(keystatus[0x50]==1) // Down
+        {
+            keystatus[0x50] = 0;
+            sprite[searchwall].y += 128;
+        }
+    }
+ if(keystatus[0x28]==1 && keystatus[0x10]==1) // ' q
+    {
+        keystatus[0x10]=0;
+        quickspeed=!quickspeed;
+        if(quickspeed) SHOW_TEXT_MED("Quick Speed On");
+        else SHOW_TEXT_FAR("Quick Speed Off");
+    }
+ if(keystatus[0x2a] || autorun) // LShift
+    {
+        if(keystatus[0xcb] && keystatus[0x38]!=1 && quickspeed==1) // Left, no Alt
+            ang -= 16;
+        if(keystatus[0xcd] && keystatus[0x38]!=1 && quickspeed==1) // Right, no Alt
+            ang += 16;
+        runrate = 1;
+        if(keystatus[0xc8] || keystatus[0xcd]) // Up/Down
+            if(quickspeed==1)
+                runrate = 2;
+    }
+ if(keystatus[0x9d]==1 && keystatus[0xc9]==1) // Ctrl PgUp
+    switch (searchstat)
+    {
+        case 1:
+            keystatus[0xc9] = 0;
+            sector[searchsector].ceilingz -= 8192;
+            break;
+        case 2:
+            keystatus[0xc9] = 0;
+            sector[searchsector].floorz -= 8192;
+            break;
+    }
+ if(keystatus[0x9d]==1 && keystatus[0xd1]==1) // Ctrl PgDn
+    switch (searchstat)
+    {
+        case 1:
+            keystatus[0xd1] = 0;
+            sector[searchsector].ceilingz += 8192;
+            break;
+        case 2:
+            keystatus[0xd1] = 0;
+            sector[searchsector].floorz += 8192;
+            break;
+    }
+ if(keystatus[0x38]!=1 && keystatus[0x28]!=1 && keystatus[0x2e]==1) // c, no Alt or '
+   if (searchstat==3)
+    {
+        if (sprite[searchwall].cstat&0x80) SHOW_TEXT_FAR("Sprite Center OFF");
+        else SHOW_TEXT_NEAR("Sprite Center ON");
+    }
+ if(keystatus[0x28]!=1 && keystatus[0x13]==1) // r, no '
+    switch (searchstat)
+    {
+        case 1:
+            if (sector[searchsector].ceilingstat&0x41) SHOW_TEXT_FAR("Ceiling Relative OFF");
+            else SHOW_TEXT_NEAR("Ceiling Relative ON");
+            break;
+        case 2:
+            if (sector[searchsector].floorstat&0x41) SHOW_TEXT_FAR("Floor Relative OFF");
+            else SHOW_TEXT_NEAR("Floor Relative ON");
+            break;
+    }
+ if(keystatus[0x28]==1 && keystatus[0xc]==1) // ' -
+    {
+        keystatus[0xc] = 0;
+        if(gamma<2) gamma=0;
+        else gamma-=2;
+        setbrightness(gamma,palette);
+        sprintf(tempbuf,"Gamma Correction Value : %d",gamma);
+        SHOW_TEXT_NEAR(tempbuf);
+    }
+ if(keystatus[0x28]==1 && keystatus[0xd]==1) // ' =
+    {
+        keystatus[0xd] = 0;
+        if(gamma>14) gamma=16;
+        else gamma+=2;
+        setbrightness(gamma,palette);
+        sprintf(tempbuf,"Gamma Correction Value : %d",gamma);
+        SHOW_TEXT_NEAR(tempbuf);
+    }
+#endif // APPVER_DN3DREV >= AV_DR_DN3D14
  if(keystatus[0x28]==1 && keystatus[0x20]==1) // ' d
 
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
     {
         ShowHelpText("SectorEffector");
     }
-/*
+#else // VERSIONS RESTORATION - Uncomment for 1.4 and modify print func
     {
         keystatus[0x20] = 0;
         skill++; if(skill>4) skill=0;
         sprintf(tempbuf,"%s",SKILLMODE[skill]);
-        printext256(1*4,1*8,11,-1,tempbuf,0);
+        SHOW_TEXT_FAR(tempbuf);
     }
-*/
+#endif
  if(keystatus[0x28]==1 && keystatus[0x22]==1) // ' g
     {
         keystatus[0x22] = 0;
         tabgraphic=!tabgraphic;
-        if(tabgraphic) printext256(1*4,1*8,11,-1,"Graphics ON",0);
-        else printext256(1*4,1*8,11,-1,"Graphics OFF",0);
+        if(tabgraphic) SHOW_TEXT_MED("Graphics ON");
+        else SHOW_TEXT_FAR("Graphics OFF");
     }
 
  if(keystatus[0x28]==1 && keystatus[0x13]==1) // ' r
     {
         keystatus[0x13] = 0;
         framerateon=!framerateon;
-        if(framerateon) printext256(1*4,1*8,11,-1,"Framerate ON",0);
-        else printext256(1*4,1*8,11,-1,"Framerate OFF",0);
+        if(framerateon) SHOW_TEXT_MED("Framerate ON");
+        else SHOW_TEXT_FAR("Framerate OFF");
     }
 
  if(keystatus[0x28]==1 && keystatus[0x11]==1) // ' w
@@ -1582,20 +1776,23 @@ void Keys3d(void)
         keystatus[0x11] = 0;
         nosprites++; if(nosprites>3) nosprites=0;
         sprintf(tempbuf,"%s",ALPHABEASTLOADOMAGA1[nosprites]);
-        printext256(1*4,1*8,11,-1,tempbuf,0);
+        SHOW_TEXT_NEAR(tempbuf);
     }
 
  if(keystatus[0x28]==1 && keystatus[0x15]==1) // ' y
     {
         keystatus[0x15] = 0;
         purpleon=!purpleon; if(nosprites>3) nosprites=0;
-        if(purpleon) printext256(1*4,1*8,11,-1,"Purple ON",0);
-        else printext256(1*4,1*8,11,-1,"Purple OFF",0);
+        if(purpleon) SHOW_TEXT_MED("Purple ON");
+        else SHOW_TEXT_FAR("Purple OFF");
     }
 
  if(keystatus[0x28]==1 && keystatus[0x2e]==1) // ' C
           {
          keystatus[0x2e] = 0;
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+                SHOW_TEXT_MED("Global Shade changed");
+#endif
                  switch (searchstat)
                  {
                         case 0: case 4:
@@ -1622,6 +1819,33 @@ void Keys3d(void)
                  }
       }
 
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+ if(keystatus[0x28]==1 && keystatus[0x19]==1) // ' P
+          {
+                keystatus[0x19] = 0;
+                SHOW_TEXT_FAR("Global Parallax Panning Off");
+                switch (searchstat)
+                {
+                    case 1: case 2:
+                    for(i=0;i<MAXSECTORS;i++)
+                    {
+                        if(searchstat==1)
+                         if(sector[i].ceilingstat&1) { sector[i].ceilingxpanning=0; sector[i].ceilingypanning=0; }
+
+                        if(searchstat==2)
+                         if(sector[i].floorstat&1) { sector[i].floorxpanning=0; sector[i].floorypanning=0; }
+                    }
+                }
+          }
+
+ if(keystatus[0x40]==1) // F6
+    {
+        keystatus[0x40] = 0;
+        sprintf(tempbuf,"Level %s : Next Tag %d",levelname,GetNextTag(nextfreetag));
+        SHOW_TEXT_NEAR(tempbuf);
+    }
+
+#endif
  if(keystatus[0x28]==1 && keystatus[0x14]==1) // ' T
           {
                  keystatus[0x14] = 0;
@@ -1728,6 +1952,7 @@ void Keys3d(void)
   usedcount=!usedcount;
 #else
   usedcount=1;
+  debuginfotimeleft=172;
 #endif
 
   count=0;
@@ -2261,7 +2486,11 @@ int intro=0;
 
 void ExtCheckKeys(void)
 {
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
  long i,count,nexti;
+#else
+ long i,nexti;
+#endif
  short statnum=0;
         if (qsetmode == 200)    //In 3D mode
         {
@@ -2299,7 +2528,7 @@ void ExtCheckKeys(void)
 #endif
                 if(usedcount)
         {
-#if (APPVER_DN3DREV < AV_DR_DN3D14)
+#if (APPVER_DN3DREV < AV_DR_DN3D14) // VERSIONS RESTORATION - Kinda moved into ShowDebugInfo
           if(tabgraphic)
            rotatesprite((320-32)<<16,(64)<<16,64<<9,0,temppicnum,0,0,0,0,0,xdim-1,ydim-1);
 #endif
@@ -2353,6 +2582,35 @@ void ExtCheckKeys(void)
                   Keys2d();
         }
 }
+#if (APPVER_DN3DREV >= AV_DR_DN3D14) // VERSIONS RESTORATION - Mostly from ExtCheckKeys
+
+void ShowDebugInfo(void)
+{
+    if (debuginfotimeleft<1) return;
+    debuginfotimeleft--;
+    if(tabgraphic)
+        rotatesprite((320-32)<<16,(64)<<16,64<<9,0,temppicnum,0,0,0,0,0,xdim-1,ydim-1);
+
+    printext256(70*8+1,0*8+1,0,-1,names[temppicnum],1);
+    printext256(70*8+1,0*8,31,-1,names[temppicnum],1);
+
+    sprintf(tempbuf,"Lo = %ld",templotag);
+    printext256(70*8+1,1*8+1,0,-1,tempbuf,1);
+    printext256(70*8,1*8,31,-1,tempbuf,1);
+
+    sprintf(tempbuf,"Hi = %ld",temphitag);
+    printext256(70*8+1,2*8+1,0,-1,tempbuf,1);
+    printext256(70*8,2*8,31,-1,tempbuf,1);
+
+    sprintf(tempbuf,"USED = %ld",count);
+    printext256(70*8+1,3*8+1,0,-1,tempbuf,1);
+    printext256(70*8,3*8,31,-1,tempbuf,1);
+
+    sprintf(tempbuf,"MEM  = %ld",ActorMem(temppicnum));
+    printext256(70*8+1,4*8+1,0,-1,tempbuf,1);
+    printext256(70*8,4*8,31,-1,tempbuf,1);
+}
+#endif // APPVER_DN3DREV >= AV_DR_DN3D14
 
 faketimerhandler()
 {
@@ -2604,7 +2862,55 @@ SearchSectorsBackward()
  printmessage16("< Sector Search : none");
 }
 
-#if (APPVER_DN3DREV >= AV_DR_DN3D14) // VERSIONS RESTORATION - New functions
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+// VERSIONS RESTORATION - New functions, including virtually identical copy of BUILD.C:getnumber256
+static int getnumber256(char namestart[80], short num, long maxnumber)
+{
+	char buffer[80];
+	long j, k, n, danum, oldnum;
+
+	danum = (long)num;
+	oldnum = danum;
+	while ((keystatus[0x1c] != 2) && (keystatus[0x1] == 0))
+	{
+		drawrooms(posx,posy,posz,ang,horiz,cursectnum);
+		ExtAnalyzeSprites();
+		drawmasks();
+
+		sprintf(&buffer,"%s%ld_ ",namestart,danum);
+		printmessage256(buffer);
+		nextpage();
+
+		for(j=2;j<=11;j++)
+			if (keystatus[j] > 0)
+			{
+				keystatus[j] = 0;
+				k = j-1;
+				if (k == 10) k = 0;
+				n = (danum*10)+k;
+				if (n < maxnumber) danum = n;
+			}
+		if (keystatus[0xe] > 0)    // backspace
+		{
+			danum /= 10;
+			keystatus[0xe] = 0;
+		}
+		if (keystatus[0x1c] == 1)
+		{
+			oldnum = danum;
+			keystatus[0x1c] = 2;
+			asksave = 1;
+		}
+	}
+	keystatus[0x1c] = 0;
+	keystatus[0x1] = 0;
+
+	// VERSIONS RESTORATION - Not in this copy of getnumber256
+	//lockclock = totalclock;  //Reset timing
+
+	return((short)oldnum);
+}
+
 void autosizesprite (short spritenum)
 {
  if(autosize==0)
