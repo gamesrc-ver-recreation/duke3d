@@ -2556,6 +2556,9 @@ void ExtCheckKeys(void)
             }
           }
 
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+        usedcount = 0;
+#else // VERSIONS RESTORATION - Kinda moved into ShowDebugInfo as of 1.4
             printext256(70*8+1,0*8+1,0,-1,names[temppicnum],1);
             printext256(70*8+1,0*8,15,-1,names[temppicnum],1);
 
@@ -2575,6 +2578,7 @@ void ExtCheckKeys(void)
                         sprintf(tempbuf,"MEM  = %ld",count);
         printext256(70*8+1,4*8+1,0,-1,tempbuf,1);
         printext256(70*8,4*8,15,-1,tempbuf,1);
+#endif // APPVER_DN3DREV
                 }// end if usedcount
         }
         else
@@ -3019,6 +3023,8 @@ void autosizesprite (short spritenum)
 
      case GREENSLIME:
 
+     case ORGANTIC:
+
      case DUKECUTOUT:
 
      case ROBOTPIRATE:
@@ -3104,6 +3110,7 @@ int GetNextTag(short nextfreetag)
     case POWERSWITCH2:
     case PULLSWITCH:
     case ALIENSWITCH:
+    case CAMERA1:
         if(sprite[i].lotag>nextfreetag) nextfreetag=1+sprite[i].lotag;
         break;
 
@@ -3111,6 +3118,9 @@ int GetNextTag(short nextfreetag)
     case SEENINE:
     case OOZFILTER:
         case SECTOREFFECTOR:
+    case FEM1:
+    case FEM2:
+    case FEM3:
         if(sprite[i].lotag==10 ||
             sprite[i].lotag==27 ||
             sprite[i].lotag==28 ||
