@@ -203,7 +203,11 @@ char *Slow[8]=
     {"SLOW *************************************"}
     };
 
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
 #define MAXHELP3D 15
+#else
+#define MAXHELP3D 20
+#endif
 char *Help3d[MAXHELP3D]=
         {
     {"3D KEYS HELP"},
@@ -221,6 +225,13 @@ char *Help3d[MAXHELP3D]=
     {" ' V = CHANGE VISIBILITY"},
     {" ' C = CHANGE GLOBAL SHADE"},
     {" ' DEL = CSTAT=0"},
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+    {" ' - = GAMMA "},
+    {" ' + = GAMMA "},
+    {" ' P = GLOBAL PARALLEX PANNING OFF "},
+    {" ' F6 = NEXT TAG "},
+    {" ' / = AUTOSIZE SPRITE"},
+#endif
         };
 
 
