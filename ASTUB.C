@@ -254,8 +254,13 @@ char *Help3d[MAXHELP3D]=
 /******* VARS ********/
 
 static char tempbuf[1024]; //1024
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
 static int numsprite[MAXSPRITES];
 static int multisprite[MAXSPRITES];
+#else
+static int numsprite[MAXTILES];
+static int multisprite[MAXTILES];
+#endif
 static char lo[32];
 static const char *levelname;
 #if (APPVER_DN3DREV >= AV_DR_DN3D14)
@@ -882,8 +887,13 @@ void ExtShowSectorData(short sectnum)   //F5
        }
      }
 
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
      for(i=0;i<MAXSPRITES;i++) numsprite[i]=0;
      for(i=0;i<MAXSPRITES;i++) multisprite[i]=0;
+#else
+     for(i=0;i<MAXTILES;i++) numsprite[i]=0;
+     for(i=0;i<MAXTILES;i++) multisprite[i]=0;
+#endif
          for(i=0;i<MAXSPRITES;i++)
      { if(sprite[i].statnum==0)
        {
@@ -1052,8 +1062,13 @@ void ExtShowWallData(short wallnum)       //F6
 #endif // APPVER_DN3DREV
 
  //Count Normal Actors
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
     for(i=0;i<MAXSPRITES;i++) numsprite[i]=0;
     for(i=0;i<MAXSPRITES;i++) multisprite[i]=0;
+#else
+    for(i=0;i<MAXTILES;i++) numsprite[i]=0;
+    for(i=0;i<MAXTILES;i++) multisprite[i]=0;
+#endif
     for(i=0;i<MAXSPRITES;i++)
         { if(sprite[i].statnum==0)
             {
@@ -1159,8 +1174,13 @@ void ExtShowWallData(short wallnum)       //F6
             }// end if
         }//end for
     total=0;
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
     for(i=0;i<MAXSPRITES;i++) if(numsprite[i]!=0) total+=numsprite[i];
     for(i=0;i<MAXSPRITES;i++) if(multisprite[i]!=0) total+=multisprite[i];
+#else
+    for(i=0;i<MAXTILES;i++) if(numsprite[i]!=0) total+=numsprite[i];
+    for(i=0;i<MAXTILES;i++) if(multisprite[i]!=0) total+=multisprite[i];
+#endif
 
  clearmidstatbar16();
 
@@ -1213,8 +1233,13 @@ void ExtShowWallData(short wallnum)       //F6
 #endif
 
  //Count Respawn Actors
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
     for(i=0;i<MAXSPRITES;i++) numsprite[i]=0;
     for(i=0;i<MAXSPRITES;i++) multisprite[i]=0;
+#else
+    for(i=0;i<MAXTILES;i++) numsprite[i]=0;
+    for(i=0;i<MAXTILES;i++) multisprite[i]=0;
+#endif
     for(i=0;i<MAXSPRITES;i++)
     { if(sprite[i].statnum==0 && sprite[i].picnum==RESPAWN)
       {  switch(sprite[i].hitag)
@@ -1280,8 +1305,13 @@ void ExtShowWallData(short wallnum)       //F6
       }// end if
     }// end for
     total=0;
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
     for(i=0;i<MAXSPRITES;i++) if(numsprite[i]!=0) total+=numsprite[i];
     for(i=0;i<MAXSPRITES;i++) if(multisprite[i]!=0) total+=multisprite[i];
+#else
+    for(i=0;i<MAXTILES;i++) if(numsprite[i]!=0) total+=numsprite[i];
+    for(i=0;i<MAXTILES;i++) if(multisprite[i]!=0) total+=multisprite[i];
+#endif
 
 
 #if (APPVER_DN3DREV < AV_DR_DN3D14)
