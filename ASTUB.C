@@ -2872,16 +2872,24 @@ static int getnumber256(char namestart[80], short num, long maxnumber)
 {
 	char buffer[80];
 	long j, k, n, danum, oldnum;
+	char neg; // VERSIONS RESTORATION - Additional var and related code
 
 	danum = (long)num;
+	neg = 0;
 	oldnum = danum;
+	if (danum < 0)
+	{
+		neg = 1;
+		danum *= -1;
+	}
 	while ((keystatus[0x1c] != 2) && (keystatus[0x1] == 0))
 	{
 		drawrooms(posx,posy,posz,ang,horiz,cursectnum);
-		ExtAnalyzeSprites();
+		//ExtAnalyzeSprites(); // VERSIONS RESTORATION - Removed
 		drawmasks();
 
-		sprintf(&buffer,"%s%ld_ ",namestart,danum);
+		if (!neg) sprintf(&buffer,"%s%ld_ ",namestart,danum);
+		else sprintf(&buffer,"%s-%ld_ ",namestart,danum);
 		printmessage256(buffer);
 		nextpage();
 
@@ -2897,11 +2905,18 @@ static int getnumber256(char namestart[80], short num, long maxnumber)
 		if (keystatus[0xe] > 0)    // backspace
 		{
 			danum /= 10;
+			if (danum == 0) neg = 0;
 			keystatus[0xe] = 0;
+		}
+		if (keystatus[0xc] > 0)    // -
+		{
+			neg = !neg;
+			keystatus[0xc] = 0;
 		}
 		if (keystatus[0x1c] == 1)
 		{
 			oldnum = danum;
+			if (neg) oldnum *= -1;
 			keystatus[0x1c] = 2;
 			asksave = 1;
 		}
