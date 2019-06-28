@@ -111,12 +111,12 @@ static long clockval[16], clockcnt = 0;
 #define NUMOPTIONS 8
 #define NUMKEYS 19
 
-#if (APPVER_DN3DREV >= AV_DR_DN3D14) // FIXME - How to describe this? Unchained, maybe?
-static long altres[15] = {256,320,360,400,200,240,256,270,300,350,360,400,480,512,540};
-#endif
 static long vesares[13][2] = {320,200,360,200,320,240,360,240,320,400,
                                                                         360,400,640,350,640,400,640,480,800,600,
                                                                         1024,768,1280,1024,1600,1200};
+#if (APPVER_DN3DREV >= AV_DR_DN3D14) // FIXME - How to describe this? Unchained, maybe?
+static long altres[15] = {256,320,360,400,200,240,256,270,300,350,360,400,480,512,540};
+#endif
 
 static char option[NUMOPTIONS] = {0,0,0,0,0,0,1,0};
 static char keys[NUMKEYS] =
@@ -171,11 +171,19 @@ char *Mode32d[MAXMODE32D]=
 #define MAXSKILL 5
 char *SKILLMODE[MAXSKILL]=
         {
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
     {"BEGINNER"},
     {"EASY"},
     {"NORMAL"},
     {"NOT EASY"},
     {"ALL"},
+#else
+    {"1 PIECE OF CAKE"},
+    {"2 LET'S ROCK"},
+    {"3 COME GET SOME"},
+    {"4 DAMN I'M GOOD"},
+    {"ALL SKILLS"},
+#endif
     };
 
 #define MAXNOSPRITES 4
@@ -210,7 +218,11 @@ char *Slow[8]=
 #endif
 char *Help3d[MAXHELP3D]=
         {
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
     {"3D KEYS HELP"},
+#else
+    {"    3D KEYS HELP"},
+#endif
         {" "},
     {" F1 = HELP TOGGLE"},
     {" ' R = FRAMERATE TOGGLE"},
@@ -229,7 +241,7 @@ char *Help3d[MAXHELP3D]=
     {" ' - = GAMMA "},
     {" ' + = GAMMA "},
     {" ' P = GLOBAL PARALLEX PANNING OFF "},
-    {" ' F6 = NEXT TAG "},
+    {" F6  = NEXT TAG "},
     {" ' / = AUTOSIZE SPRITE"},
 #endif
         };
@@ -242,6 +254,10 @@ static int numsprite[MAXSPRITES];
 static int multisprite[MAXSPRITES];
 static char lo[32];
 static const char *levelname;
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+static short autosizespritenum=-1;
+static unsigned char debuginfotimeleft=0;
+#endif
 static short curwall=0,wallpicnum=0,curwallnum=0;
 static short cursprite=0,curspritenum=0;
 static short cursector_lotag=0,cursectornum=0;
@@ -259,15 +275,11 @@ char nosprites=0,purpleon=0,skill=4;
 char framerateon=1,tabgraphic=0;
 #if (APPVER_DN3DREV >= AV_DR_DN3D14)
 static char gamma=0;
-static char autosize=1;
-static short autosizespritenum=-1;
-static unsigned char textoffset = 31;
-static unsigned char texttimeleft = 0;
-static unsigned char debuginfotimeleft=0;
-static char textbuf[1024];
-static char autorun=0;
 static char quickspeed=0;
 static char runrate=1;
+static char autosize=1;
+static char autorun=0;
+static char textbuf[1024];
 static long count;
 // VERSIONS RESTORATION - This *replaces* the function from BUILD.C
 extern short asksave;
@@ -276,6 +288,10 @@ static int getnumber256(char namestart[80], short num, long maxnumber);
 
 
 static char sidemode=0;
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+static unsigned char textoffset = 31;
+static unsigned char texttimeleft = 0;
+#endif
 extern long vel, svel, angvel;
 long xvel, yvel, hvel, timeoff;
 
@@ -954,7 +970,7 @@ void ExtShowSectorData(short sectnum)   //F5
       PrintStatus("",multisprite[CRYSTALAMMO],x2,y+7,1);
           PrintStatus("Disruptor=",numsprite[DEVISTATORAMMO],x,y+8,11);
                 PrintStatus("",multisprite[DEVISTATORAMMO],x2,y+8,1);
-     PrintStatus("Enlarger=",numsprite[GROWAMMO],x,y+9,11);
+     PrintStatus("Enlarger =",numsprite[GROWAMMO],x,y+9,11);
       PrintStatus("",multisprite[GROWAMMO],x2,y+9,1);
      PrintStatus("Freezeray=",numsprite[FREEZEAMMO],x,y+10,11);
       PrintStatus("",multisprite[FREEZEAMMO],x2,y+10,1);
@@ -1269,7 +1285,7 @@ void ExtShowWallData(short wallnum)       //F6
  PrintStatus("Respawn",total,x,y,11);
 #else
  x=36;y=4;
- PrintStatus("Respawn =",total,x,y,11);
+ PrintStatus("Respawn = ",total,x,y,11);
 #endif
  PrintStatus(" Liztroop  =",numsprite[LIZTROOP],x,y+1,11);
  PrintStatus(" Lizman    =",numsprite[LIZMAN],x,y+2,11);
@@ -1288,15 +1304,15 @@ void ExtShowWallData(short wallnum)       //F6
  PrintStatus("Boss2     =",numsprite[BOSS2],x,y+6,11);
  PrintStatus("Boss3     =",numsprite[BOSS3],x,y+7,11);
 #else
- PrintStatus("Turret    =",numsprite[ROTATEGUN],x,y+8,11);
- PrintStatus("Egg       =",numsprite[EGG],x,y+9,11);
+ PrintStatus(" Turret    =",numsprite[ROTATEGUN],x,y+8,11);
+ PrintStatus(" Egg       =",numsprite[EGG],x,y+9,11);
  x+=17;
  PrintStatus("Slimer    =",numsprite[GREENSLIME],x,y+1,11);
  PrintStatus("Boss1     =",numsprite[BOSS1],x,y+2,11);
  PrintStatus("MiniBoss1 =",multisprite[BOSS1],x,y+3,11);
  PrintStatus("Boss2     =",numsprite[BOSS2],x,y+4,11);
  PrintStatus("Boss3     =",numsprite[BOSS3],x,y+5,11);
- PrintStatus("Tank      =",numsprite[TANK],x,y+6,11);
+ PrintStatus("Riot Tank =",numsprite[TANK],x,y+6,11);
  PrintStatus("New Beast =",numsprite[NEWBEAST],x,y+7,11);
  PrintStatus("Boss4     =",numsprite[BOSS4],x,y+8,11);
 #endif
