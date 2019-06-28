@@ -3002,7 +3002,6 @@ void autosizesprite (short spritenum)
      case LIZTROOPSHOOT:
      case LIZTROOPJETPACK:
      case LIZTROOPONTOILET:
-     case LIZTROOPJUSTSIT:
      case LIZTROOPDUCKING:
 
      case OCTABRAIN:
@@ -3018,7 +3017,6 @@ void autosizesprite (short spritenum)
      case PIGCOP:
      case PIGCOPSTAYPUT:
      case PIGCOPDIVE:
-     case PIGCOPDEADSPRITE:
 
      case LIZMAN:
      case LIZMANSTAYPUT:
@@ -3060,9 +3058,6 @@ void autosizesprite (short spritenum)
          break;
 
      case BOSS1:
-     case BOSS1STAYPUT:
-     case BOSS1SHOOT:
-     case BOSS1LOB:
 
      case BOSS2:
 
