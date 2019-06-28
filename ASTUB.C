@@ -111,11 +111,15 @@ static long clockval[16], clockcnt = 0;
 #define NUMOPTIONS 8
 #define NUMKEYS 19
 
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
 static long vesares[13][2] = {320,200,360,200,320,240,360,240,320,400,
                                                                         360,400,640,350,640,400,640,480,800,600,
                                                                         1024,768,1280,1024,1600,1200};
-#if (APPVER_DN3DREV >= AV_DR_DN3D14) // FIXME - How to describe this? Unchained, maybe?
-static long altres[15] = {256,320,360,400,200,240,256,270,300,350,360,400,480,512,540};
+#else
+static long vesares[41] = {
+    256,320,360,400,200,240,256,270,300,350,360,400,480,512,540,
+    320,200,360,200,320,240,360,240,320,400,360,400,640,350,
+    640,400,640,480,800,600,1024,768,1280,1024,1600,1200};
 #endif
 
 static char option[NUMOPTIONS] = {0,0,0,0,0,0,1,0};
@@ -2326,8 +2330,8 @@ if ((key == 'y') || (key == 'Y'))
 #else
         switch(option[0])
         {
-                case 0: initengine(0,altres[option[6]&15],altres[(option[6]>>4)+4]); break;
-                case 1: initengine(1,vesares[option[6]&15][0],vesares[option[6]&15][1]); break;
+                case 0: initengine(0,vesares[option[6]&15],vesares[(option[6]>>4)+4]); break;
+                case 1: initengine(1,vesares[2*(option[6]&15)+15],vesares[2*(option[6]&15)+16]); break;
                 default: initengine(option[0],320L,200L); break;
         }
 #endif
