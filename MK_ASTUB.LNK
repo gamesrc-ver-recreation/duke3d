@@ -1,0 +1,8 @@
+option map
+option static
+name build
+f ..\build\19960820\build
+f astub
+f ..\build\19960820\cache1d
+f ..\build\19960820\engine
+f a
