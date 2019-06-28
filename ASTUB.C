@@ -2630,7 +2630,11 @@ faketimerhandler()
         ototalclock = totalclock;
 
         oposx = posx; oposy = posy;
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
         hitwall = clipmove(&posx,&posy,&posz,&cursectnum,xvel,yvel,128L,4L<<8,4L<<8,0);
+#else
+        hitwall = clipmove(&posx,&posy,&posz,&cursectnum,runrate*xvel,runrate*yvel,128L,4L<<8,4L<<8,0);
+#endif
         xvel = ((posx-oposx)<<14); yvel = ((posy-oposy)<<14);
 
         yvel += 80000;
