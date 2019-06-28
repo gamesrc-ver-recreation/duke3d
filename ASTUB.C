@@ -2867,7 +2867,7 @@ SearchSectorsBackward()
 }
 
 #if (APPVER_DN3DREV >= AV_DR_DN3D14)
-// VERSIONS RESTORATION - New functions, including virtually identical copy of BUILD.C:getnumber256
+// VERSIONS RESTORATION - New functions, including modified copies of BUILD.C:getnumber256 and ENGINE.C:insertsprite
 static int getnumber256(char namestart[80], short num, long maxnumber)
 {
 	char buffer[80];
@@ -2913,6 +2913,13 @@ static int getnumber256(char namestart[80], short num, long maxnumber)
 	//lockclock = totalclock;  //Reset timing
 
 	return((short)oldnum);
+}
+
+insertsprite(short sectnum, short statnum)
+{
+	insertspritestat(statnum);
+	autosizespritenum=insertspritesect(sectnum);
+	return(autosizespritenum);
 }
 
 void autosizesprite (short spritenum)
@@ -3079,7 +3086,7 @@ void autosizesprite (short spritenum)
  }
 }
 
-int GetNextTag(short nextfreetag)
+int GetNextTag(int nextfreetag)
 {
  int i;
  for(i=0;i<MAXSPRITES;i++)
