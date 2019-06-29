@@ -1766,10 +1766,12 @@ void Keys3d(void)
             break;
     }
  if(keystatus[0x38]!=1 && keystatus[0x28]!=1 && keystatus[0x2e]==1) // c, no Alt or '
-   if (searchstat==3)
+    switch (searchstat)
     {
+        case 3:
         if (sprite[searchwall].cstat&0x80) SHOW_TEXT_FAR("Sprite Center OFF");
         else SHOW_TEXT_NEAR("Sprite Center ON");
+            break;
     }
  if(keystatus[0x28]!=1 && keystatus[0x13]==1) // r, no '
     switch (searchstat)
