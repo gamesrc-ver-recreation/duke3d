@@ -1704,23 +1704,23 @@ void Keys3d(void)
     {
         if(keystatus[0x4b]==1) // Left
         {
-            keystatus[0x4b] = 0;
             sprite[searchwall].x -= 128;
+            keystatus[0x4b] = 0;
         }
         if(keystatus[0x4d]==1) // Right
         {
-            keystatus[0x4d] = 0;
             sprite[searchwall].x += 128;
+            keystatus[0x4d] = 0;
         }
         if(keystatus[0x48]==1) // Up
         {
-            keystatus[0x48] = 0;
             sprite[searchwall].y -= 128;
+            keystatus[0x48] = 0;
         }
         if(keystatus[0x50]==1) // Down
         {
-            keystatus[0x50] = 0;
             sprite[searchwall].y += 128;
+            keystatus[0x50] = 0;
         }
     }
  if(keystatus[0x28]==1 && keystatus[0x10]==1) // ' q
@@ -1745,24 +1745,24 @@ void Keys3d(void)
     switch (searchstat)
     {
         case 1:
-            keystatus[0xc9] = 0;
             sector[searchsector].ceilingz -= 8192;
+            keystatus[0xc9] = 0;
             break;
         case 2:
-            keystatus[0xc9] = 0;
             sector[searchsector].floorz -= 8192;
+            keystatus[0xc9] = 0;
             break;
     }
  if(keystatus[0x9d]==1 && keystatus[0xd1]==1) // Ctrl PgDn
     switch (searchstat)
     {
         case 1:
-            keystatus[0xd1] = 0;
             sector[searchsector].ceilingz += 8192;
+            keystatus[0xd1] = 0;
             break;
         case 2:
-            keystatus[0xd1] = 0;
             sector[searchsector].floorz += 8192;
+            keystatus[0xd1] = 0;
             break;
     }
  if(keystatus[0x38]!=1 && keystatus[0x28]!=1 && keystatus[0x2e]==1) // c, no Alt or '
