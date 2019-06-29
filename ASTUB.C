@@ -1774,6 +1774,9 @@ void Keys3d(void)
  if(keystatus[0x28]!=1 && keystatus[0x13]==1) // r, no '
     switch (searchstat)
     {
+        case 0:
+        case 4:
+            break;
         case 1:
             if (sector[searchsector].ceilingstat&0x41) SHOW_TEXT_FAR("Ceiling Relative OFF");
             else SHOW_TEXT_NEAR("Ceiling Relative ON");
@@ -1781,6 +1784,8 @@ void Keys3d(void)
         case 2:
             if (sector[searchsector].floorstat&0x41) SHOW_TEXT_FAR("Floor Relative OFF");
             else SHOW_TEXT_NEAR("Floor Relative ON");
+            break;
+        case 3:
             break;
     }
  if(keystatus[0x28]==1 && keystatus[0xc]==1) // ' -
