@@ -2306,7 +2306,7 @@ void ExtInit(void)
     int key;
 
     printf("\n------------------------------------------------------------------------------\n");
-    printf("BUILD.EXE for Duke Nukem 3D - Atomic Edition v1.4\n");
+    printf("BUILD.EXE for Duke Nukem 3D - Atomic Edition v1.4\n\n");
     printf("Copyright (c) 1993 - 1996 Ken Silverman, 3D Realms Entertainment.\n");
 #endif
     printf("This version of BUILD was created for Duke Nukem 3D and parts were modified\n");
