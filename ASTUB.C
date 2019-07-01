@@ -290,7 +290,6 @@ static char runrate=1;
 static char autosize=1;
 static char autorun=0;
 static char textbuf[1024];
-static long count;
 // VERSIONS RESTORATION - This *replaces* the function from BUILD.C
 extern short asksave;
 static int getnumber256(char namestart[80], short num, long maxnumber);
@@ -1589,6 +1588,10 @@ void ReadPaletteTable()
  kclose(fp);
  ReadGamePalette();
 }// end ReadPaletteTable
+
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+static long count;
+#endif
 
 void Keys3d(void)
 {
