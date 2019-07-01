@@ -14,7 +14,7 @@ game.obj : game.c build.h names.h pragmas.h
 build.obj : build.c build.h pragmas.h
 	wcc386 build /4r /s /or
 astub.obj : astub.c build.h
-	wcc386 astub /4r /s /ort -DAPPVER_EXEDEF=$(appver_exedef)
+	wcc386 astub /4r /s /ort -DAPPVER_EXEDEF=$(appver_exedef) /w4
 #bstub.obj : bstub.c build.h
 #	wcc386 bstub /4r /s /or
 cache1d.obj : cache1d.c pragmas.h

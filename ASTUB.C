@@ -292,7 +292,7 @@ static char textbuf[1024];
 static long count;
 // VERSIONS RESTORATION - This *replaces* the function from BUILD.C
 extern short asksave;
-static int getnumber256(char namestart[80], short num, long maxnumber);
+getnumber256(char namestart[80], short num, long maxnumber);
 #endif
 
 
@@ -2940,7 +2940,7 @@ SearchSectorsBackward()
 
 #if (APPVER_DN3DREV >= AV_DR_DN3D14)
 // VERSIONS RESTORATION - New functions, including modified copies of BUILD.C:getnumber256 and ENGINE.C:insertsprite
-static int getnumber256(char namestart[80], short num, long maxnumber)
+getnumber256(char namestart[80], short num, long maxnumber)
 {
 	char buffer[80];
 	long j, k, n, danum, oldnum;

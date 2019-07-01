@@ -1,5 +1,10 @@
+system dos4g
 option map
-option static
+option stack=90k
+option statics
+option u
+segment type code lo
+segment type data lo
 name build
 f ..\build\19960820\build
 f astub
