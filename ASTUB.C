@@ -90,6 +90,9 @@ char *Myname[1]= {"stryker@metronet.com"};
 extern char keystatus[];
 extern short defaultspritecstat;
 extern long posx, posy, posz, horiz, qsetmode;
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+extern short asksave;
+#endif
 extern short ang, cursectnum;
 extern short ceilingheinum, floorheinum;
 extern char names[MAXTILES][17];
@@ -289,18 +292,12 @@ static char quickspeed=0;
 static char runrate=1;
 static char autosize=1;
 static char autorun=0;
-static char textbuf[1024];
 // VERSIONS RESTORATION - This *replaces* the function from BUILD.C
-extern short asksave;
-static int getnumber256(char namestart[80], short num, long maxnumber);
+//static int getnumber256(char namestart[80], short num, long maxnumber);
 #endif
 
 
 static char sidemode=0;
-#if (APPVER_DN3DREV >= AV_DR_DN3D14)
-static unsigned char textoffset = 31;
-static unsigned char texttimeleft = 0;
-#endif
 extern long vel, svel, angvel;
 long xvel, yvel, hvel, timeoff;
 
@@ -1526,22 +1523,26 @@ void PrintStatus(char *string,int num,char x,char y,char color)
 
 #else
 
-#define SHOW_TEXT_NEAR(string) ShowText(string,31)
-#define SHOW_TEXT_MED(string) ShowText(string,95)
-#define SHOW_TEXT_FAR(string) ShowText(string,143)
+#define SHOW_TEXT_NEAR(string) Message(string,31)
+#define SHOW_TEXT_MED(string) Message(string,95)
+#define SHOW_TEXT_FAR(string) Message(string,143)
 
-void ShowText(char *string, char offset)
+static char messagecolor = 31;
+static unsigned char messagedelay = 0;
+static char messagebuf[1024];
+
+void Message(char *string, char color)
 {
-    sprintf(textbuf,string,0); // VERSIONS RESTORATION - THIS IS *NOT* SECURE!!
-    textoffset = offset;
-    texttimeleft = 128;
+    sprintf(messagebuf,string,0); // VERSIONS RESTORATION - THIS IS *NOT* SECURE!!
+    messagedelay = 128;
+    messagecolor = color;
 }
 
-void UpdateShownText(void)
+void ShowMessage()
 {
-    if (texttimeleft<1) return;
-    texttimeleft--;
-    printext256(0,8,textoffset,0,textbuf,0);
+    if (messagedelay<1) return;
+    messagedelay--;
+    printext256(0,8,messagecolor,0,messagebuf,0);
 }
 
 #endif // APPVER_DN3DREV
@@ -1602,7 +1603,7 @@ void Keys3d(void)
     long i,rate,nexti;
     short statnum=0;
     int nextfreetag=0;
-    UpdateShownText();
+    ShowMessage();
     ShowDebugInfo();
 #endif
 
@@ -2944,14 +2945,13 @@ SearchSectorsBackward()
 
 #if (APPVER_DN3DREV >= AV_DR_DN3D14)
 // VERSIONS RESTORATION - New functions, including modified copies of BUILD.C:getnumber256 and ENGINE.C:insertsprite
-static int getnumber256(char namestart[80], short num, long maxnumber)
+/*static int */getnumber256(char namestart[80], short num, long maxnumber)
 {
 	char buffer[80];
+	char neg = 0; // VERSIONS RESTORATION - Additional var and related code
 	long j, k, n, danum, oldnum;
-	char neg; // VERSIONS RESTORATION - Additional var and related code
 
 	danum = (long)num;
-	neg = 0;
 	oldnum = danum;
 	if (danum < 0)
 	{
