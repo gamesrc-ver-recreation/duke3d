@@ -996,7 +996,11 @@ void ExtShowSectorData(short sectnum)   //F5
 
      printext16(65*8,4*8,11,-1,"MISC",0);
      PrintStatus("Secrets =",secrets,65,6,11);
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
      printext16(65*8,7*8,11,-1,"ACTORS",0);
+#else
+     printext16(65*8,7*8-2,11,-1,"ACTORS",0);
+#endif
      PrintStatus("Skill 1 =",totalactors1,65,8,11);
      PrintStatus("Skill 2 =",totalactors2,65,9,11);
      PrintStatus("Skill 3 =",totalactors3,65,10,11);
@@ -1232,8 +1236,8 @@ void ExtShowWallData(short wallnum)       //F6
  PrintStatus("Boss2     =",numsprite[BOSS2],x,y+4,11);
  PrintStatus("Boss3     =",numsprite[BOSS3],x,y+5,11);
  PrintStatus("Riot Tank =",numsprite[TANK],x,y+6,11);
- PrintStatus("New Beast =",numsprite[NEWBEAST],x,y+6,11);
- PrintStatus("Boss4     =",numsprite[BOSS4],x,y+6,11);
+ PrintStatus("New Beast =",numsprite[NEWBEAST],x,y+7,11);
+ PrintStatus("Boss4     =",numsprite[BOSS4],x,y+8,11);
 #endif
 
  //Count Respawn Actors
@@ -1350,8 +1354,8 @@ void ExtShowWallData(short wallnum)       //F6
  PrintStatus("MiniBoss1 =",multisprite[BOSS1],x,y+3,11);
  PrintStatus("Boss2     =",numsprite[BOSS2],x,y+4,11);
  PrintStatus("Boss3     =",numsprite[BOSS3],x,y+5,11);
- PrintStatus("Riot Tank =",numsprite[TANK],x,y+6,11);
- PrintStatus("New Beast =",numsprite[NEWBEAST],x,y+7,11);
+ PrintStatus("Riot Tank =",numsprite[BOSS3],x,y+7,11); // VERSIONS RESTORATION:
+ PrintStatus("New Beast =",numsprite[TANK],x,y+6,11);  // Vanilla bug/typos
  PrintStatus("Boss4     =",numsprite[BOSS4],x,y+8,11);
 #endif
 
@@ -1493,10 +1497,10 @@ void ExtEditWallData(short wallnum)       //F8
 
 void ExtEditSpriteData(short spritenum)   //F8
 {
+    if(qsetmode!=480) return;
 #if (APPVER_DN3DREV >= AV_DR_DN3D14)
     if(qsetmode==200) return;
 #endif
-    if(qsetmode!=480) return;
     wallsprite=2;
     cursprite = spritenum;
     curwallnum = 0;
