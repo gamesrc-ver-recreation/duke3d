@@ -85,6 +85,9 @@ Duke Lookup Table
 
 //#include "water.c"
 
+#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+static short unusedvar; // HACK
+#endif
 char *Myname[1]= {"stryker@metronet.com"};
 
 extern char keystatus[];
@@ -99,7 +102,11 @@ extern char names[MAXTILES][17];
 
 extern long zmode, kensplayerheight, zlock;
 
+#if (APPVER_DN3DREV < AV_DR_DN3D14)
 extern short editstatus, searchit;
+#else
+extern short editstatus;
+#endif
 extern long searchx, searchy;                          //search input
 extern short searchsector, searchwall, searchstat;     //search output
 
