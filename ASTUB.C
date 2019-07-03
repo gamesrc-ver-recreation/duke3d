@@ -1091,16 +1091,6 @@ void ExtShowWallData(short wallnum)       //F6
                     case LIZTROOPONTOILET :
                     case LIZTROOPDUCKING :
                         numsprite[LIZTROOP]++; break;
-#if (APPVER_DN3DREV >= AV_DR_DN3D14)
-                    case TANK:
-                        numsprite[TANK]++; break;
-                    case NEWBEAST:
-                    case NEWBEASTSTAYPUT:
-                    case NEWBEASTJUMP:
-                    case NEWBEASTHANG:
-                    case NEWBEASTHANGDEAD:
-                        numsprite[NEWBEAST]++; break;
-#endif
                     case BOSS1:
                     case BOSS1STAYPUT:
                     case BOSS1SHOOT:
@@ -1112,6 +1102,14 @@ void ExtShowWallData(short wallnum)       //F6
                     case BOSS3:
                         multisprite[BOSS3]++; break;
 #if (APPVER_DN3DREV >= AV_DR_DN3D14)
+                    case TANK:
+                        numsprite[TANK]++; break;
+                    case NEWBEAST:
+                    case NEWBEASTSTAYPUT:
+                    case NEWBEASTJUMP:
+                    case NEWBEASTHANG:
+                    case NEWBEASTHANGDEAD:
+                        numsprite[NEWBEAST]++; break;
                     case BOSS4:
                         multisprite[BOSS4]++; break;
 #endif
