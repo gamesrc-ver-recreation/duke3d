@@ -1151,9 +1151,6 @@ void ExtShowWallData(short wallnum)       //F6
                     case OCTABRAINSTAYPUT:
                         numsprite[OCTABRAIN]++; break;
                     case RECON:
-#if (APPVER_DN3DREV >= AV_DR_DN3D14)
-                    case TANK:
-#endif
                     case DRONE:
                     case ROTATEGUN:
                     case EGG:
@@ -1164,6 +1161,8 @@ void ExtShowWallData(short wallnum)       //F6
                         numsprite[sprite[i].picnum]++;
 #if (APPVER_DN3DREV >= AV_DR_DN3D14)
                         break;
+                    case TANK:
+                        numsprite[TANK]++; break;
                     case NEWBEAST:
                     case NEWBEASTSTAYPUT:
                     case NEWBEASTJUMP:
@@ -1258,10 +1257,6 @@ void ExtShowWallData(short wallnum)       //F6
                     case LIZTROOPONTOILET :
                     case LIZTROOPDUCKING :
                         numsprite[LIZTROOP]++; break;
-#if (APPVER_DN3DREV >= AV_DR_DN3D14)
-                    case TANK:
-                        numsprite[TANK]++; break;
-#endif
                     case PIGCOP:
                     case PIGCOPSTAYPUT:
                     case PIGCOPDIVE:
@@ -1296,6 +1291,8 @@ void ExtShowWallData(short wallnum)       //F6
                         numsprite[sprite[i].hitag]++;
 #if (APPVER_DN3DREV >= AV_DR_DN3D14)
                         break;
+                    case TANK:
+                        numsprite[TANK]++; break;
                     case NEWBEAST:
                     case NEWBEASTSTAYPUT:
                     case NEWBEASTJUMP:
@@ -2954,7 +2951,7 @@ SearchSectorsBackward()
 
 #if (APPVER_DN3DREV >= AV_DR_DN3D14)
 // VERSIONS RESTORATION - New functions, including modified copies of BUILD.C:getnumber256 and ENGINE.C:insertsprite
-/*static int */getnumber256(char namestart[80], short num, long maxnumber)
+static getnumber256(char namestart[80], short num, long maxnumber)
 {
 	char buffer[80];
 	char neg = 0; // VERSIONS RESTORATION - Additional var and related code
