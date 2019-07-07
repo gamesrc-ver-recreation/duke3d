@@ -11,7 +11,7 @@ if ERRORLEVEL 4 set TARGET=WW2GI10
 if ERRORLEVEL 5 set TARGET=EDK20023
 
 if not %TARGET% == DN3D14 goto task
-if not exist ..\build\19960820\cache1d.obj goto dn3d14error
+if not exist ..\build\19960724\cache1d.obj goto dn3d14error
 if not exist ..\build\19960820\engine.obj goto dn3d14error
 goto task
 :dn3d14error
