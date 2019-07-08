@@ -1,0 +1,8 @@
+system dos4g
+option map
+option statics
+option u
+segment type code lo
+segment type data lo
+name build
+file ..\..\build\19960724\build,astub,..\..\build\19960724\cache1d,..\..\build\19960724\engine,..\a

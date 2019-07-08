@@ -10,6 +10,8 @@
 
 // APPVER_DN3DREV definitions
 #define AV_DR_DN3D14 199610210L
+#define AV_DR_DN3D14B AV_DR_DN3D14 // Hack for build editor dir
+#define AV_DR_DN3D14G AV_DR_DN3D14 // Hack for game exe dir
 #define AV_DR_DN3DGPLSRC 199610320L // Using a pseudo-date; Excludes CTW changes
 #define AV_DR_DN3D15 199612110L
 #define AV_DR_NAM10 199805150L // Also for NAPALM

@@ -24,12 +24,17 @@ game_objs = $(game_objs_minus_animlib) animlib.obj
 
 $(appver_exedef)\game.exe: $(game_objs)
            cd $(appver_exedef)
-!ifeq appver_exedef DN3D14
+!ifeq appver_exedef DN3D14G
            wlink $(all) @..\makef_14.lnk
 !else
            wlink $(all) @..\makefile.lnk
 !endif
            cd ..
+
+$(appver_exedef)\build.exe: astub.obj
+	cd $(appver_exedef)
+	wlink $(all) @..\mkbld_14.lnk
+	cd ..
 
 # use for NAM
 #compileoptions = $(prod) $(debug) -imact -DNAM
@@ -56,6 +61,8 @@ globaldependencies = makefile. duke3d.h global.c
 .obj : $(appver_exedef)
 
 game.obj : game.c $(globaldependencies)
+
+astub.obj : astub.c $(globaldependencies)
 
 actors.obj : actors.c $(globaldependencies)
 

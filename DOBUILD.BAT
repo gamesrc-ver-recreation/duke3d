@@ -11,6 +11,8 @@ if ERRORLEVEL 4 set TARGET=NAM10
 if ERRORLEVEL 5 set TARGET=WW2GI10
 if ERRORLEVEL 6 set TARGET=EDK20023
 
+set EXENAME=game.exe
+
 if %TARGET% == DN3D14B goto dn3d14b
 if %TARGET% == DN3D14G goto dn3d14g
 goto task
@@ -18,6 +20,7 @@ goto task
 if not exist ..\build\19960724\build.obj goto dn3d14error
 if not exist ..\build\19960724\cache1d.obj goto dn3d14error
 if not exist ..\build\19960724\engine.obj goto dn3d14error
+set EXENAME=build.exe
 goto task
 :dn3d14g
 if not exist ..\build\19960724\cache1d.obj goto dn3d14error
@@ -29,5 +32,5 @@ echo compatible Build Engine object files ready under ..\build.
 goto end
 :task
 mkdir %TARGET%
-wmake.exe "appver_exedef = %TARGET%"
+wmake.exe %TARGET%\%EXENAME% "appver_exedef = %TARGET%"
 :end
