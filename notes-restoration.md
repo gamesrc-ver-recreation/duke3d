@@ -27,6 +27,9 @@ for the EXEs matching the Duke Nukem 3D: Atomic Edition versions:
 - Enhanced Duke (EDuke) 2.00.23 (mostly known as EDuke 2.0, not to be
 confused with the released sources, which appear to match v2.00.21).
 
+In addition, with one more more caveat, you may recreate the following EXE:
+- BUILD.EXE for Duke Nukem 3D - Atomic Edition v1.4 (also re-used for 1.5).
+
 The MAKEFILE bundled with the EDuke 2.00.21 sources (the initial release)
 was used as a base. You shall *not* call "wmake" on
 your own anymore. Instead, use DOBUILD.BAT.
@@ -34,7 +37,8 @@ your own anymore. Instead, use DOBUILD.BAT.
 List of releases by directory names
 -----------------------------------
 
-- DN3D14: Duke Nukem 3D: Atomic Edition v1.4.
+- DN3D14B: Duke Nukem 3D: Atomic Edition v1.4 Build Editor.
+- DN3D14G: Duke Nukem 3D: Atomic Edition v1.4 (the game).
 - DN3D15: Duke Nukem 3D: Atomic Edition v1.5.
 - NAM10: NAM (NAPALM) Full Version 1.0.
 - WW2GI10: WW2GI Full Version 1.0.
@@ -138,6 +142,14 @@ and later assisting with the recreation of the Duke3D 1.4 revision.
 It's probably also a good chance to send my thanks to various other members
 of the Duke4.net community for their great support during all of these years!
 
+Later, code for the Build Editor as distributed with Duke3D 1.4 and 1.5 was
+recreated. The only source file which isn't a direct part of the Build Engine
+was ASTUB.C. A version of it was GPLed, which is assumed to match 1.3d.
+Almost all code had to be re-added from scratch. In a few cases of having
+differences in the output from the original, Shadow Warrior's JNSTUB.C was
+very useful. It might actually be the closest to any known source code
+which is still including code added for Duke3D 1.4's Build Editor.
+
 How was the makefile (and a bit more) modified from the original
 ----------------------------------------------------------------
 
@@ -165,36 +177,43 @@ Building any of the EXEs
 
 Required tools:
 
-- For Duke3D versions 1.4 and 1.5 i.e., Duke Nukem 3D Atomic Edition 1.4/1.5:
+- For Duke3D versions 1.4 and 1.5 i.e., Duke Nukem 3D Atomic Edition 1.4/1.5,
+as well as the Build Editor as originally distributed with Duke3D 1.4 and 1.5:
 Watcom C 10.0 (and no other version, not even 10.0a or 10.0b).
 - For any other EXE: Watcom C 10.6 (and no other version).
 - (Optional) For Duke3D 1.4/1.5: DOS/4GW Professional Bind Utility version 1.3,
 along with DOS/4GW Professional Protected Mode Run Time version 1.96.
 
-Additionally, for Duke3D 1.4:
+Additionally, for Duke3D 1.4 and the Build Editor:
 - You'll also need to build matching CACHE1D.OBJ and ENGINE.OBJ files
-in the ..\build subdirectory.
+in the ..\build subdirectory. For the Build Editor,
+BUILD.OBJ is further required.
 
 Notes before trying to build anything:
 
-- This may depend on luck. In the cases of Duke Nukem 3D: Atomic Edition
-versions 1.4 and 1.5, you *will* get different EXEs, especially
-if you don't use DOS/4GW Professional (but also if you do).
-Even with other EXEs, luck may have its part.
+- This may depend on luck. In the cases of the Build Editor, as well
+as Duke Nukem 3D: Atomic Edition versions 1.4 and 1.5, you *will* get
+different EXEs, especially if you don't use DOS/4GW Professional
+(but also if you do). Even with other EXEs, luck may have its part.
+- For Duke3D 1.4's Build Editor, the output Keys3d function is expected
+to have a few unresolved differences from the original, but the code
+should be equivalent in behaviors.
 - Further note that any customized patch, like copy protection removal,
 shall *not* be applied here. This may lead to an additional
 minor difference of one byte, if not much more.
 - You may use DOBUILD.BAT to build each EXE, and DOCLEAN.BAT to clean
 any previously built object and executable files.
 
-Building the Duke Nukem 3D: Atomic Edition 1.4 or 1.5 EXE
-=========================================================
+Building the Duke Nukem 3D: Atomic Edition 1.4/1.5 EXE or their Build Editor
+============================================================================
 
-1. If you want to build 1.4, don't forget to build the matching
+1. If you want to build the 1.4 game EXE, don't forget to build the matching
 CACHE1D.OBJ and ENGINE.OBJ files under "build" first.
-2. Use DOBUILD.BAT, selecting DN3D14 or DN3D15 as the
-output directory name, depending on the version.
-3. Hopefully you should get an EXE essentially behaving like the original.
+2. For the Build Editor, build the matching BUILD.OBJ, CACHE1D.OBJ
+and ENGINE.OBJ files under "build".
+3. Use DOBUILD.BAT, selecting DN3D14B, DN3D14G or DN3D15 as the
+output directory name, depending on the EXE you want to build.
+4. Hopefully you should get an EXE essentially behaving like the original.
 
 Expected differences from the original:
 
@@ -202,10 +221,12 @@ Expected differences from the original:
 values depending on the environment while running the Watcom C compiler
 (e.g., the exact contents of each compilation unit). This seems to be
 related to Watcom C v10.0(a/b), and less to 10.6.
-2. The created GAME.EXE file will require an external DOS4GW EXE
+- The created GAME.EXE file will require an external DOS4GW EXE
 (or compatible). You may optionally use DOS/4GW Professional to
 bind its loader to the EXE, but chances are there'll still be an
 *additional* difference of, say, 6 bytes from the original EXE.
+- As stated above, for the Duke3D 1.4 Build Editor, ASTUB.C:Keys3d is
+expected to have technical differences from the code in the original EXE.
 
 Building the NAM, WW2GI or EDUKE EXE
 ====================================
