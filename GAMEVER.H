@@ -9,15 +9,19 @@
 // this header first (as of writing this).
 
 // APPVER_DN3DREV definitions
+#define AV_DR_DN3D13 199604190L
 #define AV_DR_DN3D14 199610210L
-#define AV_DR_DN3D14B AV_DR_DN3D14 // Hack for build editor dir
-#define AV_DR_DN3D14G AV_DR_DN3D14 // Hack for game exe dir
 #define AV_DR_DN3DGPLSRC 199610320L // Using a pseudo-date; Excludes CTW changes
 #define AV_DR_DN3D15 199612110L
 #define AV_DR_NAM10 199805150L // Also for NAPALM
 #define AV_DR_WW2GI10 199902280L
 #define AV_DR_EDK20021 200006191L // There were two builds during the same day!
 #define AV_DR_EDK20023 200006200L
+// Hacks for more specific EXEs / build dirs
+#define AV_DR_DN3D13B AV_DR_DN3D13
+#define AV_DR_DN3D13G AV_DR_DN3D13
+#define AV_DR_DN3D14B AV_DR_DN3D14
+#define AV_DR_DN3D14G AV_DR_DN3D14
 
 // Now define APPVER_DN3DREV to one of the above,
 // based on the definition of APPVER_EXEDEF
