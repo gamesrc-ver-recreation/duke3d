@@ -33,7 +33,11 @@ $(appver_exedef)\game.exe: $(game_objs)
 
 $(appver_exedef)\build.exe: astub.obj
 	cd $(appver_exedef)
+!ifeq appver_exedef DN3D13B
+	wlink $(all) @..\mkbld_13.lnk
+!else
 	wlink $(all) @..\mkbld_14.lnk
+!endif
 	cd ..
 
 # use for NAM
