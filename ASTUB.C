@@ -121,17 +121,11 @@ static long clockval[16], clockcnt = 0;
 #define NUMOPTIONS 8
 #define NUMKEYS 19
 
-#if (APPVER_DN3DREV < AV_DR_DN3D14)
-static long vesares[13][2] = {320,200,360,200,320,240,360,240,320,400,
-                                                                        360,400,640,350,640,400,640,480,800,600,
-                                                                        1024,768,1280,1024,1600,1200};
-#else
 static long chainxres[4] = {256,320,360,400};
 static long chainyres[11] = {200,240,256,270,300,350,360,400,480,512,540};
 static long vesares[13][2] = {320,200,360,200,320,240,360,240,320,400,
-    360,400,640,350,640,400,640,480,800,600,
-    1024,768,1280,1024,1600,1200};
-#endif
+                                                                        360,400,640,350,640,400,640,480,800,600,
+                                                                        1024,768,1280,1024,1600,1200};
 
 static char option[NUMOPTIONS] = {0,0,0,0,0,0,1,0};
 static char keys[NUMKEYS] =
@@ -2369,20 +2363,12 @@ if ((key == 'y') || (key == 'Y'))
                 // if (option[3] != 0) moustat =
                 initmouse();
 
-#if (APPVER_DN3DREV < AV_DR_DN3D14)
-        switch(option[0]+1)
-        {
-                case 1: initengine(1,vesares[option[6]&15][0],vesares[option[6]&15][1]); break;
-                default: initengine(option[0]+1,320L,200L); break;
-        }
-#else
         switch(option[0])
         {
                 case 0: initengine(0,chainxres[option[6]&15],chainyres[(option[6]>>4)]); break;
                 case 1: initengine(1,vesares[option[6]&15][0],vesares[option[6]&15][1]); break;
                 default: initengine(option[0],320L,200L); break;
         }
-#endif
 
         kensplayerheight = 40; //32
          zmode = 1;
