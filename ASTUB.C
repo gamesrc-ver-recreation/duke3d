@@ -2760,8 +2760,10 @@ faketimerhandler()
 
 void Ver()
 {
-#if (APPVER_DN3DREV < AV_DR_DN3D14)
+#if (APPVER_DN3DREV < AV_DR_DN3D13)
  sprintf(tempbuf,"DUKE NUKEM BUILD: V032696");
+#elif (APPVER_DN3DREV < AV_DR_DN3D14)
+ sprintf(tempbuf,"DUKE NUKEM BUILD: V041996");
 #else
  sprintf(tempbuf,"DUKE NUKEM BUILD ATOMIC EDITION : V1.4 100296");
 #endif
