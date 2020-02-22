@@ -2334,8 +2334,7 @@ void ExtInit(void)
     printf("Please refer to LICENSE.DOC for further information on levels created with\n");
     printf("BUILD.EXE.\n");
     printf("\n");
-    // VERSIONS RESTORATION - FIXME not changing spacing for now
-#if (APPVER_DN3DREV >= AV_DR_DN3D14)
+#if (APPVER_DN3DREV >= AV_DR_DN3D14) // VERSIONS RESTORATION - Keep v1.3d's spacing for now
     printf("Press <Y> if you have read and accepted the terms of LICENSE.DOC,\n");
     printf("or any other key to abort the program. \n");
     printf("\n");
@@ -2377,7 +2376,7 @@ if ((key == 'y') || (key == 'Y'))
 
         ReadPaletteTable();
 //  InitWater();
-    // VERSIONS RESTORATION - FIXME: Recall what we aren't doing with spacing
+    // VERSIONS RESTORATION - Again keep v1.3d's spacing
 #if (APPVER_DN3DREV >= AV_DR_DN3D14)
 }
 else
