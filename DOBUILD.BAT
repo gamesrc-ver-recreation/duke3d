@@ -20,17 +20,17 @@ if %TARGET% == DN3D14G goto dn3d14g
 goto task
 :dn3d13b
 :dn3d14b
-if not exist ..\build\19960724\build.obj goto dn3d14error
-if not exist ..\build\19960724\cache1d.obj goto dn3d14error
-if not exist ..\build\19960724\engine.obj goto dn3d14error
+if not exist ..\build\19960724\build.obj goto engineerror
+if not exist ..\build\19960724\cache1d.obj goto engineerror
+if not exist ..\build\19960724\engine.obj goto engineerror
 set EXENAME=build.exe
 goto task
 :dn3d14g
-if not exist ..\build\19960724\cache1d.obj goto dn3d14error
-if not exist ..\build\19960820\engine.obj goto dn3d14error
+if not exist ..\build\19960724\cache1d.obj goto engineerror
+if not exist ..\build\19960820\engine.obj goto engineerror
 goto task
-:dn3d14error
-echo Can't recreate Duke3D 1.4 game or Build Editor EXE, you need
+:engineerror
+echo Can't recreate Duke3D game or Build Editor EXE, you need
 echo compatible Build Engine object files ready under ..\build.
 goto end
 :task
