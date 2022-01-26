@@ -127,8 +127,10 @@ A few missing headers from the MACT library were copied from 3DR's sources.
 Their MAKEFILE.LNK file was also used as a base.
 
 As a side-note on MAKEFILE.LNK, using the "file" directive even for the
-libraries, and further issuing the "segment" directives, were all essential
+libraries, and further issuing two "segment" directives, were all essential
 for reproducing exactly the original EXEs as built by Matt.
+It later turned out that omitting "system dos4g" was an alternative
+to the aforementioned "segment" directive changes.
 
 The idea to look into the EDuke 2.00.21 sources
 (rather than just 3DR's sources) came from Evan Ramos.

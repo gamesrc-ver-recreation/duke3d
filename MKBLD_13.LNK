@@ -1,8 +1,8 @@
-system dos4g
+#system dos4g
 option map
 option statics
 option u
-segment type code lo
-segment type data lo
+#segment type code lo
+#segment type data lo
 name build
 file ..\..\build\19960419\build,astub,..\..\build\19960317\cache1d,..\..\build\19960305\engine,..\..\build\19960305\a
