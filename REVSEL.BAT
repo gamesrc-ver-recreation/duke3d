@@ -14,7 +14,7 @@ echo [0] Cancel and quit
 echo.
 echo %MSG%
 set MSG=
-choice /C:12345670 /N
+choice /S /C:12345670 /N
 echo.
 
 if ERRORLEVEL 8 goto end
